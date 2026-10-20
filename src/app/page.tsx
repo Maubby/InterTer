@@ -1,69 +1,62 @@
 import Image from "next/image";
+import { Bouton } from "@/components/Bouton";
+import { Carte, Titre } from "@/components/Carte";
+import { Eclair, Etoile, Flamme, Trophee } from "@/components/Icons";
 
-export default function Home() {
+export default function Accueil() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
+      <header className="text-center space-y-3">
         <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+          src="/logo/logo-512.svg"
+          alt="Logo Interter"
+          width={160}
+          height={160}
+          unoptimized
+          className="mx-auto w-40 h-40"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        <Titre>Interter</Titre>
+        <p className="text-xl text-sable">
+          Chaque jour, un Défi du Jour pour faire briller ta ville face à toute
+          la France.
+        </p>
+      </header>
+
+      <Carte className="flex items-center gap-4">
+        <Image
+          src="/mascotte/margot-bienvenue.svg"
+          alt="Margot, la Dame Voyageuse"
+          width={96}
+          height={96}
+          unoptimized
+          className="w-24 h-24 rounded-lg border-2 border-sable"
+        />
+        <p className="text-lg">
+          <span className="lettrine mr-2">B</span>
+          ienvenue dans le grand tournoi des villes ! Je suis Margot, la Dame
+          Voyageuse. Prête à défendre ton terter ?
+        </p>
+      </Carte>
+
+      <div className="grid gap-3">
+        <Bouton variante="primaire" pleineLargeur>
+          <Eclair className="w-6 h-6" /> Jouer au Défi du Jour
+        </Bouton>
+        <Bouton variante="enigme" pleineLargeur>
+          <Trophee className="w-6 h-6" /> Voir le classement
+        </Bouton>
+        <Bouton variante="succes" pleineLargeur>
+          <Etoile className="w-6 h-6" /> Essayer sans compte
+        </Bouton>
+      </div>
+
+      <Carte className="flex items-center gap-3">
+        <Flamme className="w-8 h-8 text-gueules" />
+        <p>
+          Reviens chaque jour pour garder ta série et faire monter ta ville au
+          classement national.
+        </p>
+      </Carte>
+    </main>
   );
 }

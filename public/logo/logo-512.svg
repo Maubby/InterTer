@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Placeholder logo : sera remplacé par le fichier définitif fourni plus tard -->
+  <rect width="512" height="512" rx="48" fill="#f3e7cd"/>
+  <rect x="40" y="196" width="80" height="120" rx="8" fill="#1e7d4e" stroke="#2b2118" stroke-width="10"/>
+  <rect x="136" y="196" width="80" height="120" rx="8" fill="#c8102e" stroke="#2b2118" stroke-width="10"/>
+  <rect x="232" y="196" width="80" height="120" rx="8" fill="#1d4e89" stroke="#2b2118" stroke-width="10"/>
+  <rect x="328" y="196" width="80" height="120" rx="8" fill="#1e7d4e" stroke="#2b2118" stroke-width="10"/>
+  <rect x="424" y="196" width="48" height="120" rx="8" fill="#c8102e" stroke="#2b2118" stroke-width="10"/>
+</svg>

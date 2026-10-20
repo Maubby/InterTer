@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <!-- Placeholder mascotte « Margot, la Dame Voyageuse » — pose enigme.
+       Sera remplacé par l'illustration définitive (WebP) fournie plus tard.
+       Silhouette attendue : chaperon vert à cornette, robe rouge ceinturée d'or,
+       cape bleu azur, canne en J tenue par le crochet. -->
+  <rect width="600" height="600" fill="#e9d9b5"/>
+  <circle cx="300" cy="200" r="80" fill="#f3e7cd" stroke="#2b2118" stroke-width="8"/>
+  <path d="M220 180 q-20 -60 30 -70 q-20 30 10 40 q60 -30 110 10 q-10 -50 -60 -50 q-80 0 -90 70z" fill="#1e7d4e" stroke="#2b2118" stroke-width="6"/>
+  <path d="M180 520 q0 -180 120 -180 q120 0 120 180z" fill="#c8102e" stroke="#2b2118" stroke-width="8"/>
+  <rect x="240" y="380" width="120" height="20" rx="6" fill="#e8b33d" stroke="#2b2118" stroke-width="5"/>
+  <path d="M420 520 q0 -140 -60 -170 l-30 20 q50 60 40 150z" fill="#1d4e89" stroke="#2b2118" stroke-width="6"/>
+  <path d="M150 470 q-10 40 10 50" fill="none" stroke="#2b2118" stroke-width="8" stroke-linecap="round"/>
+  <text x="300" y="575" text-anchor="middle" font-family="serif" font-size="28" font-weight="bold" fill="#2b2118">Margot — enigme (placeholder)</text>
+</svg>
