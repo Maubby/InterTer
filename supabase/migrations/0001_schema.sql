@@ -5,9 +5,16 @@
 -- Toute logique de points vit dans les fonctions RPC ci-dessous.
 -- ============================================================
 
+-- ============================================================
+-- EXTENSIONS — à activer AVANT toute autre chose
+-- ============================================================
 create extension if not exists "uuid-ossp";
 create extension if not exists "unaccent";
 create extension if not exists "pg_trgm";
+
+-- ============================================================
+-- Fonctions utilitaires
+-- ============================================================
 
 -- Normalisation de texte (recherche sans accents, comparaison de réponses)
 create or replace function public.norm_txt(t text)
