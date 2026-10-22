@@ -1,31 +1,53 @@
 -- ============================================================
--- INTERTER — Étape 1 : schéma initial
--- Tables + Row Level Security + RPC anti-triche
--- Règle absolue : le client ne JAMAIS écrire un score directement.
--- Toute logique de points vit dans les fonctions RPC ci-dessous.
+-- INTERTER — Étape 1 : schéma initial (v2, auto-réparable)
+-- Ce fichier repart de zéro : il nettoie, recrée le schéma public,
+-- installe les extensions PUIS crée tables + RLS.
+-- Il peut être rejoué tel quel à tout moment.
+-- Règle absolue : le client ne doit JAMAIS écrire un score
+-- directement — toute la logique de points vit dans les RPC (0002).
 -- ============================================================
 
 -- ============================================================
--- EXTENSIONS — à activer AVANT toute autre chose
+-- 0. NETTOYAGE + RÉINITIALISATION (idempotent)
 -- ============================================================
-create extension if not exists "uuid-ossp";
-create extension if not exists "unaccent";
-create extension if not exists "pg_trgm";
+drop schema if exists public cascade;
+create schema public;
+comment on schema public is 'standard public schema';
+grant usage on schema public to postgres, anon, authenticated, service_role;
+grant all on schema public to postgres, anon, authenticated, service_role;
+
+-- Restore des droits par défaut de Supabase (nécessaires à l'API PostgREST)
+alter default privileges in schema public
+  grant select on tables to postgres, anon, authenticated, service_role;
+alter default privileges in schema public
+  grant all on tables to postgres;
+alter default privileges in schema public
+  grant usage, select on sequences to postgres, anon, authenticated, service_role;
+alter default privileges in schema public
+  grant execute on functions to postgres, anon, authenticated, service_role;
+alter default privileges in schema public
+  grant usage on types to postgres, anon, authenticated, service_role;
 
 -- ============================================================
--- Fonctions utilitaires
+-- 1. EXTENSIONS — dans le schéma dédié « extensions »
+--    (jamais dans public : elles survivront aux nettoyages)
 -- ============================================================
+create schema if not exists extensions;
+create extension if not exists "unaccent" schema extensions;
+-- (gen_random_uuid() est natif depuis PostgreSQL 13 : pas besoin de uuid-ossp)
+-- (pas besoin de pg_trgm : index text_pattern_ops ci-dessous)
 
--- Normalisation de texte (recherche sans accents, comparaison de réponses)
+-- Normalisation de texte : recherche et réponses sans accents
 create or replace function public.norm_txt(t text)
 returns text
 language sql immutable
 as $$
-  select lower(trim(unaccent(t)));
+  select lower(trim(extensions.unaccent(t)));
 $$;
+grant execute on function public.norm_txt(text) to postgres, anon, authenticated;
 
 -- ============================================================
--- TABLES
+-- 2. TABLES
 -- ============================================================
 
 -- ---------- cities : communes de France (import INSEE) ----------
@@ -38,10 +60,11 @@ create table public.cities (
   region_name      text not null,
   population       integer,
   longitude        double precision,
-  latitude         double precision
+  latitude          double precision
 );
+-- Recherche d'autocomplétion : index sur le préfixe du nom
+create index cities_name_pat_idx on public.cities (name text_pattern_ops);
 create index cities_dept_idx on public.cities (department_code);
-create index cities_name_trgm_idx on public.cities using gin (name gin_trgm_ops);
 
 -- ---------- profiles : un joueur ----------
 create table public.profiles (
@@ -59,8 +82,8 @@ create unique index profiles_pseudo_norm_idx on public.profiles (public.norm_txt
 create index profiles_city_idx on public.profiles (city_id);
 
 -- ---------- game_items : items de mini-jeux, format-agnostique ----------
--- payload contient les réponses : jamais sélectionné côté client sans
--- strip préalable (vue publique game_items_public ci-dessous).
+-- payload contient les réponses : jamais exposé au client directement
+-- (la vue game_items_public retire les champs de réponse).
 create table public.game_items (
   id              uuid primary key default gen_random_uuid(),
   game_type       text not null check (game_type in
@@ -74,7 +97,7 @@ create table public.game_items (
 create index game_items_type_idx on public.game_items (game_type) where is_active;
 create index game_items_dept_idx on public.game_items (department_code) where is_active;
 
--- Vue publique SANS les réponses : c'est la seule exposée aux joueurs.
+-- Vue publique SANS les réponses : la seule exposée aux joueurs.
 create or replace view public.game_items_public as
   select id, game_type,
          payload - 'answer' - 'answers' - 'correct_order' - 'intruder' - 'solution' as payload,
@@ -168,15 +191,14 @@ create table public.newsletter_subscribers (
 );
 
 -- ============================================================
--- ROW LEVEL SECURITY — activée sur TOUTES les tables
+-- 3. ROW LEVEL SECURITY — activée sur TOUTES les tables
 -- ============================================================
-
 alter table public.cities                 enable row level security;
 alter table public.profiles               enable row level security;
 alter table public.game_items             enable row level security;
 alter table public.daily_challenges       enable row level security;
 alter table public.daily_plays            enable row level security;
-alter table public.practice_plays         enable row level security;
+alter table public.practice_plays        enable row level security;
 alter table public.city_scores            enable row level security;
 alter table public.badges                 enable row level security;
 alter table public.user_badges            enable row level security;
@@ -184,28 +206,26 @@ alter table public.referrals             enable row level security;
 alter table public.purchases             enable row level security;
 alter table public.newsletter_subscribers enable row level security;
 
--- ---------- cities : lecture publique, écriture interdite ----------
+-- ---------- policies ----------
 create policy cities_select on public.cities for select using (true);
 
--- ---------- profiles ----------
 create policy profiles_select on public.profiles for select using (true);
-create policy profiles_update_own on public.profiles
-  for update using (auth.uid() = id)
-  with check (
-    auth.uid() = id
-    -- ANTI-ÉLÉVATION : impossible de s'auto-promouvoir
-    and is_admin    = (select p.is_admin    from public.profiles p where p.id = auth.uid())
-    and is_supporter = (select p.is_supporter from public.profiles p where p.id = auth.uid())
-    and streak      = (select p.streak      from public.profiles p where p.id = auth.uid())
-    and last_play_date = (select p.last_play_date from public.profiles p where p.id = auth.uid())
-  );
 create policy profiles_insert_own on public.profiles
   for insert with check (
     auth.uid() = id
     and is_admin = false and is_supporter = false and streak = 0
   );
+create policy profiles_update_own on public.profiles
+  for update using (auth.uid() = id)
+  with check (
+    auth.uid() = id
+    -- ANTI-ÉLÉVATION : impossible de s'auto-promouvoir
+    and is_admin       = (select p.is_admin       from public.profiles p where p.id = auth.uid())
+    and is_supporter   = (select p.is_supporter   from public.profiles p where p.id = auth.uid())
+    and streak         = (select p.streak         from public.profiles p where p.id = auth.uid())
+    and last_play_date = (select p.last_play_date from public.profiles p where p.id = auth.uid())
+  );
 
--- ---------- game_items : lecture publique (vue sans réponses), écriture admin ----------
 create policy game_items_select_active on public.game_items
   for select using (
     is_active = true
@@ -216,7 +236,6 @@ create policy game_items_admin_write on public.game_items
     exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin)
   );
 
--- ---------- daily_challenges : lecture si publié, écriture admin ----------
 create policy daily_challenges_select_published on public.daily_challenges
   for select using (
     is_published = true
@@ -227,44 +246,32 @@ create policy daily_challenges_admin_write on public.daily_challenges
     exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin)
   );
 
--- ---------- daily_plays : lecture de ses parties, écriture UNIQUEMENT via RPC ----------
+-- Écriture de scores : UNIQUEMENT via les RPC (aucune policy insert)
 create policy daily_plays_select_own on public.daily_plays
   for select using (auth.uid() = user_id);
--- (pas de policy insert/update : le client ne peut pas écrire, seul le RPC le fait)
-
--- ---------- practice_plays : idem, écriture via RPC uniquement ----------
 create policy practice_plays_select_own on public.practice_plays
   for select using (auth.uid() = user_id);
-
--- ---------- city_scores : lecture publique (classement), écriture via RPC uniquement ----------
 create policy city_scores_select on public.city_scores for select using (true);
 
--- ---------- badges : lecture publique ----------
 create policy badges_select on public.badges for select using (true);
-create policy user_badges_select_own on public.user_badges
-  for select using (true);
+create policy user_badges_select_own on public.user_badges for select using (true);
 create policy user_badges_admin_write on public.user_badges
   for all using (
     exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin)
   );
 
--- ---------- referrals ----------
 create policy referrals_own on public.referrals
   for select using (auth.uid() = referrer_id or auth.uid() = referred_id);
 
--- ---------- purchases ----------
 create policy purchases_select_own on public.purchases
   for select using (auth.uid() = user_id);
 
--- ---------- newsletter_subscribers : insertion publique avec consentement ----------
 create policy newsletter_insert on public.newsletter_subscribers
   for insert with check (consent_given = true);
 
--- ---------- Révocation des droits d'écriture directe côté client ----------
--- Le client (anon/authenticated) ne peut RIEN écrire dans ces tables :
--- tout passe par les RPC security definer ci-dessous.
-revoke insert, update, delete on public.daily_plays from anon, authenticated;
-revoke insert, update, delete on public.practice_plays from anon, authenticated;
-revoke insert, update, delete on public.city_scores from anon, authenticated;
-revoke insert, update, delete on public.user_badges from anon, authenticated;
-revoke insert, update, delete on public.purchases from anon, authenticated;
+-- ---------- Le client ne peut RIEN écrire directement dans les scores ----------
+revoke insert, update, delete on public.daily_plays      from anon, authenticated;
+revoke insert, update, delete on public.practice_plays   from anon, authenticated;
+revoke insert, update, delete on public.city_scores      from anon, authenticated;
+revoke insert, update, delete on public.user_badges      from anon, authenticated;
+revoke insert, update, delete on public.purchases        from anon, authenticated;
