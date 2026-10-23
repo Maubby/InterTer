@@ -36,7 +36,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr" className={`${cinzel.variable} ${nunito.variable}`}>
-      <body className="font-sans antialiased min-h-dvh">{children}</body>
+      // suppressHydrationWarning : les extensions navigateur (ex. ColorZilla)
+      // modifient le <body> avant React ; on ignore ces différences cosmétiques.
+      <body className="font-sans antialiased min-h-dvh" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
