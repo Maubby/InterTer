@@ -34,6 +34,9 @@ yarn-error.log*
 .env.local
 .env*.local
 
+# fichier d'import téléchargé par le script (21 Mo, rien à faire sur GitHub)
+communes-france-2026.csv
+
 # vercel
 .vercel
 
