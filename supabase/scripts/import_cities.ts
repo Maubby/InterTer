@@ -26,8 +26,10 @@ import { pipeline } from "node:stream/promises";
 import { setTimeout as sleep } from "node:timers/promises";
 
 // ---- Config ----
+// Fichier officiel « Communes et villes de France » (data.gouv.fr, licence ouverte)
+// L'URL API /datasets/r/... redirige toujours vers le dernier fichier publié.
 const CSV_URL =
-  "https://www.data.gouv.fr/fr/datasets/r/67a01cf4-0cc9-4007-bd77-9b7bafbf2d21"; // communes-france-2026.csv (à vérifier ci-dessous)
+  "https://www.data.gouv.fr/api/1/datasets/r/c63fd0b1-7987-46f6-b779-8b3ed889090c";
 const CSV_LOCAL = "communes-france-2026.csv";
 const BATCH = 500; // lignes par lot envoyé à Supabase
 
@@ -56,7 +58,7 @@ function slugify(name: string, code: string): string {
   return `${base}-${code}`;
 }
 
-// ---- Parse CSV (séparateur ';', gestion des guillemets) ----
+// ---- Parse CSV (séparateur ',', gestion des guillemets) ----
 function parseLine(line: string): string[] {
   const out: string[] = [];
   let cur = "";
@@ -66,7 +68,7 @@ function parseLine(line: string): string[] {
     if (c === '"') {
       if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
       else inQuotes = !inQuotes;
-    } else if (c === ";" && !inQuotes) {
+    } else if ((c === "," || c === ";") && !inQuotes) {
       out.push(cur); cur = "";
     } else cur += c;
   }
@@ -104,7 +106,7 @@ Vérifie l'URL du fichier sur https://www.data.gouv.fr (jeu "Communes et villes 
 async function main() {
   const file = await downloadCsv();
   const { readFile } = await import("node:fs/promises");
-  const raw = await readFile(file, "latin1"); // le CSV de data.gouv est en latin1
+  const raw = await readFile(file, "utf-8"); // le CSV 2026 de data.gouv est en UTF-8, virgules
   const lines = raw.split(/\r?\n/).filter((l) => l.trim().length > 0);
   const header = parseLine(lines[0]);
   console.log(`📄 ${lines.length - 1} lignes détectées`);
