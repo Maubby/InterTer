@@ -12,6 +12,12 @@
  *
  * Le script est IDEMPOTENT : on peut le relancer sans doublons.
  */
+// Charge le .env.local AVANT tout le reste (tsx ne le fait pas automatiquement,
+// contrairement à npm run dev)
+import { config } from "dotenv";
+config({ path: ".env.local" });
+config(); // fallback sur .env si présent
+
 import { createClient } from "@supabase/supabase-js";
 import { createWriteStream, existsSync } from "node:fs";
 import { unlink } from "node:fs/promises";
