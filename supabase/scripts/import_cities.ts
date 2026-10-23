@@ -43,8 +43,18 @@ if (!url || !serviceKey) {
   );
   process.exit(1);
 }
+// ⚠️ Pour les nouvelles clés Supabase (sb_secret_... / sb_publishable_...),
+// la clé doit être passée via l'en-tête apikey ET bearer — supabase-js le fait
+// par défaut avec l'option apiKey explicite. On force aussi le header manuellement
+// au cas où la version de la lib l'exigerait.
 const supabase = createClient(url, serviceKey, {
-  auth: { persistSession: false },
+  auth: { persistSession: false, autoRefreshToken: false },
+  global: {
+    headers: {
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
+    },
+  },
 });
 
 // ---- Slug simple (nom sans accents + code INSEE pour l'unicité) ----
