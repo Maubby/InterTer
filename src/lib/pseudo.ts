@@ -26,16 +26,11 @@ export function pseudoAleatoire(): string {
 }
 
 /**
- * Pseudo proposé au 1er joueur : toujours « Jacques Beauregard »,
- * clin d'œil au sketch des Inconnus sur les publicitaires (le nom
- * de candidat « qui sonne bien »). Les joueurs suivants reçoivent
- * un pseudo aléatoire du même ton.
+ * Pseudo proposé par défaut à tous les nouveaux joueurs :
+ * « Jacques Beauregard » — clin d'œil au sketch des Inconnus
+ * sur les publicitaires (le nom de candidat « qui sonne bien »).
+ * Le joueur peut bien sûr le modifier librement.
  */
-let premierJoueur = true;
 export function pseudoPropose(): string {
-  if (premierJoueur) {
-    premierJoueur = false;
-    return "Jacques Beauregard";
-  }
-  return pseudoAleatoire();
+  return "Jacques Beauregard";
 }
