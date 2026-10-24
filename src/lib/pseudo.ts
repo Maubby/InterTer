@@ -24,3 +24,17 @@ export function pseudoAleatoire(): string {
   const n = NOMS[Math.floor(Math.random() * NOMS.length)];
   return `${p} ${n}`;
 }
+
+/**
+ * Pseudo proposé au 1er joueur : toujours « Jacques Beauregard »,
+ * clin d'œil au sketch des Inconnus (Radio Beauregard).
+ * Les joueurs suivants reçoivent un pseudo aléatoire.
+ */
+let premierJoueur = true;
+export function pseudoPropose(): string {
+  if (premierJoueur) {
+    premierJoueur = false;
+    return "Jacques Beauregard";
+  }
+  return pseudoAleatoire();
+}

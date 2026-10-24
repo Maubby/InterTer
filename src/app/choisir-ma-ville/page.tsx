@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
-import { pseudoAleatoire } from "@/lib/pseudo";
+import { pseudoAleatoire, pseudoPropose } from "@/lib/pseudo";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
 
@@ -31,7 +31,7 @@ export default function PageChoisirMaVille() {
   // pseudo à consonance française, JAMAIS l'email (vie privée)
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) setPseudoDefaut(pseudoAleatoire());
+      if (user) setPseudoDefaut(pseudoPropose());
     });
   }, []);
 
