@@ -11,6 +11,7 @@ type Ville = {
   name: string;
   department_name: string;
   region_name: string;
+  postal_code?: string | null;
 };
 
 // Écran obligatoire de choix de la ville (après OAuth).
@@ -43,23 +44,27 @@ export default function PageChoisirMaVille() {
       .toLowerCase();
   }
 
-  // Recherche des villes (autocomplétion) dès que l'utilisateur tape ≥ 2 lettres
+  // Recherche des villes (autocomplétion) dès que l'utilisateur tape ≥ 2 caractères
+  // Accepte : un NOM ("bois", "Paris") OU un CODE POSTAL ("87220", "87")
   useEffect(() => {
     if (recherche.trim().length < 2 || choisie) {
       setVilles([]);
       return;
     }
     const t = setTimeout(async () => {
-      // Recherche par préfixe via la vue texte normalisée : on utilise
-      // le service REST avec le préfixe en minuscule + sans accents,
-      // en demandant le tri par population (les grandes villes d'abord).
-      const prefixe = sansAccents(recherche.trim());
-      const { data, error } = await supabase
+      const q = recherche.trim();
+      const estCodePostal = /^\d+$/.test(q); // que des chiffres = code postal
+      let requete = supabase
         .from("cities")
-        .select("id, name, department_name, region_name, population")
-        .ilike("name", `${recherche.trim()}%`)
+        .select("id, name, department_name, region_name, population, postal_code")
         .order("population", { ascending: false, nullsFirst: false })
         .limit(8);
+      if (estCodePostal) {
+        requete = requete.like("postal_code", `${q}%`);
+      } else {
+        requete = requete.ilike("name", `${q}%`);
+      }
+      const { data, error } = await requete;
       if (error) {
         console.error(error);
         return;
@@ -144,7 +149,7 @@ export default function PageChoisirMaVille() {
             setRecherche(e.target.value);
             setChoisie(null);
           }}
-          placeholder="Tape le nom de ta ville…"
+          placeholder="Nom de ta ville ou code postal…"
           className="w-full min-h-[56px] px-4 rounded-lg border-4 border-sable bg-parchemin-2 text-lg"
           aria-label="Rechercher une ville"
         />
@@ -163,6 +168,7 @@ export default function PageChoisirMaVille() {
                 >
                   <span className="font-bold text-lg">{v.name}</span>
                   <span className="block text-sm text-sable/60">
+                    {v.postal_code ? `${v.postal_code} · ` : ""}
                     {v.department_name} — {v.region_name}
                   </span>
                 </button>

@@ -1,39 +1,36 @@
 /**
- * IMPORT DES COMMUNES DE FRANCE — Interter
+ * IMPORT DES COMMUNES DE FRANCE — Interter (v2 : avec code postal)
  * -------------------------------------------------------------
  * Télécharge le fichier officiel (data.gouv.fr, licence ouverte,
  * 34 868 communes, millésime 2026) puis l'envoie dans Supabase.
+ * v2 : ajoute le code postal principal (recherche par CP).
  *
  * USAGE (depuis le dossier du projet, dans un terminal) :
  *   npx tsx supabase/scripts/import_cities.ts
  *
- * PRÉREQUIS dans .env.local :
- *   NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+ * PRÉREQUIS : .env.local avec NEXT_PUBLIC_SUPABASE_URL et
+ * SUPABASE_SERVICE_ROLE_KEY + migration 0005_postal_code.sql jouée.
  *
- * Le script est IDEMPOTENT : on peut le relancer sans doublons.
+ * Idempotent : relançable sans doublons (upsert sur id).
  */
-// Charge le .env.local AVANT tout le reste (tsx ne le fait pas automatiquement,
-// contrairement à npm run dev)
 import { config } from "dotenv";
 config({ path: ".env.local" });
-config(); // fallback sur .env si présent
+config();
 
 import { createClient } from "@supabase/supabase-js";
 import { createWriteStream, existsSync } from "node:fs";
-import { unlink } from "node:fs/promises";
+import { readFile, unlink } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { setTimeout as sleep } from "node:timers/promises";
 
 // ---- Config ----
-// Fichier officiel « Communes et villes de France » (data.gouv.fr, licence ouverte)
-// L'URL API /datasets/r/... redirige toujours vers le dernier fichier publié.
 const CSV_URL =
   "https://www.data.gouv.fr/api/1/datasets/r/c63fd0b1-7987-46f6-b779-8b3ed889090c";
 const CSV_LOCAL = "communes-france-2026.csv";
-const BATCH = 500; // lignes par lot envoyé à Supabase
+const BATCH = 500;
 
-// ---- Client Supabase avec la clé service (droits complets) ----
+// ---- Client Supabase (clé service = droits complets) ----
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !serviceKey) {
@@ -43,21 +40,14 @@ if (!url || !serviceKey) {
   );
   process.exit(1);
 }
-// ⚠️ Pour les nouvelles clés Supabase (sb_secret_... / sb_publishable_...),
-// la clé doit être passée via l'en-tête apikey ET bearer — supabase-js le fait
-// par défaut avec l'option apiKey explicite. On force aussi le header manuellement
-// au cas où la version de la lib l'exigerait.
 const supabase = createClient(url, serviceKey, {
-  auth: { persistSession: false, autoRefreshToken: false },
+  auth: { persistSession: false },
   global: {
-    headers: {
-      apikey: serviceKey,
-      Authorization: `Bearer ${serviceKey}`,
-    },
+    headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
   },
 });
 
-// ---- Slug simple (nom sans accents + code INSEE pour l'unicité) ----
+// ---- Slug ----
 function slugify(name: string, code: string): string {
   const base = name
     .normalize("NFD")
@@ -68,7 +58,7 @@ function slugify(name: string, code: string): string {
   return `${base}-${code}`;
 }
 
-// ---- Parse CSV (séparateur ',', gestion des guillemets) ----
+// ---- Parse CSV (virgules, guillemets gérés) ----
 function parseLine(line: string): string[] {
   const out: string[] = [];
   let cur = "";
@@ -99,14 +89,15 @@ const toFloat = (s: string): number | null => {
 
 async function downloadCsv(): Promise<string> {
   if (existsSync(CSV_LOCAL)) {
-    console.log(`📁 Fichier déjà présent : ${CSV_LOCAL} (pas de re-téléchargement)`);
+    console.log(`📁 Fichier déjà présent : ${CSV_LOCAL}`);
     return CSV_LOCAL;
   }
   console.log(`⬇️  Téléchargement du fichier officiel des communes...`);
   const res = await fetch(CSV_URL);
   if (!res.ok || !res.body) {
-    throw new Error(`Téléchargement échoué (HTTP ${res.status}). 
-Vérifie l'URL du fichier sur https://www.data.gouv.fr (jeu "Communes et villes de France", millésime 2026, CSV).`);
+    throw new Error(
+      `Téléchargement échoué (HTTP ${res.status}). Vérifie l'URL sur data.gouv.fr.`
+    );
   }
   await pipeline(Readable.fromWeb(res.body as any), createWriteStream(CSV_LOCAL));
   console.log(`✅ Fichier téléchargé : ${CSV_LOCAL}`);
@@ -115,8 +106,7 @@ Vérifie l'URL du fichier sur https://www.data.gouv.fr (jeu "Communes et villes 
 
 async function main() {
   const file = await downloadCsv();
-  const { readFile } = await import("node:fs/promises");
-  const raw = await readFile(file, "utf-8"); // le CSV 2026 de data.gouv est en UTF-8, virgules
+  const raw = await readFile(file, "utf-8");
   const lines = raw.split(/\r?\n/).filter((l) => l.trim().length > 0);
   const header = parseLine(lines[0]);
   console.log(`📄 ${lines.length - 1} lignes détectées`);
@@ -130,18 +120,18 @@ async function main() {
   const iPop = idx("population");
   const iLat = idx("latitude_centre");
   const iLon = idx("longitude_centre");
+  const iCp = idx("code_postal");
   if (iInsee < 0 || iNom < 0) {
     console.error("❌ Colonnes introuvables. En-têtes :", header.slice(0, 12));
     process.exit(1);
   }
 
-  // Préparation des lignes
   const rows: any[] = [];
   const seen = new Set<string>();
   for (let i = 1; i < lines.length; i++) {
     const c = parseLine(lines[i]);
     const id = c[iInsee];
-    if (!id || seen.has(id)) continue; // anti-doublon
+    if (!id || seen.has(id)) continue;
     seen.add(id);
     const name = c[iNom] || id;
     rows.push({
@@ -154,11 +144,11 @@ async function main() {
       population: toInt(c[iPop]),
       latitude: toFloat(c[iLat]),
       longitude: toFloat(c[iLon]),
+      postal_code: c[iCp] || null, // v2 : code postal principal
     });
   }
   console.log(`🏘️  ${rows.length} communes uniques à importer\n`);
 
-  // Envoi par lots
   let done = 0;
   for (let i = 0; i < rows.length; i += BATCH) {
     const chunk = rows.slice(i, i + BATCH);
@@ -167,16 +157,14 @@ async function main() {
       .upsert(chunk, { onConflict: "id" });
     if (error) {
       console.error(`\n❌ Lot ${Math.floor(i / BATCH) + 1} : ${error.message}`);
-      console.error("   L'import s'arrête. Corrige le problème puis RELANCE :");
-      console.error("   le script reprendra sans créer de doublons.");
+      console.error("   Corrige le problème puis RELANCE (reprise sans doublons).");
       process.exit(1);
     }
     done += chunk.length;
     process.stdout.write(`\r⏳ ${done}/${rows.length} communes importées`);
-    if (i + BATCH < rows.length) await sleep(150); // respiration pour Supabase
+    if (i + BATCH < rows.length) await sleep(150);
   }
-  console.log(`\n\n🎉 TERMINÉ : ${done} communes sont dans la base !`);
-  console.log("   Vérification : Supabase → Table Editor → cities");
+  console.log(`\n\n🎉 TERMINÉ : ${done} communes importées (avec code postal) !`);
 }
 
 main().catch((e) => {
