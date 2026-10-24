@@ -202,7 +202,6 @@ export default function PageChoisirMaVille() {
               value={pseudo}
               onChange={(e) => setPseudo(e.target.value)}
               placeholder={pseudoDefaut || "TonPseudo"}
-              defaultValue={pseudoDefaut}
               className="w-full min-h-[48px] px-4 rounded-lg border-4 border-sable bg-parchemin-2 text-lg"
               maxLength={30}
             />
