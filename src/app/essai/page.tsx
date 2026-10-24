@@ -166,17 +166,25 @@ export default function PageEssai() {
         )}
 
         {reponseDonnee && (
-          <div
-            className={`text-center font-bold text-xl ${
-              bonneReponse ? "text-sinople" : "text-gueules"
-            }`}
-          >
-            {bonneReponse ? (
-              <span className="anim-points-volants inline-block">Bravo ! +10 points</span>
-            ) : (
-              "Dommage !"
+          <>
+            <div
+              className={`text-center font-bold text-xl ${
+                bonneReponse ? "text-sinople" : "text-gueules"
+              }`}
+            >
+              {bonneReponse ? (
+                <span className="anim-points-volants inline-block">Bravo ! +10 points</span>
+              ) : (
+                "Dommage !"
+              )}
+            </div>
+            {/* Explication pédagogique : on apprend toujours quelque chose */}
+            {item.payload?.explanation && (
+              <div className="text-base bg-parchemin rounded-lg border-2 border-sable/30 p-3">
+                <strong>Le saviez-vous ?</strong> {item.payload.explanation}
+              </div>
             )}
-          </div>
+          </>
         )}
 
         {reponseDonnee && (
