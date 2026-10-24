@@ -27,8 +27,9 @@ export function pseudoAleatoire(): string {
 
 /**
  * Pseudo proposé au 1er joueur : toujours « Jacques Beauregard »,
- * clin d'œil au sketch des Inconnus (Radio Beauregard).
- * Les joueurs suivants reçoivent un pseudo aléatoire.
+ * clin d'œil au sketch des Inconnus sur les publicitaires (le nom
+ * de candidat « qui sonne bien »). Les joueurs suivants reçoivent
+ * un pseudo aléatoire du même ton.
  */
 let premierJoueur = true;
 export function pseudoPropose(): string {
