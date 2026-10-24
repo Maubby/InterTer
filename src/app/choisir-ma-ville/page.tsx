@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
+import { pseudoAleatoire } from "@/lib/pseudo";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
 
@@ -26,10 +27,11 @@ export default function PageChoisirMaVille() {
   // Pseudo pré-rempli : partie locale de l'email (récupéré à l'affichage)
   const [pseudoDefaut, setPseudoDefaut] = useState("");
 
-  // Pré-remplit le pseudo dès la connexion détectée
+  // Pré-remplit le pseudo dès la connexion détectée :
+  // pseudo à consonance française, JAMAIS l'email (vie privée)
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user?.email) setPseudoDefaut(user.email.split("@")[0]);
+      if (user) setPseudoDefaut(pseudoAleatoire());
     });
   }, []);
 
@@ -82,9 +84,8 @@ export default function PageChoisirMaVille() {
       return;
     }
 
-    // Pseudo pré-rempli : partie locale de l'email Google
-    const pseudoFinal =
-      pseudo.trim() || user.email?.split("@")[0] || "Joueur";
+    // Pseudo : celui choisi par le joueur, sinon le pseudo proposé
+    const pseudoFinal = pseudo.trim() || pseudoDefaut || pseudoAleatoire();
 
     // Crée le profil (1re connexion) ou le met à jour
     const { error: errProfil } = await supabase.from("profiles").upsert({
