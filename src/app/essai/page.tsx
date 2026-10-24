@@ -1,40 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
 import { Etoile, Trophee } from "@/components/Icons";
 
-// ---------- Types des items (vue publique SANS les réponses) ----------
-type Item = {
-  id: string;
-  game_type: "qcm" | "true_false" | "riddle" | "emoji_riddle" | "intruder" | "order_dates";
-  payload: any; // contenu selon game_type, sans les champs de réponse
-};
+// ---------- Types ----------
+type GameType = "qcm" | "true_false" | "riddle" | "emoji_riddle" | "intruder" | "order_dates";
+type Item = { id: string; game_type: GameType; payload: any };
 
-const NB_ESSAI = 3; // 3 mini-jeux jouables sans compte
+const TYPES_ESSAI: GameType[] = ["qcm", "riddle", "intruder"];
 
 export default function PageEssai() {
   const supabase = getSupabaseBrowserClient();
   const [items, setItems] = useState<Item[]>([]);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [enCours, setEnCours] = useState(false);
   const [reponseDonnee, setReponseDonnee] = useState(false);
   const [bonneReponse, setBonneReponse] = useState<boolean | null>(null);
   const [fini, setFini] = useState(false);
   const [chargement, setChargement] = useState(true);
 
-  // Chargement de 3 items aléatoires (vue publique : pas de réponses exposées)
   useEffect(() => {
     (async () => {
-      // Un item de chaque format différent si possible : on tire 3 game_types distincts
-      const types = ["qcm", "riddle", "intruder"] as const;
       const res = await Promise.all(
-        types.map((t) =>
+        TYPES_ESSAI.map((t) =>
           supabase
             .from("game_items_public")
-            .select("id, game_type, payload, difficulty")
+            .select("id, game_type, payload")
             .eq("game_type", t)
             .limit(1)
         )
@@ -48,19 +43,33 @@ export default function PageEssai() {
     })();
   }, []);
 
-  const item = items[index];
-
-  // Feedback : vert tamponné / rouge qui tremble + points volants
-  function valider(estCorrect: boolean) {
-    setReponseDonnee(true);
-    setBonneReponse(estCorrect);
-    if (estCorrect) setScore((s) => s + 10);
-  }
+  // Validation TOUJOURS côté serveur (RPC check_practice_item) :
+  // le navigateur ne connaît jamais la réponse → anti-triche par construction.
+  const valider = useCallback(
+    async (answer: any) => {
+      if (enCours || reponseDonnee) return;
+      setEnCours(true);
+      const { data, error } = await supabase.rpc("check_practice_item", {
+        p_item_id: items[index]?.id,
+        p_answer: answer,
+      });
+      if (error) {
+        alert("Erreur de validation : " + error.message);
+        setEnCours(false);
+        return;
+      }
+      const ok = (data as any)?.is_correct === true;
+      setBonneReponse(ok);
+      setReponseDonnee(true);
+      if (ok) setScore((s) => s + 10);
+      setEnCours(false);
+    },
+    [supabase, items, index, enCours, reponseDonnee]
+  );
 
   function suivant() {
-    if (index + 1 >= items.length) {
-      setFini(true);
-    } else {
+    if (index + 1 >= items.length) setFini(true);
+    else {
       setIndex((i) => i + 1);
       setReponseDonnee(false);
       setBonneReponse(null);
@@ -108,13 +117,15 @@ export default function PageEssai() {
     );
   }
 
-  if (!item) {
+  if (items.length === 0) {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 text-center space-y-4">
         <p>Aucun mini-jeu disponible pour le moment.</p>
       </main>
     );
   }
+
+  const item = items[index];
 
   return (
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
@@ -131,7 +142,9 @@ export default function PageEssai() {
         <span className="font-cinzel font-bold ml-2">{score} pts</span>
       </div>
 
-      <Titre niveau={2}>Mini-jeu {index + 1} sur {items.length}</Titre>
+      <Titre niveau={2}>
+        Mini-jeu {index + 1} sur {items.length}
+      </Titre>
 
       <Carte
         className={`space-y-4 ${
@@ -142,12 +155,16 @@ export default function PageEssai() {
             : ""
         }`}
       >
-        {/* ---- Rendu selon le format ---- */}
-        {item.game_type === "qcm" && <Qcm item={item} onValider={valider} desactive={reponseDonnee} />}
-        {item.game_type === "riddle" && <Devinette item={item} onValider={valider} desactive={reponseDonnee} />}
-        {item.game_type === "intruder" && <Intrus item={item} onValider={valider} desactive={reponseDonnee} />}
+        {item.game_type === "qcm" && (
+          <Qcm onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} />
+        )}
+        {item.game_type === "riddle" && (
+          <Devinette onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} />
+        )}
+        {item.game_type === "intruder" && (
+          <Intrus onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} />
+        )}
 
-        {/* ---- Feedback immédiat ---- */}
         {reponseDonnee && (
           <div
             className={`text-center font-bold text-xl ${
@@ -155,11 +172,9 @@ export default function PageEssai() {
             }`}
           >
             {bonneReponse ? (
-              <span className="anim-points-volants inline-block">
-                Bravo ! +10 points
-              </span>
+              <span className="anim-points-volants inline-block">Bravo ! +10 points</span>
             ) : (
-              "Dommage ! La bonne réponse s'affiche en vert."
+              "Dommage !"
             )}
           </div>
         )}
@@ -175,21 +190,19 @@ export default function PageEssai() {
 }
 
 // ============================================================
-// Formats de mini-jeux (les réponses sont validées côté serveur
-// au Défi du Jour ; en mode essai, validation locale simple)
+// Formats — ils envoient juste le choix au serveur, qui valide.
 // ============================================================
 
 function Qcm({
-  item,
   onValider,
   desactive,
+  p,
 }: {
-  item: Item;
-  onValider: (ok: boolean) => void;
+  onValider: (answer: any) => void;
   desactive: boolean;
+  p: any;
 }) {
   const [choix, setChoix] = useState<number | null>(null);
-  const p = item.payload;
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">{p.question}</p>
@@ -199,16 +212,10 @@ function Qcm({
           disabled={desactive}
           onClick={() => {
             setChoix(i);
-            // En mode essai, la validation est locale (pas de compte).
-            // NB : payload public → pas de champ answer ; pour l'essai on
-            // considère la 1re proposition comme correcte côté client si
-            // le champ existe, sinon on simule via le champ answer masqué.
-            onValider(p.answer !== undefined ? i === p.answer : false);
+            onValider({ choice: i });
           }}
           className={`w-full min-h-[56px] rounded-lg border-4 text-lg font-bold transition-colors ${
-            choix === i
-              ? "bg-or border-sable"
-              : "bg-white border-sable hover:bg-or/20"
+            choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
           }`}
         >
           {c}
@@ -219,19 +226,15 @@ function Qcm({
 }
 
 function Devinette({
-  item,
   onValider,
   desactive,
+  p,
 }: {
-  item: Item;
-  onValider: (ok: boolean) => void;
+  onValider: (answer: any) => void;
   desactive: boolean;
+  p: any;
 }) {
   const [texte, setTexte] = useState("");
-  const p = item.payload;
-  function sansAccents(s: string): string {
-    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-  }
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">{p.riddle}</p>
@@ -247,7 +250,7 @@ function Devinette({
         variante="enigme"
         pleineLargeur
         disabled={desactive || texte.trim().length === 0}
-        onClick={() => onValider(sansAccents(texte) === sansAccents(p.answer ?? ""))}
+        onClick={() => onValider({ text: texte })}
       >
         Valider ma réponse
       </Bouton>
@@ -266,16 +269,15 @@ function Devinette({
 }
 
 function Intrus({
-  item,
   onValider,
   desactive,
+  p,
 }: {
-  item: Item;
-  onValider: (ok: boolean) => void;
+  onValider: (answer: any) => void;
   desactive: boolean;
+  p: any;
 }) {
   const [choix, setChoix] = useState<number | null>(null);
-  const p = item.payload;
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">Trouve l&apos;intrus :</p>
@@ -286,12 +288,10 @@ function Intrus({
             disabled={desactive}
             onClick={() => {
               setChoix(i);
-              onValider(p.intruder !== undefined ? i === p.intruder : false);
+              onValider({ intruder_index: i });
             }}
             className={`min-h-[64px] rounded-lg border-4 text-lg font-bold transition-colors ${
-              choix === i
-                ? "bg-or border-sable"
-                : "bg-white border-sable hover:bg-or/20"
+              choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
             }`}
           >
             {c}
