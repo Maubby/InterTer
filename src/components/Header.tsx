@@ -27,6 +27,9 @@ export default function Header() {
           <Link href="/essai" className="hover:text-gueules transition-colors">
             Essai
           </Link>
+          <Link href="/mon-profil" className="hover:text-gueules transition-colors">
+            Mon profil
+          </Link>
         </nav>
       </div>
     </header>
