@@ -303,6 +303,13 @@ export default function PageDefiDuJour() {
 // Formats — envoient la réponse au parent, qui valide via RPC.
 // ============================================================
 
+// Affiche une affirmation booléenne proprement (true → Vrai)
+function affichage(a: any): string {
+  if (a === true) return "Vrai";
+  if (a === false) return "Faux";
+  return String(a ?? "");
+}
+
 type OnValider = (answer: any) => void;
 type Props = { p: any; onValider: OnValider; desactive: boolean };
 
@@ -329,9 +336,14 @@ function Qcm({ p, onValider, desactive }: Props) {
 
 function VraiFaux({ p, onValider, desactive }: Props) {
   const [choix, setChoix] = useState<string | null>(null);
+  // L'affirmation : selon le format de l'item (statement, question,
+  // ou 1re d'une liste "statements")
+  const affirmation = p.statement ?? p.question ?? (Array.isArray(p.statements) ? p.statements[0] : null);
+  // La bonne réponse au même format
+  const bonne = p.answer ?? (Array.isArray(p.answers) ? p.answers[0] : null);
   return (
     <div className="space-y-3">
-      <p className="text-xl font-bold">{p.statement ?? p.question}</p>
+      <p className="text-xl font-bold">{affichage(affirmation)}</p>
       <div className="grid grid-cols-2 gap-3">
         {[["true", "VRAI"], ["false", "FAUX"]].map(([val, label]) => (
           <button

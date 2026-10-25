@@ -4,7 +4,12 @@
     "difficulty": 1,
     "payload": {
       "question": "Quelle ville est surnommée « la ville rose » ?",
-      "choices": ["Lyon", "Toulouse", "Marseille", "Bordeaux"],
+      "choices": [
+        "Lyon",
+        "Toulouse",
+        "Marseille",
+        "Bordeaux"
+      ],
       "answer": 1
     }
   },
@@ -12,17 +17,9 @@
     "game_type": "true_false",
     "difficulty": 1,
     "payload": {
-      "statements": [
-        "Le mont Blanc est le plus haut sommet d'Europe.",
-        "La Loire est le plus long fleuve de France.",
-        "Paris est traversée par la Seine.",
-        "L'Alsace se trouve à l'ouest de la France.",
-        "Nice est une ville de la Côte d'Azur.",
-        "Le camembert vient de Normandie.",
-        "La Bretagne possède un drapeau à mouchetures d'hermine.",
-        "Strasbourg est le siège du Parlement européen."
-      ],
-      "answers": [true, true, true, false, true, true, true, true]
+      "statement": "Le mont Blanc est le plus haut sommet d'Europe.",
+      "answer": true,
+      "explanation": "Le mont Blanc (4 805 m) culmine en France, dans les Alpes — c'est le toit de l'Europe occidentale."
     }
   },
   {
@@ -30,7 +27,10 @@
     "difficulty": 2,
     "payload": {
       "riddle": "Je suis une ville fortifiée par Vauban, surnommée « la citadelle du Nord ». Mon beffroi carillonne chaque heure.",
-      "hints": ["Mes remparts sont classés à l'UNESCO.", "Je suis dans le département du Nord."],
+      "hints": [
+        "Mes remparts sont classés à l'UNESCO.",
+        "Je suis dans le département du Nord."
+      ],
       "answer": "Lille"
     }
   },
@@ -39,7 +39,12 @@
     "difficulty": 1,
     "payload": {
       "emojis": "🏰🐟🌊",
-      "choices": ["Lyon", "Marseille", "Strasbourg", "Nantes"],
+      "choices": [
+        "Lyon",
+        "Marseille",
+        "Strasbourg",
+        "Nantes"
+      ],
       "answer": 1
     }
   },
@@ -47,7 +52,12 @@
     "game_type": "intruder",
     "difficulty": 2,
     "payload": {
-      "items": ["Camembert", "Comté", "Cheddar", "Roquefort"],
+      "items": [
+        "Camembert",
+        "Comté",
+        "Cheddar",
+        "Roquefort"
+      ],
       "intruder": 2
     }
   },
@@ -61,7 +71,12 @@
         "Construction de la tour Eiffel",
         "Ouverture du tunnel sous la Manche"
       ],
-      "correct_order": [0, 1, 2, 3]
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ]
     }
   }
 ]
