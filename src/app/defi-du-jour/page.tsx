@@ -123,12 +123,16 @@ export default function PageDefiDuJour() {
       setEnCours(false);
       return;
     }
-    const { data: itemsData } = await supabase
+    const { data: itemsData, error: errItems } = await supabase
       .from("game_items_public")
       .select("id, game_type, theme, payload")
       .in("id", data.item_ids);
-    if (!itemsData) {
-      setErreur("Impossible de charger les mini-jeux du jour.");
+    if (errItems || !itemsData) {
+      console.error("Erreur chargement items:", errItems);
+      setErreur(
+        "Impossible de charger les mini-jeux du jour : " +
+          (errItems?.message ?? "réponse vide")
+      );
       setEnCours(false);
       return;
     }
