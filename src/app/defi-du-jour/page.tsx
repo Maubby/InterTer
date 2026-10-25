@@ -346,12 +346,13 @@ export default function PageDefiDuJour() {
       <Titre>La Quête du Jour</Titre>
       <Carte className="space-y-4">
         <p className="text-lg">
-          <strong>5 mini-jeux identiques pour toute la France</strong>, à
-          jouer <strong>une seule fois</strong> par jour.
+          Chaque jour, <strong>une nouvelle Quête t&apos;attend</strong> : 5
+          défis inédits concoctés par la guilde du village — jamais vus,
+          jamais revus !
         </p>
         <p className="text-base">
-          Tes points comptent <strong>double</strong> pour ta ville. Chaque
-          jour joué augmente ta série{" "}
+          Tes points comptent <strong>double</strong> pour ta ville, et
+          chaque jour joué rallonge ta série{" "}
           <Flamme className="inline w-5 h-5 text-gueules" /> !
         </p>
         <Separateur />
