@@ -88,12 +88,12 @@ export default function PageClassement() {
     })();
   }, [vue, maVille]);
 
-  // Médailles pour le podium
-  function medaille(i: number): string {
-    if (i === 0) return "🥇";
-    if (i === 1) return "🥈";
-    if (i === 2) return "🥉";
-    return `${i + 1}.`;
+  // Médailles pour le podium : or/argent/bronze en pastilles (pas d'emoji)
+  function medaille(i: number): { txt: string; coul: string } {
+    if (i === 0) return { txt: "1er", coul: "bg-or text-sable" };
+    if (i === 1) return { txt: "2e", coul: "bg-sable/70 text-parchemin" };
+    if (i === 2) return { txt: "3e", coul: "bg-gueules/60 text-white" };
+    return { txt: `${i + 1}e`, coul: "bg-parchemin-2 text-sable" };
   }
 
   return (
@@ -151,8 +151,10 @@ export default function PageClassement() {
                   l.city_id === maVille ? "bg-or/20 border-2 border-or" : ""
                 }`}
               >
-                <span className="font-cinzel font-black text-xl w-10 text-center shrink-0">
-                  {medaille(i)}
+                <span
+                  className={`font-cinzel font-black text-sm w-12 h-9 flex items-center justify-center rounded-md shrink-0 ${medaille(i).coul}`}
+                >
+                  {medaille(i).txt}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-lg truncate">{l.name}</p>

@@ -177,7 +177,7 @@ export default function PageMonProfil() {
           </div>
           <p className="text-sm text-sable/60">
             dont les tiens, gagnés en Quête du Jour (×2) et en épreuves —
-            chaque habitateur compte !
+            chaque habitant compte !
           </p>
           <Bouton
             variante="enigme"
