@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
