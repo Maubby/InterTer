@@ -39,13 +39,25 @@ export default function Accueil() {
       </Carte>
 
       <div className="grid gap-3">
-        <Bouton variante="primaire" pleineLargeur>
+        <Bouton
+          variante="primaire"
+          pleineLargeur
+          onClick={() => (window.location.href = "/defi-du-jour")}
+        >
           <Eclair className="w-6 h-6" /> Vivre la Quête du Jour
         </Bouton>
-        <Bouton variante="enigme" pleineLargeur>
+        <Bouton
+          variante="enigme"
+          pleineLargeur
+          onClick={() => (window.location.href = "/classement")}
+        >
           <Trophee className="w-6 h-6" /> Voir le classement
         </Bouton>
-        <Bouton variante="succes" pleineLargeur>
+        <Bouton
+          variante="succes"
+          pleineLargeur
+          onClick={() => (window.location.href = "/essai")}
+        >
           <Etoile className="w-6 h-6" /> Essayer sans compte
         </Bouton>
       </div>
