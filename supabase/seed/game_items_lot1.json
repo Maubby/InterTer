@@ -780,11 +780,11 @@
       ],
       "correct_order": [
         0,
-        2,
         1,
+        2,
         3
       ],
-      "explanation": "L'imprimerie s'installe à Paris en 1470, l'édit de Nantes est révoqué en 1685, Versailles s'élève à partir de 1661, la Révolution éclate en 1789."
+      "explanation": "L'imprimerie s'installe à Paris en 1470. Versailles s'élève à partir de 1661 sous Louis XIV. L'édit de Nantes est révoqué en 1685, chassant les protestants. La Révolution éclate en 1789."
     }
   },
   {
@@ -800,11 +800,11 @@
       ],
       "correct_order": [
         0,
-        2,
         1,
+        2,
         3
       ],
-      "explanation": "Le séisme de Lisbonne ébranle l'Europe en 1755, la première ligne ferroviaire française ouvre en 1827, le téléphone arrive en 1876, la radioactivité est découverte en 1896."
+      "explanation": "Le séisme de Lisbonne ébranle l'Europe en 1755. La première ligne de chemin de fer française (Saint-Étienne–Andrézieux) ouvre en 1827. Le téléphone est inventé en 1876, et la radioactivité découverte en 1896."
     }
   },
   {
