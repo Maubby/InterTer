@@ -12,42 +12,62 @@ import { Etoile, Flamme, Trophee } from "@/components/Icons";
 // Les thèmes structurent la banque de questions ; les formats
 // (qcm, devinette...) sont la manière de jouer chaque thème.
 const GUILDE: Record<string, { nom: string; svg: string; intro: string }> = {
-  qcm: {
+  quotidien: {
     nom: "Mahaut la Marchande",
     svg: "/personnages/mahaut-marchande.svg",
     intro: "Mahaut étale ses marchandises devant toi :",
   },
-  true_false: {
+  histoire: {
     nom: "Henri le Bailli",
     svg: "/personnages/henri-bailli.svg",
     intro: "Henri te demande de trancher :",
   },
-  riddle: {
+  legendes: {
     nom: "Ameline la Conteuse",
     svg: "/personnages/ameline-contreuse.svg",
-    intro: "Ameline conte une légende, devine la fin :",
+    intro: "Ameline conte une légende :",
   },
-  emoji_riddle: {
+  armes: {
     nom: "Garin le Forgeron",
     svg: "/personnages/garin-forgeron.svg",
     intro: "Garin frappe son enclume, écoute bien :",
   },
-  intruder: {
+  cuisine: {
     nom: "Yvonne la Marmitonne",
     svg: "/personnages/yvonne-marmitonne.svg",
     intro: "Yvonne vide son panier sur la table :",
   },
-  order_dates: {
+  chroniques: {
     nom: "Étienne le Greffier",
     svg: "/personnages/etienne-greffier.svg",
     intro: "Étienne relit les registres de la ville :",
+  },
+  geographie: {
+    nom: "Berthe la Cartographe",
+    svg: "/personnages/berthe-cartographe.svg",
+    intro: "Berthe déplie ses cartes :",
+  },
+  fetes: {
+    nom: "Jehanne la Ménestrelle",
+    svg: "/personnages/jehanne-menestrelle.svg",
+    intro: "Jehanne accorde son luth :",
+  },
+  nature: {
+    nom: "Aldric le Fauconnier",
+    svg: "/personnages/aldric-fauconnier.svg",
+    intro: "Aldric pose son faucon sur le gant :",
+  },
+  sciences: {
+    nom: "Pons le Barbier-Chirurgien",
+    svg: "/personnages/pons-barbier.svg",
+    intro: "Pons aiguise ses instruments :",
   },
 };
 
 // ---------- Types ----------
 type GameType =
   | "qcm" | "true_false" | "riddle" | "emoji_riddle" | "intruder" | "order_dates";
-type Item = { id: string; game_type: GameType; payload: any };
+type Item = { id: string; game_type: GameType; theme?: string | null; payload: any };
 type Resultat = { score: number; total: number; correct_count: number; streak: number };
 
 export default function PageDefiDuJour() {
@@ -105,7 +125,7 @@ export default function PageDefiDuJour() {
     }
     const { data: itemsData } = await supabase
       .from("game_items_public")
-      .select("id, game_type, payload")
+      .select("id, game_type, theme, payload")
       .in("id", data.item_ids);
     if (!itemsData) {
       setErreur("Impossible de charger les mini-jeux du jour.");
@@ -257,7 +277,7 @@ export default function PageDefiDuJour() {
         </div>
 
         <Titre niveau={2}>
-          {GUILDE[items[index].game_type]?.nom ?? "Épreuve"} — {index + 1} sur {items.length}
+          {GUILDE[items[index].theme ?? items[index].game_type]?.nom ?? "Épreuve"} — {index + 1} sur {items.length}
         </Titre>
 
         <Carte
@@ -270,21 +290,21 @@ export default function PageDefiDuJour() {
           }`}
         >
           {/* L'hôte de l'épreuve */}
-          {GUILDE[items[index].game_type] && (
+          {GUILDE[items[index].theme ?? items[index].game_type] && (
             <div className="flex items-center gap-3 border-b-2 border-sable/20 pb-3">
               <Image
-                src={GUILDE[items[index].game_type].svg}
-                alt={GUILDE[items[index].game_type].nom}
+                src={GUILDE[items[index].theme ?? items[index].game_type].svg}
+                alt={GUILDE[items[index].theme ?? items[index].game_type].nom}
                 width={56}
                 height={56}
                 unoptimized
               />
               <div>
                 <p className="font-cinzel font-bold text-lg text-azur">
-                  {GUILDE[items[index].game_type].nom}
+                  {GUILDE[items[index].theme ?? items[index].game_type].nom}
                 </p>
                 <p className="text-base text-sable/70">
-                  {GUILDE[items[index].game_type].intro}
+                  {GUILDE[items[index].theme ?? items[index].game_type].intro}
                 </p>
               </div>
             </div>
