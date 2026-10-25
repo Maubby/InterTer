@@ -389,6 +389,8 @@ type Props = { p: any; onValider: OnValider; desactive: boolean };
 
 function Qcm({ p, onValider, desactive }: Props) {
   const [choix, setChoix] = useState<number | null>(null);
+  // Reset quand on change d'épreuve (sinon le choix précédent reste surligné)
+  useEffect(() => { setChoix(null); }, [p]);
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">{p.question}</p>
@@ -410,6 +412,8 @@ function Qcm({ p, onValider, desactive }: Props) {
 
 function VraiFaux({ p, onValider, desactive }: Props) {
   const [choix, setChoix] = useState<string | null>(null);
+  // Reset quand on change d'épreuve
+  useEffect(() => { setChoix(null); }, [p]);
   // L'affirmation : selon le format de l'item (statement, question,
   // ou 1re d'une liste "statements")
   const affirmation = p.statement ?? p.question ?? (Array.isArray(p.statements) ? p.statements[0] : null);
@@ -509,6 +513,8 @@ function EmojiRiddle({ p, onValider, desactive }: Props) {
 
 function Intrus({ p, onValider, desactive }: Props) {
   const [choix, setChoix] = useState<number | null>(null);
+  // Reset quand on change d'épreuve
+  useEffect(() => { setChoix(null); }, [p]);
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">Trouve l&apos;intrus :</p>
@@ -532,6 +538,8 @@ function Intrus({ p, onValider, desactive }: Props) {
 
 function OrdreDates({ p, onValider, desactive }: Props) {
   const [ordre, setOrdre] = useState<number[]>([]);
+  // Reset quand on change d'épreuve
+  useEffect(() => { setOrdre([]); }, [p]);
   const tous = Array.from({ length: p.events?.length ?? 0 }, (_, i) => i);
 
   function basculer(i: number) {

@@ -214,7 +214,7 @@
     "game_type": "qcm",
     "difficulty": 1,
     "payload": {
-      "question": "Vercingétorix affronta César lors de quelle célèbre bataille ?",
+      "question": "Devant quelle ville Vercingétorix se rendit-il à César, mettant fin à la résistance gauloise ?",
       "choices": [
         "Alésia",
         "Gergovie",
@@ -222,7 +222,7 @@
         "Bibracte"
       ],
       "answer": 0,
-      "explanation": "En 52 av. J.-C., Vercingétorix capitule à Alésia (Côte-d'Or) devant César — la Gaule devient romaine. Alésia reste l'un des sites archéologiques majeurs de France."
+      "explanation": "En 52 av. J.-C., vaincu au siège d'Alésia (Côte-d'Or), Vercingétorix jette ses armes aux pieds de César et se rend — la Gaule devient romaine. (Il avait certes battu César à Gergovie quelques mois plus tôt, mais c'est à Alésia que tout se joua.)"
     }
   },
   {
