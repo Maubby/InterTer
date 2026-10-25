@@ -5,44 +5,37 @@ import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
 import Image from "next/image";
+import { Separateur, RoseDesVents } from "@/components/Fioritures";
 import { Etoile, Flamme, Trophee } from "@/components/Icons";
 
-// ---------- Noms des épreuves (vocabulaire médiéval) ----------
-const NOMS_EPREUVES: Record<string, string> = {
-  qcm: "Le Marché du Merchant",
-  true_false: "Le Jugement du Tribunal",
-  riddle: "L'Énigme du Veilleur",
-  emoji_riddle: "Le Blason Mystère",
-  intruder: "Le Sac du Pillard",
-  order_dates: "La Chronique du Moine",
-};
-
-// ---------- Les personnages : un hôte par épreuve ----------
-const PERSONNAGES: Record<string, { nom: string; svg: string; intro: string }> = {
+// ---------- La guilde d'Interter : un personnage par thème ----------
+// Les thèmes structurent la banque de questions ; les formats
+// (qcm, devinette...) sont la manière de jouer chaque thème.
+const GUILDE: Record<string, { nom: string; svg: string; intro: string }> = {
   qcm: {
-    nom: "Bertrand le Merchant",
-    svg: "/personnages/bertrand-merchant.svg",
-    intro: "Bertrand te montre ses marchandises :",
+    nom: "Mahaut la Marchande",
+    svg: "/personnages/mahaut-marchande.svg",
+    intro: "Mahaut étale ses marchandises devant toi :",
   },
   true_false: {
-    nom: "Maître Aldric le Juge",
-    svg: "/personnages/aldric-juge.svg",
-    intro: "Maître Aldric te demande de trancher :",
+    nom: "Henri le Bailli",
+    svg: "/personnages/etienne-greffier.svg",
+    intro: "Henri te demande de trancher :",
   },
   riddle: {
-    nom: "Gaspard le Veilleur",
-    svg: "/personnages/gaspard-veilleur.svg",
-    intro: "Gaspard te pose une énigme :",
+    nom: "Ameline la Conteuse",
+    svg: "/personnages/ameline-contreuse.svg",
+    intro: "Ameline conte une légende, devine la fin :",
   },
   emoji_riddle: {
-    nom: "Héraut Ambroise",
-    svg: "/personnages/ambroise-heraut.svg",
-    intro: "Ambroise te montre des symboles :",
+    nom: "Garin le Forgeron",
+    svg: "/personnages/garin-forgeron.svg",
+    intro: "Garin frappe son enclume, écoute bien :",
   },
   intruder: {
-    nom: "Ferrand le Pillard",
-    svg: "/personnages/ferrand-pillard.svg",
-    intro: "Ferrand vide son sac sur la table :",
+    nom: "Yvonne la Marmitonne",
+    svg: "/personnages/yvonne-marmitonne.svg",
+    intro: "Yvonne vide son panier sur la table :",
   },
   order_dates: {
     nom: "Frère Anselme",
@@ -264,7 +257,7 @@ export default function PageDefiDuJour() {
         </div>
 
         <Titre niveau={2}>
-          {NOMS_EPREUVES[items[index].game_type]} — {index + 1} sur {items.length}
+          {GUILDE[items[index].game_type]?.nom ?? "Épreuve"} — {index + 1} sur {items.length}
         </Titre>
 
         <Carte
@@ -277,21 +270,21 @@ export default function PageDefiDuJour() {
           }`}
         >
           {/* L'hôte de l'épreuve */}
-          {PERSONNAGES[items[index].game_type] && (
+          {GUILDE[items[index].game_type] && (
             <div className="flex items-center gap-3 border-b-2 border-sable/20 pb-3">
               <Image
-                src={PERSONNAGES[items[index].game_type].svg}
-                alt={PERSONNAGES[items[index].game_type].nom}
+                src={GUILDE[items[index].game_type].svg}
+                alt={GUILDE[items[index].game_type].nom}
                 width={56}
                 height={56}
                 unoptimized
               />
               <div>
                 <p className="font-cinzel font-bold text-lg text-azur">
-                  {PERSONNAGES[items[index].game_type].nom}
+                  {GUILDE[items[index].game_type].nom}
                 </p>
                 <p className="text-base text-sable/70">
-                  {PERSONNAGES[items[index].game_type].intro}
+                  {GUILDE[items[index].game_type].intro}
                 </p>
               </div>
             </div>
@@ -314,7 +307,7 @@ export default function PageDefiDuJour() {
               </div>
               {item.payload?.explanation && (
                 <div className="text-base bg-parchemin rounded-lg border-2 border-sable/30 p-3">
-                  <strong>Le saviez-vous ?</strong> {item.payload.explanation}
+                  <strong className="font-cinzel">Selon la Chronique…</strong> {item.payload.explanation}
                 </div>
               )}
               <Bouton variante="primaire" pleineLargeur onClick={suivant} disabled={enCours}>
@@ -341,6 +334,7 @@ export default function PageDefiDuJour() {
           jour joué augmente ta série{" "}
           <Flamme className="inline w-5 h-5 text-gueules" /> !
         </p>
+        <Separateur />
         {erreur && <p className="text-gueules font-bold">{erreur}</p>}
         {phase === "chargement" ? (
           <p>Chargement…</p>

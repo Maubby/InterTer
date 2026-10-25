@@ -8,8 +8,21 @@ export function Carte({
 }) {
   return (
     <div
-      className={`bg-parchemin-2 border-4 border-sable rounded-xl shadow-enchere p-5 ${className}`}
+      className={`relative bg-parchemin-2 border-4 border-sable rounded-xl shadow-enchere p-5 ${className}`}
     >
+      {/* Coins ornementaux médiévaux (fioritures) */}
+      <svg viewBox="0 0 20 20" className="absolute top-1 left-1 w-4 h-4 opacity-60" aria-hidden="true">
+        <path d="M2 10 L10 2 L18 10 L10 18 Z" fill="none" stroke="#b8975a" strokeWidth="1.5" />
+      </svg>
+      <svg viewBox="0 0 20 20" className="absolute top-1 right-1 w-4 h-4 opacity-60" aria-hidden="true">
+        <path d="M2 10 L10 2 L18 10 L10 18 Z" fill="none" stroke="#b8975a" strokeWidth="1.5" />
+      </svg>
+      <svg viewBox="0 0 20 20" className="absolute bottom-1 left-1 w-4 h-4 opacity-60" aria-hidden="true">
+        <path d="M2 10 L10 2 L18 10 L10 18 Z" fill="none" stroke="#b8975a" strokeWidth="1.5" />
+      </svg>
+      <svg viewBox="0 0 20 20" className="absolute bottom-1 right-1 w-4 h-4 opacity-60" aria-hidden="true">
+        <path d="M2 10 L10 2 L18 10 L10 18 Z" fill="none" stroke="#b8975a" strokeWidth="1.5" />
+      </svg>
       {children}
     </div>
   );
