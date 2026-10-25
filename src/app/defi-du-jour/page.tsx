@@ -19,7 +19,7 @@ const GUILDE: Record<string, { nom: string; svg: string; intro: string }> = {
   },
   true_false: {
     nom: "Henri le Bailli",
-    svg: "/personnages/etienne-greffier.svg",
+    svg: "/personnages/henri-bailli.svg",
     intro: "Henri te demande de trancher :",
   },
   riddle: {
@@ -38,9 +38,9 @@ const GUILDE: Record<string, { nom: string; svg: string; intro: string }> = {
     intro: "Yvonne vide son panier sur la table :",
   },
   order_dates: {
-    nom: "Frère Anselme",
-    svg: "/personnages/anselme-moine.svg",
-    intro: "Frère Anselme ouvre sa chronique :",
+    nom: "Étienne le Greffier",
+    svg: "/personnages/etienne-greffier.svg",
+    intro: "Étienne relit les registres de la ville :",
   },
 };
 

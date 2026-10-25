@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Henri le Bailli : chapeau d'officier, écharpe rouge, rouleau de loi -->
+  <circle cx="60" cy="64" r="40" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <path d="M30 100 Q60 72 90 100 Z" fill="#1f3a5f" stroke="#6b4f2a" stroke-width="3"/>
+  <path d="M42 90 L78 82" stroke="#c8102e" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="60" cy="52" r="24" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <path d="M36 42 Q60 30 84 42 L80 36 Q60 26 40 36 Z" fill="#1f3a5f" stroke="#6b4f2a" stroke-width="3"/>
+  <circle cx="60" cy="28" r="3" fill="#e8a020" stroke="#6b4f2a" stroke-width="1.5"/>
+  <path d="M45 48 L57 50" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M75 48 L63 50" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="52" cy="54" r="3" fill="#6b4f2a"/>
+  <circle cx="68" cy="54" r="3" fill="#6b4f2a"/>
+  <path d="M52 65 L68 65" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- rouleau de loi -->
+  <rect x="16" y="72" width="9" height="22" rx="3" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="2.5"/>
+  <!-- sceau -->
+  <circle cx="92" cy="82" r="5" fill="#c8102e" stroke="#6b4f2a" stroke-width="2"/>
+  <path d="M92 79 v6 M89 82 h6" stroke="#fff" stroke-width="1.5"/>
+</svg>
