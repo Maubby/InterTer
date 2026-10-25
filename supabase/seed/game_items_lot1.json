@@ -1,0 +1,892 @@
+[
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Quel objet du quotidien la ville de Laguiole fabrique-t-elle célèbrement ?",
+      "choices": [
+        "Le couteau de poche",
+        "Le parapluie",
+        "La montre",
+        "Le peigne en buis"
+      ],
+      "answer": 0,
+      "explanation": "Le couteau de Laguiole (Aveyron) est fabriqué depuis 1828. Son abeille emblématique ornait à l'origine les trompettes de la cavalerie d'Empire."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "De quelle ville provenaient les draps royaux au XVIIe siècle ?",
+      "choices": [
+        "Rouen",
+        "Lyon",
+        "Reims",
+        "Tarascon"
+      ],
+      "answer": 1,
+      "explanation": "Lyon, capitale de la soie, habillait la Cour. Les canuts tissaient dans les ateliers de la Croix-Rousse, quartier resté emblématique."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "Le denim (jean) doit son nom à la ville de Nîmes.",
+      "answer": true,
+      "explanation": "« De Nîmes » : le serge de Nîmes, tissu résistant, fut exporté vers Gênes puis popularisé par Levi Strauss. La ville a d'ailleurs donné son nom au « jeans » (Gênes)."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Le calendrier à images des postes, appelé « Almanach », était imprimeé dans quelle ville à l'origine ?",
+      "choices": [
+        "Épinal",
+        "Toulouse",
+        "Nantes",
+        "Chartres"
+      ],
+      "answer": 0,
+      "explanation": "Les images d'Épinal, nées en 1796, racontaient des histoires en images pour le peuple. « Une image d'Épinal » est resté une expression pour une vision naïve des choses."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Quelle ville française a inventé le stylo-plume à réservoir ?",
+      "choices": [
+        "Paris",
+        "Bordeaux",
+        "Grenoble",
+        "Mulhouse"
+      ],
+      "answer": 1,
+      "explanation": "En 1884, Lewis Waterman met au point le stylo-plume moderne à Bordeaux après qu'un marchand lui eut rendu un contrat taché d'encre — l'irritation fut mère de l'invention."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "L'échelle des chèvres de Montreuil-Bellay porte ce nom car des chèvres paissaient sur ses remparts.",
+      "answer": false,
+      "explanation": "L'échelle des chèvres est en réalité une montée de marches si raide que seules des chèvres semblaient pouvoir l'emprunter — c'est le vin de Saumur qui fit la richesse de Montreuil-Bellay, pas les caprins."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 3,
+    "payload": {
+      "question": "Le bijou traditionnel « la croix de Savoie » est porté dans quelle région ?",
+      "choices": [
+        "La Savoie",
+        "La Bretagne",
+        "L'Alsace",
+        "Le Pays basque"
+      ],
+      "answer": 0,
+      "explanation": "La croix de Savoie, en or ciselé, est le bijou traditionnel des Savoyardes, transmis de mère en fille depuis des siècles."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Dans quelle ville est née la presse à imprimer les journaux en couleur en France ?",
+      "choices": [
+        "Lyon",
+        "Paris",
+        "Marseille",
+        "Limoges"
+      ],
+      "answer": 3,
+      "explanation": "Limoges, ville de l'imprimerie et de l'émail, fut pionnière des presses en couleur au XIXe siècle — avant même que les grands paris s'y mettent."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "true_false",
+    "difficulty": 2,
+    "payload": {
+      "statement": "Le tire-bouchon a été breveté en France au XIXe siècle.",
+      "answer": true,
+      "explanation": "Le tire-bouchon est breveté en 1855 par L. J. Labaune à Paris. La Région l'a classé au patrimoine : sans lui, point de grands crus ni de petits plateaux de terrines."
+    }
+  },
+  {
+    "theme": "quotidien",
+    "game_type": "qcm",
+    "difficulty": 3,
+    "payload": {
+      "question": "Quel objet emblématique de Rouen était vendu « au poinçon » dès le XVIIIe siècle ?",
+      "choices": [
+        "La faïence",
+        "Le fer à repasser",
+        "La bougie",
+        "Le sablier"
+      ],
+      "answer": 0,
+      "explanation": "La faïence de Rouen, aux décors « à la corne » bleus, était si réputée qu'elle se vendait marquée au poinçon — ancêtre de notre certification."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Quelle ville fut la capitale des rois francs avant Paris ?",
+      "choices": [
+        "Soissons",
+        "Reims",
+        "Tours",
+        "Orléans"
+      ],
+      "answer": 1,
+      "explanation": "Reims fut la ville du sacre : 25 rois de France y furent couronnés dans sa cathédrale, de Louis VIII en 1223 à Charles X en 1825."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "Jeanne d'Arc a délivré la ville d'Orléans en 1429.",
+      "answer": true,
+      "explanation": "Le 8 mai 1429, Jeanne d'Arc libère Orléans du siège anglais. La ville célèbre toujours les fêtes johanniques chaque mois de mai, 600 ans plus tard."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Dans quelle ville siégeait le Parlement de Bretagne avant la Révolution ?",
+      "choices": [
+        "Nantes",
+        "Rennes",
+        "Brest",
+        "Vannes"
+      ],
+      "answer": 1,
+      "explanation": "Le Parlement de Bretagne siégeait à Rennes depuis 1554. Rennes, capitale administrative de la Bretagne, garde son palais monumental place du Parlement."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Quelle ville était surnommée « la cité des Papes » ?",
+      "choices": [
+        "Rome",
+        "Avignon",
+        "Vatican",
+        "Arles"
+      ],
+      "answer": 1,
+      "explanation": "De 1309 à 1377, sept papes résidèrent à Avignon au lieu de Rome. Le palais des Papes reste le plus grand palais gothique d'Europe."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "true_false",
+    "difficulty": 2,
+    "payload": {
+      "statement": "La Marseillaise a été composée à Marseille.",
+      "answer": false,
+      "explanation": "Rouget de Lisle compose le « Chant de guerre de l'Armée du Rhin » à Strasbourg en 1792. Ce sont les fédérés marseillais qui l'popularisèrent à Paris — d'où son nom."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Vercingétorix affronta César lors de quelle célèbre bataille ?",
+      "choices": [
+        "Alésia",
+        "Gergovie",
+        "Avaricum",
+        "Bibracte"
+      ],
+      "answer": 0,
+      "explanation": "En 52 av. J.-C., Vercingétorix capitule à Alésia (Côte-d'Or) devant César — la Gaule devient romaine. Alésia reste l'un des sites archéologiques majeurs de France."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "order_dates",
+    "difficulty": 2,
+    "payload": {
+      "events": [
+        "Fondation de Marseille par les Grecs",
+        "Siège d'Alésia",
+        "Sacré de Charlemagne",
+        "Construction de la tour Eiffel"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "Marseille est fondée vers 600 av. J.-C., Alésia tombe en 52 av. J.-C., Charlemagne est sacré en 800, et la tour Eiffel s'élève en 1889 — 25 siècles d'histoire de France."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Quelle ville a accueilli l'exposition universelle de 1889, celle de la tour Eiffel ?",
+      "choices": [
+        "Lyon",
+        "Paris",
+        "Marseille",
+        "Bordeaux"
+      ],
+      "answer": 1,
+      "explanation": "L'Exposition universelle de 1889 célébrait le centenaire de la Révolution. La tour Eiffel, devant être démontée après, fut sauvée par l'invention de la radio — elle servit d'antenne."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "true_false",
+    "difficulty": 3,
+    "payload": {
+      "statement": "Le traité de Verdun qui partagea l'empire de Charlemagne fut signé à Verdun.",
+      "answer": true,
+      "explanation": "En 843, les petits-fils de Charlemagne partagèrent son empire à Verdun : c'est la naissance de la France et de la Germanie — Verdun, ville de paix, fut aussi ville de partage."
+    }
+  },
+  {
+    "theme": "histoire",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Quelle ville abrite le château qui a vu naître Guillaume le Conquérant ?",
+      "choices": [
+        "Falaise",
+        "Caen",
+        "Bayeux",
+        "Rouen"
+      ],
+      "answer": 0,
+      "explanation": "Guillaume le Conquérant naît au château de Falaise (Calvados) vers 1027. De là, il partit conquérir l'Angleterre en 1066 — Falaise garde sa statue équestre."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "riddle",
+    "difficulty": 1,
+    "payload": {
+      "riddle": "Ma fontaine jaillit à Vaucluse, et Pétrarque m'immortalisa en y pleurant sa bien-aimée Laure. Qui suis-je ?",
+      "hints": [
+        "Un village du Vaucluse",
+        "L'inventeur de l'Arche de Triomphe ? Non...",
+        "Mon nom commence par Fontaine-"
+      ],
+      "answer": "Fontaine-de-Vaucluse",
+      "explanation": "Pétrarque vécut à Fontaine-de-Vaucluse au XIVe siècle : c'est là qu'il écrivit ses sonnets pour Laure. Sa source est la plus puissante de France — elle inspire encore les poètes."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "riddle",
+    "difficulty": 2,
+    "payload": {
+      "riddle": "Une bête terrifia mon vivarais au XVIIIe siècle, et l'on dit qu'elle tuait plus vite que l'éclair. Quelle était-elle ?",
+      "hints": [
+        "Elle a inspiré un animal fantastique",
+        "Elle sévissait dans une région de gorges et de volcans",
+        "Son nom complet : « la bête du ... »"
+      ],
+      "answer": "la bête du Gévaudan",
+      "explanation": "De 1764 à 1767, la bête du Gévaudan fit des dizaines de victimes en Lozère. Louloup gigantesque ou tueur déguisé ? L'énigme n'est jamais complètement résolue."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Quelle fée se baignait dans la Seine avant de fonder la ville de Melun selon la légende ?",
+      "choices": [
+        "Mélusine",
+        "Melusina",
+        "Viviane",
+        "Morganne"
+      ],
+      "answer": 0,
+      "explanation": "Mélusine, fée-serpent du Poitou, est la gardienne légendaire de Lusignan : elle y bâtit le château en une nuit. Les seigneurs de Lusignan régnèrent sur un vaste empire médiéval."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "riddle",
+    "difficulty": 2,
+    "payload": {
+      "riddle": "On dit qu'un dragon guerroyait dans mon marais, et que des moines y plantèrent des crosses pour l'assécher. Qui suis-je ?",
+      "hints": [
+        "Je suis un lieu de pèlerinage des marais",
+        "Mon nom évoque une victoire sur le dragon",
+        "Saint ... me délivra"
+      ],
+      "answer": "Saint-Michel-en-Guers",
+      "explanation": "La légende du dragon de Guers (Vendée) est née de la conquête des marais par les moines défricheurs du Moyen Âge : dompter le marais, c'était vaincre la bête."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Le Graal aurait été caché dans quelle forêt selon les légendes arthuriennes adaptées en France ?",
+      "choices": [
+        "Brocéliande",
+        "Fontainebleau",
+        "Tronçais",
+        "Chantilly"
+      ],
+      "answer": 0,
+      "explanation": "La forêt de Brocéliande (Morbihan) cache le val sans retour de Merlin et le tombeau de l'enchanteur — aujourd'hui, le site de Paimpont attire toujours les chercheurs de légendes."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "Roland, neveu de Charlemagne, serait enterré au col de Roncevaux.",
+      "answer": true,
+      "explanation": "La chanson de Roland, plus ancienne épopée française, raconte la mort du preux Roland au col de Roncevaux en 778 — son cor de bruyenne sonne encore dans la légende."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "riddle",
+    "difficulty": 3,
+    "payload": {
+      "riddle": "Une chapelle m'est dédiée près de Rocamadour, car j'aurais délivré un village d'un serpent géant. Que suis-je ?",
+      "hints": [
+        "Une épée légendaire",
+        "Elle s'enfonça dans le rocher de Rocamadour",
+        "On la dit l'épée de Roland"
+      ],
+      "answer": "l'épée de Roland (la Durendal)",
+      "explanation": "La Durendal, épée de Roland, serait fichée dans la falaise de Rocamadour (Lot). Selon la légende, Roland l'y jeta pour qu'elle ne tombe pas aux mains de l'ennemi."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Quelle ville du Nord donne son nom à une légende de géant reprise en processions ?",
+      "choices": [
+        "Douai",
+        "Lille",
+        "Dunkerque",
+        "Valenciennes"
+      ],
+      "answer": 0,
+      "explanation": "Les géants de Douai (Gayant et sa famille) défilent chaque juillet depuis le XVe siècle — une tradition du Nord reprise par 6 autres géants municipaux."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "true_false",
+    "difficulty": 2,
+    "payload": {
+      "statement": "La ville de Carcassonne doit son nom à une dame nommée Carcas qui sonna sa trompette pour sauver la cité.",
+      "answer": true,
+      "explanation": "La légende raconte que dame Carcas, après un long siège, fit sonner les trompettes des remparts : l'ennemi crut la ville intombale et leva le camp. « Carcas sonne » — d'où son nom."
+    }
+  },
+  {
+    "theme": "legendes",
+    "game_type": "riddle",
+    "difficulty": 1,
+    "payload": {
+      "riddle": "On dit que mon sang est le seul remède, et les rois de France me touchaient pour guérir les écrouelles. Que suis-je ?",
+      "hints": [
+        "Un pouvoir attribué aux rois de France",
+        "La maladie s'appelle les écrouelles",
+        "On me dit « thaumaturge »"
+      ],
+      "answer": "le pouvoir royal de guérison",
+      "explanation": "Du Moyen Âge à 1825 (sacre de Charles X), les rois de France « touchaient » les écrouelles de leurs sujets, croyance en la guérison par le sang royal — la monarchie divine à l'œuvre."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Quelle ville abrite le château fort le plus visité de France ?",
+      "choices": [
+        "Versailles",
+        "Carcassonne",
+        "Chenonceau",
+        "Chambord"
+      ],
+      "answer": 1,
+      "explanation": "La cité médiévale de Carcassonne (Aude), avec ses 52 tours, attire plus de 4 millions de visiteurs par an — la plus grande forteresse d'Europe encore debout."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "L'ordre du Temple fut fondé en 1119 pour protéger les pèlerins de quelle ville ?",
+      "choices": [
+        "Rome",
+        "Jérusalem",
+        "Saint-Jacques-de-Compostelle",
+        "Lourdes"
+      ],
+      "answer": 1,
+      "explanation": "Les Templiers naissent à Jérusalem en 1119 pour protéger les pèlerins sur le chemin du Saint-Sépulcre. Leur procès en 1307 les dispersa — leurs châteaux parsèment encore la France."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "Le Mont-Saint-Michel a résisté à un siège anglais pendant la guerre de Cent Ans.",
+      "answer": true,
+      "explanation": "De 1423 à 1424, les Anglais assiégèrent le Mont-Saint-Michel sans succès. Cette victoire ouvrit la voie au destin de Jeanne d'Arc — le Mont resta fidèle au roi de France."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Quel château de la Loire fut construit par François Ier pour y chasser ?",
+      "choices": [
+        "Chambord",
+        "Blois",
+        "Amboise",
+        "Chinon"
+      ],
+      "answer": 0,
+      "explanation": "Chambord, commencé en 1519, est le plus vaste château de la Loire. Son escalier à double révolution, attribué à Léonard de Vinci, monte en secret au milieu de la forêt de chasse."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "qcm",
+    "difficulty": 3,
+    "payload": {
+      "question": "Quelle ville a donné son nom au fameux canon de la guerre de 14-18 ?",
+      "choices": [
+        "Soixante-Quinze",
+        "Verdun",
+        "Bayonne",
+        "Mülhausen"
+      ],
+      "answer": 0,
+      "explanation": "Le canon de 75, pièce d'artillerie française créée en 1897, fut surnommé « le soixante-quinze ». Rapide et précis, il symbolisa la puissance de l'artillerie française."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "true_false",
+    "difficulty": 2,
+    "payload": {
+      "statement": "Vauban a fortifié plus de 150 villes et places fortes de France.",
+      "answer": true,
+      "explanation": "Sébastien Le Prestre de Vauban (1633-1707), ingénieur militaire de Louis XIV, fortifia plus de 150 places — de Lille à Briançon. Douze de ses places sont aujourd'hui classées à l'UNESCO."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "Les remparts de quelle ville furent les plus longs de France au Moyen Âge ?",
+      "choices": [
+        "Paris",
+        "Aigues-Mortes",
+        "Provins",
+        "Avranches"
+      ],
+      "answer": 1,
+      "explanation": "Aigues-Mortes (Gard), fondée par Saint Louis pour embarquer vers les croisades, garde ses remparts rectangulaires parfaits de 1 640 mètres — une forteresse-cité unique."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "order_dates",
+    "difficulty": 2,
+    "payload": {
+      "events": [
+        "Bataille de Bouvines",
+        "Siège d'Orléans",
+        "Bataille de Marignan",
+        "Bataille de Valmy"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "Bouvines (1214) fonde la puissance royale capétienne, Orléans (1429) sauve le royaume avec Jeanne d'Arc, Marignan (1515) glorie François Ier, Valmy (1792) sauve la Révolution."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Le blason de Paris présente un navire : pourquoi ?",
+      "choices": [
+        "Paris était un port fluvial majeur",
+        "Les drapiers voyageaient en bateau",
+        "C'est le symbole des marchands de l'eau",
+        "Les pêcheurs dominaient la ville"
+      ],
+      "answer": 0,
+      "explanation": "Le navire du blason de Paris rappelle la batellerie sur la Seine : la corporation des marchands de l'eau gouvernait la ville au Moyen Âge — leur devise « Fluctuat nec mergitur » (il flotte mais ne coule pas) est celle de Paris."
+    }
+  },
+  {
+    "theme": "armes",
+    "game_type": "true_false",
+    "difficulty": 3,
+    "payload": {
+      "statement": "La devise de Paris est « Fluctuat nec mergitur ».",
+      "answer": true,
+      "explanation": "« Il est battu par les flots mais ne sombre pas » : la devise latine de Paris orne son blason au navire — un hommage aux marchands de l'eau qui firent la richesse de la ville."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "De quelle ville le cassoulet est-il l'emblème ?",
+      "choices": [
+        "Castelnaudary",
+        "Toulouse",
+        "Carcassonne",
+        "Tours"
+      ],
+      "answer": 0,
+      "explanation": "Castelnaudary (Aude), « capitale mondiale du cassoulet », en fait la promotion depuis des siècles. Sa confrérie du cassoulet veille sur la recette : haricots, confit d'oie, saucisses et couennes."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "qcm",
+    "difficulty": 1,
+    "payload": {
+      "question": "La bouillabaisse est la spécialité de quel port méditerranéen ?",
+      "choices": [
+        "Marseille",
+        "Nice",
+        "Sète",
+        "Toulon"
+      ],
+      "answer": 0,
+      "explanation": "La bouillabaisse naquit à Marseille des restes de la pêche invendus. Sa recette est codifiée : rascasse, grondin et safran obligatoires — servie avec la rouille."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "La tartiflette est un plat traditionnel savoyard.",
+      "answer": true,
+      "explanation": "La tartiflette (pomme de terre, reblochon, lardons, oignons) fut popularisée dans les années 1980 par le syndicat du reblochon — mais s'inspire de la péla, vraie recette des vallées savoyardes."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Lequel de ces fromages est normand ?",
+      "choices": [
+        "Le camembert",
+        "Le comté",
+        "Le reblochon",
+        "Le roquefort"
+      ],
+      "answer": 0,
+      "explanation": "Le camembert de Normandie, né à la fin du XVIIIe siècle de l'initiative de Marie Harel, fut nourri au financement des armées napoléoniennes... Sa boîte de bois date de 1890 — révolution du transport."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "intruder",
+    "difficulty": 1,
+    "payload": {
+      "items": [
+        "Bordeaux",
+        "Bourgogne",
+        "Champagne",
+        "Camargue"
+      ],
+      "intruder": 3,
+      "explanation": "Bordeaux, la Bourgogne et la Champagne sont trois des plus grands vignobles français. La Camargue, elle, produit du riz et du sel — pas de grands crus."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Quelle ville accueille la fameuse « foire aux vins » chaque année depuis 1930 ?",
+      "choices": [
+        "Dijon",
+        "Beaune",
+        "Mâcon",
+        "Chalon"
+      ],
+      "answer": 0,
+      "explanation": "La foire internationale et gastronomique de Dijon attire des centaines de milliers de visiteurs — née en 1921, elle célèbre le vin de Bourgogne et la gastronomie."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "order_dates",
+    "difficulty": 3,
+    "payload": {
+      "events": [
+        "Invention du croissant",
+        "Création du cassoulet",
+        "Première bouillabaisse codifiée",
+        "Invention de la tarte Tatin"
+      ],
+      "correct_order": [
+        1,
+        2,
+        0,
+        3
+      ],
+      "explanation": "Le cassoulet existe depuis le XIVe siècle, la bouillabaisse codifiée au XVIIe, le croissant arrive à Paris en 1839 (boulangerie viennoise), et la tarte Tatin est née... d'une erreur de sœurs Tatin en 1889."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Les « bouchons lyonnais » sont :",
+      "choices": [
+        "Des bouchons de liers d'annonces",
+        "Des restaurants traditionnels",
+        "Des bouchons de bouteilles de vin",
+        "Des douceurs au chocolat"
+      ],
+      "answer": 1,
+      "explanation": "Les bouchons lyonnais sont des petits restaurants conviviaux où l'on sert quenelles, grattons et tablier de sapeur — nés du repas des canuts, ils sont aujourd'hui préservés par un label."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "Le poulet de Bresse est le seul poulet français à posséder une AOC.",
+      "answer": true,
+      "explanation": "Le poulet de Bresse (Ain) est le premier poulet à avoir obtenu une appellation d'origine, en 1957. Il porte une bague tricolore — le « roi des volailles » s'élève en liberté."
+    }
+  },
+  {
+    "theme": "cuisine",
+    "game_type": "qcm",
+    "difficulty": 3,
+    "payload": {
+      "question": "Quel instrument de cuisine fut inventé à Thiers, capitale de la coutellerie ?",
+      "choices": [
+        "Le presse-ail",
+        "Le couteau d'office",
+        "La mandoline",
+        "Le rouleau à pâtisserie"
+      ],
+      "answer": 1,
+      "explanation": "Thiers (Puy-de-Dôme) fabrique des couteaux depuis le XIVe siècle — la vallée des usines en témoigne. Le couteau d'office thiers est réputé pour sa lame forgée et son manche en bois."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "order_dates",
+    "difficulty": 1,
+    "payload": {
+      "events": [
+        "Prise de la Bastille",
+        "Déclaration des droits de l'homme",
+        "Napoléon devient empereur",
+        "Hugo achève Les Misérables"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "La Bastille tombe le 14 juillet 1789, la Déclaration des droits de l'homme suit le 26 août 1789, Napoléon se couronne en 1804, et Hugo achève Les Misérables en 1862."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "order_dates",
+    "difficulty": 1,
+    "payload": {
+      "events": [
+        "Charlemagne sacré empereur",
+        "Bataille de Hastings",
+        "Croisade de Saint Louis",
+        "Début de la guerre de Cent Ans"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "Charlemagne est sacré en 800, Guillaume le Conquérant gagne Hastings en 1066, Saint Louis part en croisade en 1248, la guerre de Cent Ans commence en 1337."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "order_dates",
+    "difficulty": 2,
+    "payload": {
+      "events": [
+        "L'imprimerie s'installe à Paris",
+        "Construction de Versailles",
+        "Révocation de l'édit de Nantes",
+        "Révolution française"
+      ],
+      "correct_order": [
+        0,
+        2,
+        1,
+        3
+      ],
+      "explanation": "L'imprimerie s'installe à Paris en 1470, l'édit de Nantes est révoqué en 1685, Versailles s'élève à partir de 1661, la Révolution éclate en 1789."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "order_dates",
+    "difficulty": 1,
+    "payload": {
+      "events": [
+        "Le séisme de Lisbonne",
+        "La première ligne de chemin de fer française",
+        "L'invention du téléphone",
+        "La découverte de la radioactivité"
+      ],
+      "correct_order": [
+        0,
+        2,
+        1,
+        3
+      ],
+      "explanation": "Le séisme de Lisbonne ébranle l'Europe en 1755, la première ligne ferroviaire française ouvre en 1827, le téléphone arrive en 1876, la radioactivité est découverte en 1896."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "true_false",
+    "difficulty": 1,
+    "payload": {
+      "statement": "La « terreur de l'an mil » : la France entière trembla de la fin du monde.",
+      "answer": false,
+      "explanation": "Contraire à la légende, les sources de l'an 1000 montrent une vie continue — la « terreur de l'an mil » fut amplifiée par les historiens du XIXe siècle."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "true_false",
+    "difficulty": 2,
+    "payload": {
+      "statement": "Le calendrier républicain fut utilisé pendant 12 ans.",
+      "answer": true,
+      "explanation": "De 1793 à 1805, la France vécut au calendrier républicain : vendémiaire, brumaire, frimaire... Napoléon l'abolit en 1806."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "qcm",
+    "difficulty": 2,
+    "payload": {
+      "question": "Quel événement marque le début de l'an I de la République ?",
+      "choices": [
+        "La prise de la Bastille",
+        "La proclamation de la République",
+        "L'exécution de Louis XVI",
+        "La victoire de Valmy"
+      ],
+      "answer": 1,
+      "explanation": "L'an I débute le 22 septembre 1792, jour de la proclamation de la République — début officiel d'une nouvelle ère pour les révolutionnaires."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "qcm",
+    "difficulty": 3,
+    "payload": {
+      "question": "Quelle ville du Nord fut la capitale du théâtre médiéval et du drap ?",
+      "choices": [
+        "Arras",
+        "Amiens",
+        "Roubaix",
+        "Calais"
+      ],
+      "answer": 0,
+      "explanation": "Arras (Pas-de-Calais) fut au XIIIe siècle l'une des villes les plus prospères du royaume : ses chroniques bourgeoises et sa confrérie des «upidaires» documentent l'âge d'or du théâtre médiéval."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "true_false",
+    "difficulty": 2,
+    "payload": {
+      "statement": "Le Premier Empire dura exactement 10 ans.",
+      "answer": true,
+      "explanation": "De 1804 (sacre de Napoléon) à 1814 (première abdication), le Premier Empire vécut précisément dix ans — suivis des Cent-Jours de 1815."
+    }
+  },
+  {
+    "theme": "chroniques",
+    "game_type": "order_dates",
+    "difficulty": 3,
+    "payload": {
+      "events": [
+        "Fondation de l'Académie française",
+        "Le Louvre devient musée",
+        "Création des Musées nationaux",
+        "Fondation du CNRS"
+      ],
+      "correct_order": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "L'Académie française naît en 1635, le Louvre devient musée en 1793, les Musées nationaux s'organisent en 1930, le CNRS est fondé en 1939."
+    }
+  }
+]
