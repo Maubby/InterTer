@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Maître Aldric le Juge : robe sombre, toque, maillet -->
+  <circle cx="60" cy="64" r="40" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- robe -->
+  <path d="M32 100 Q60 74 88 100 Z" fill="#1f3a5f" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- tête -->
+  <circle cx="60" cy="52" r="24" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- toque -->
+  <rect x="44" y="20" width="32" height="14" rx="3" fill="#1f3a5f" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- sourcils sévères -->
+  <path d="M46 46 L56 48" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M74 46 L64 48" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- yeux -->
+  <circle cx="52" cy="54" r="3" fill="#6b4f2a"/>
+  <circle cx="68" cy="54" r="3" fill="#6b4f2a"/>
+  <!-- bouche neutre -->
+  <path d="M52 66 L68 66" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- maillet -->
+  <rect x="88" y="70" width="14" height="8" rx="2" fill="#a4713d" stroke="#6b4f2a" stroke-width="2.5"/>
+  <rect x="94" y="78" width="4" height="16" fill="#a4713d" stroke="#6b4f2a" stroke-width="2.5"/>
+  <!-- rouleau de loi -->
+  <rect x="20" y="74" width="8" height="20" rx="2" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="2.5"/>
+</svg>

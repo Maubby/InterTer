@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Héraut Ambroise : tabard mi-parti, trompette -->
+  <circle cx="60" cy="64" r="40" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- tabard mi-parti -->
+  <path d="M32 100 Q60 74 88 100 Z" fill="#c8102e" stroke="#6b4f2a" stroke-width="3"/>
+  <path d="M60 78 L88 100 L60 100 Z" fill="#1f3a5f" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- tête -->
+  <circle cx="60" cy="52" r="24" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- chapeau à plume -->
+  <path d="M38 40 Q60 24 82 40 L78 34 Q60 22 42 34 Z" fill="#1f3a5f" stroke="#6b4f2a" stroke-width="3"/>
+  <path d="M78 32 q8 -10 4 -16 q8 8 2 18 Z" fill="#e8a020" stroke="#6b4f2a" stroke-width="2"/>
+  <!-- yeux -->
+  <circle cx="52" cy="52" r="3" fill="#6b4f2a"/>
+  <circle cx="68" cy="52" r="3" fill="#6b4f2a"/>
+  <!-- sourire fier -->
+  <path d="M51 61 Q60 68 69 61" fill="none" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- trompette -->
+  <path d="M84 76 L104 70" stroke="#e8a020" stroke-width="4" stroke-linecap="round"/>
+  <path d="M104 70 l6 -4 -2 8 Z" fill="#e8a020" stroke="#6b4f2a" stroke-width="2"/>
+  <!-- bannière -->
+  <rect x="18" y="70" width="3" height="26" fill="#a4713d" stroke="#6b4f2a" stroke-width="1.5"/>
+  <path d="M21 72 L38 75 L38 87 L21 90 Z" fill="#c8102e" stroke="#6b4f2a" stroke-width="2.5"/>
+</svg>

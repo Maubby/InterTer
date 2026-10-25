@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Frère Anselme : robe de moine, tonsure, plume et livre -->
+  <circle cx="60" cy="64" r="40" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- robe -->
+  <path d="M30 100 Q60 74 90 100 Z" fill="#6b4f2a" stroke="#4a3820" stroke-width="3"/>
+  <!-- corde de coulpe -->
+  <path d="M44 84 Q60 92 76 84" stroke="#d8d3c5" stroke-width="2.5" fill="none"/>
+  <!-- tête -->
+  <circle cx="60" cy="52" r="24" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- tonsure -->
+  <path d="M40 46 Q60 34 80 46 Q60 40 40 46 Z" fill="#d8d3c5" stroke="#6b4f2a" stroke-width="2"/>
+  <circle cx="60" cy="36" r="10" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="2"/>
+  <!-- yeux sages -->
+  <circle cx="52" cy="54" r="3" fill="#6b4f2a"/>
+  <circle cx="68" cy="54" r="3" fill="#6b4f2a"/>
+  <!-- sourire doux -->
+  <path d="M52 63 Q60 69 68 63" fill="none" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- livre -->
+  <rect x="18" y="72" width="24" height="18" rx="2" fill="#c8102e" stroke="#6b4f2a" stroke-width="2.5"/>
+  <path d="M30 72 L30 90" stroke="#6b4f2a" stroke-width="2"/>
+  <!-- plume -->
+  <path d="M96 56 q10 -12 4 -22 q10 14 -2 26 Z" fill="#fff" stroke="#6b4f2a" stroke-width="2.5"/>
+  <path d="M98 60 L92 72" stroke="#6b4f2a" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Mère Yvonne la Cuisinière : grand tablier, plat couvert d'un linge -->
+  <circle cx="60" cy="64" r="40" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- robe + tablier -->
+  <path d="M32 100 Q60 74 88 100 Z" fill="#e8a020" stroke="#6b4f2a" stroke-width="3"/>
+  <path d="M46 86 Q60 78 74 86 L76 100 L44 100 Z" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="2.5"/>
+  <!-- tête -->
+  <circle cx="60" cy="52" r="24" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- coiffe -->
+  <path d="M38 46 Q60 28 82 46 Q60 36 38 46 Z" fill="#fff" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- yeux maternels -->
+  <circle cx="52" cy="54" r="3" fill="#6b4f2a"/>
+  <circle cx="68" cy="54" r="3" fill="#6b4f2a"/>
+  <!-- sourire chaleureux -->
+  <path d="M51 62 Q60 68 69 62" fill="none" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- joues -->
+  <circle cx="46" cy="60" r="3" fill="#e8a0a0"/>
+  <circle cx="74" cy="60" r="3" fill="#e8a0a0"/>
+  <!-- plat couvert -->
+  <path d="M14 78 q10 -12 20 0 Z" fill="#a4713d" stroke="#6b4f2a" stroke-width="3"/>
+  <rect x="10" y="78" width="28" height="6" rx="3" fill="#a4713d" stroke="#6b4f2a" stroke-width="2.5"/>
+  <!-- cuillère -->
+  <path d="M100 70 L94 84" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="101" cy="66" rx="4" ry="6" fill="#d8d3c5" stroke="#6b4f2a" stroke-width="2" transform="rotate(20 101 66)"/>
+</svg>

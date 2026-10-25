@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cinzel, Nunito } from "next/font/google";
+import Header from "@/components/Header";
 import "./globals.css";
 
 // Typographies officielles, self-hostées par next/font (aucune requête Google au runtime)
@@ -39,7 +40,8 @@ export default function RootLayout({
       {/* suppressHydrationWarning : les extensions navigateur (ex. ColorZilla)
           modifient le <body> avant React ; on ignore ces différences cosmétiques. */}
       <body className="font-sans antialiased min-h-dvh" suppressHydrationWarning>
-        {children}
+        <Header />
+        <div className="pt-2">{children}</div>
       </body>
     </html>
   );

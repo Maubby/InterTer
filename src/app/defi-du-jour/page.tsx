@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
+import Image from "next/image";
 import { Etoile, Flamme, Trophee } from "@/components/Icons";
 
 // ---------- Noms des épreuves (vocabulaire médiéval) ----------
@@ -14,6 +15,40 @@ const NOMS_EPREUVES: Record<string, string> = {
   emoji_riddle: "Le Blason Mystère",
   intruder: "Le Sac du Pillard",
   order_dates: "La Chronique du Moine",
+};
+
+// ---------- Les personnages : un hôte par épreuve ----------
+const PERSONNAGES: Record<string, { nom: string; svg: string; intro: string }> = {
+  qcm: {
+    nom: "Bertrand le Merchant",
+    svg: "/personnages/bertrand-merchant.svg",
+    intro: "Bertrand te montre ses marchandises :",
+  },
+  true_false: {
+    nom: "Maître Aldric le Juge",
+    svg: "/personnages/aldric-juge.svg",
+    intro: "Maître Aldric te demande de trancher :",
+  },
+  riddle: {
+    nom: "Gaspard le Veilleur",
+    svg: "/personnages/gaspard-veilleur.svg",
+    intro: "Gaspard te pose une énigme :",
+  },
+  emoji_riddle: {
+    nom: "Héraut Ambroise",
+    svg: "/personnages/ambroise-heraut.svg",
+    intro: "Ambroise te montre des symboles :",
+  },
+  intruder: {
+    nom: "Ferrand le Pillard",
+    svg: "/personnages/ferrand-pillard.svg",
+    intro: "Ferrand vide son sac sur la table :",
+  },
+  order_dates: {
+    nom: "Frère Anselme",
+    svg: "/personnages/anselme-moine.svg",
+    intro: "Frère Anselme ouvre sa chronique :",
+  },
 };
 
 // ---------- Types ----------
@@ -241,6 +276,26 @@ export default function PageDefiDuJour() {
               : ""
           }`}
         >
+          {/* L'hôte de l'épreuve */}
+          {PERSONNAGES[items[index].game_type] && (
+            <div className="flex items-center gap-3 border-b-2 border-sable/20 pb-3">
+              <Image
+                src={PERSONNAGES[items[index].game_type].svg}
+                alt={PERSONNAGES[items[index].game_type].nom}
+                width={56}
+                height={56}
+                unoptimized
+              />
+              <div>
+                <p className="font-cinzel font-bold text-lg text-azur">
+                  {PERSONNAGES[items[index].game_type].nom}
+                </p>
+                <p className="text-base text-sable/70">
+                  {PERSONNAGES[items[index].game_type].intro}
+                </p>
+              </div>
+            </div>
+          )}
           {item.game_type === "qcm" && <Qcm p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
           {item.game_type === "true_false" && <VraiFaux p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
           {item.game_type === "riddle" && <Devinette p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Bertrand le Merchant : gros bonnet rouge, tablier de cuir, sac d'épices -->
+  <circle cx="60" cy="64" r="40" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- corps/tablier -->
+  <path d="M30 100 Q60 72 90 100 Z" fill="#a4713d" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- tête -->
+  <circle cx="60" cy="52" r="24" fill="#f5ecd8" stroke="#6b4f2a" stroke-width="3"/>
+  <!-- bonnet -->
+  <path d="M36 44 Q60 18 84 44 Q60 34 36 44 Z" fill="#c8102e" stroke="#6b4f2a" stroke-width="3"/>
+  <circle cx="60" cy="20" r="5" fill="#e8a020" stroke="#6b4f2a" stroke-width="2"/>
+  <!-- yeux joyeux -->
+  <circle cx="52" cy="52" r="3" fill="#6b4f2a"/>
+  <circle cx="68" cy="52" r="3" fill="#6b4f2a"/>
+  <!-- sourire -->
+  <path d="M50 62 Q60 70 70 62" fill="none" stroke="#6b4f2a" stroke-width="3" stroke-linecap="round"/>
+  <!-- moustache -->
+  <path d="M50 58 Q60 62 70 58" fill="none" stroke="#6b4f2a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- sac d'épices -->
+  <path d="M88 84 q10 -8 8 4 q-2 12 -12 8 Z" fill="#e8a020" stroke="#6b4f2a" stroke-width="2.5"/>
+  <!-- pièce d'or -->
+  <circle cx="30" cy="76" r="6" fill="#e8a020" stroke="#6b4f2a" stroke-width="2"/>
+  <circle cx="24" cy="86" r="4.5" fill="#e8a020" stroke="#6b4f2a" stroke-width="2"/>
+</svg>
