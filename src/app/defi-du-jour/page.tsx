@@ -6,6 +6,16 @@ import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
 import { Etoile, Flamme, Trophee } from "@/components/Icons";
 
+// ---------- Noms des épreuves (vocabulaire médiéval) ----------
+const NOMS_EPREUVES: Record<string, string> = {
+  qcm: "Le Marché du Merchant",
+  true_false: "Le Jugement du Tribunal",
+  riddle: "L'Énigme du Veilleur",
+  emoji_riddle: "Le Blason Mystère",
+  intruder: "Le Sac du Pillard",
+  order_dates: "La Chronique du Moine",
+};
+
 // ---------- Types ----------
 type GameType =
   | "qcm" | "true_false" | "riddle" | "emoji_riddle" | "intruder" | "order_dates";
@@ -61,7 +71,7 @@ export default function PageDefiDuJour() {
       .eq("is_published", true)
       .single();
     if (error || !data) {
-      setErreur("Le Défi du Jour n'est pas encore publié — reviens plus tard !");
+      setErreur("La Quête du Jour n'est pas encore publiée — reviens plus tard !");
       setEnCours(false);
       return;
     }
@@ -126,10 +136,10 @@ export default function PageDefiDuJour() {
   if (phase === "connecte-toi") {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-        <Titre>Le Défi du Jour</Titre>
+        <Titre>La Quête du Jour</Titre>
         <Carte className="space-y-4">
           <p className="text-lg">
-            Le Défi du Jour, c&apos;est <strong>5 mini-jeux identiques pour
+            La Quête du Jour, c&apos;est <strong>5 mini-jeux identiques pour
             toute la France</strong>, à jouer une seule fois. Tes points
             comptent <strong>double</strong> pour ta ville !
           </p>
@@ -149,7 +159,7 @@ export default function PageDefiDuJour() {
   if (phase === "pas-encore") {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-        <Titre>Le Défi du Jour</Titre>
+        <Titre>La Quête du Jour</Titre>
         <Carte className="space-y-4">
           <p className="text-lg">
             Choisis d&apos;abord ta ville : sans elle, tes points ne savent
@@ -171,7 +181,7 @@ export default function PageDefiDuJour() {
   if (phase === "resultat" && resultat) {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-        <Titre>Ton Défi du Jour est envoyé !</Titre>
+        <Titre>Ta Quête du Jour est accomplie !</Titre>
         <Carte className="space-y-4">
           <Trophee taille={64} className="mx-auto text-or" />
           <p className="text-2xl font-bold">
@@ -180,7 +190,7 @@ export default function PageDefiDuJour() {
           <p className="text-xl">
             <strong>{resultat.score} points</strong> pour ta ville — soit{" "}
             <strong className="text-sinople">{resultat.score * 2} points</strong>{" "}
-            comptés au classement (×2 Défi du Jour) !
+            comptés au classement (×2 Quête du Jour) !
           </p>
           <p className="flex items-center justify-center gap-2 text-lg">
             <Flamme className="w-6 h-6 text-gueules" />
@@ -219,7 +229,7 @@ export default function PageDefiDuJour() {
         </div>
 
         <Titre niveau={2}>
-          Défi du Jour — {index + 1} sur {items.length}
+          {NOMS_EPREUVES[items[index].game_type]} — {index + 1} sur {items.length}
         </Titre>
 
         <Carte
@@ -265,7 +275,7 @@ export default function PageDefiDuJour() {
   // ---------- Écran d'accueil du défi ----------
   return (
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-      <Titre>Le Défi du Jour</Titre>
+      <Titre>La Quête du Jour</Titre>
       <Carte className="space-y-4">
         <p className="text-lg">
           <strong>5 mini-jeux identiques pour toute la France</strong>, à

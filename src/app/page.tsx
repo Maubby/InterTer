@@ -17,7 +17,7 @@ export default function Accueil() {
         />
         <Titre>Interter</Titre>
         <p className="text-xl text-sable">
-          Chaque jour, un Défi du Jour pour faire briller ta ville face à toute
+          Chaque jour, une Quête du Jour pour faire briller ta ville face à toute
           la France.
         </p>
       </header>
@@ -40,7 +40,7 @@ export default function Accueil() {
 
       <div className="grid gap-3">
         <Bouton variante="primaire" pleineLargeur>
-          <Eclair className="w-6 h-6" /> Jouer au Défi du Jour
+          <Eclair className="w-6 h-6" /> Vivre la Quête du Jour
         </Bouton>
         <Bouton variante="enigme" pleineLargeur>
           <Trophee className="w-6 h-6" /> Voir le classement
