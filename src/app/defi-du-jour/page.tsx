@@ -193,7 +193,7 @@ export default function PageDefiDuJour() {
           <p className="text-lg">
             La Quête du Jour, c&apos;est <strong>5 mini-jeux identiques pour
             toute la France</strong>, à jouer une seule fois. Tes points
-            comptent <strong>double</strong> pour ta ville !
+            comptent <strong>quintuple</strong> pour ta ville !
           </p>
           <Bouton
             variante="primaire"
@@ -242,7 +242,7 @@ export default function PageDefiDuJour() {
           <p className="text-xl">
             <strong>{resultat.score} points</strong> pour ta ville — soit{" "}
             <strong className="text-sinople">{resultat.score * 2} points</strong>{" "}
-            comptés au classement (×2 Quête du Jour) !
+            comptés au classement (×5 Quête du Jour) !
           </p>
           <p className="flex items-center justify-center gap-2 text-lg">
             <Flamme className="w-6 h-6 text-gueules" />
@@ -355,7 +355,7 @@ export default function PageDefiDuJour() {
           jamais revus !
         </p>
         <p className="text-base">
-          Tes points comptent <strong>double</strong> pour ta ville, et
+          Tes points comptent <strong>×5</strong> pour ta ville, et
           chaque jour joué rallonge ta série{" "}
           <Flamme className="inline w-5 h-5 text-gueules" /> !
         </p>

@@ -178,7 +178,7 @@ export default function PageClassement() {
 
       {lignes.length > 0 && (
         <p className="text-center text-sm text-sable/60">
-          Le classement compte tous les points gagnés en Quête du Jour (×2) et
+          Le classement compte tous les points gagnés en Quête du Jour (×5) et
           en épreuves locales.
         </p>
       )}

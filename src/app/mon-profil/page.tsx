@@ -176,7 +176,7 @@ export default function PageMonProfil() {
             <p className="text-sable/70">points cumulés par la ville</p>
           </div>
           <p className="text-sm text-sable/60">
-            dont les tiens, gagnés en Quête du Jour (×2) et en épreuves —
+            dont les tiens, gagnés en Quête du Jour (×5) et en entraînement —
             chaque habitant compte !
           </p>
           <Bouton
