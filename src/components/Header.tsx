@@ -46,16 +46,14 @@ export default function Header() {
       <div className="mx-auto max-w-5xl px-4 py-2 flex items-center gap-3">
         <Link href="/" aria-label="Interter — retour à l'accueil" className="flex items-center gap-3">
           <Image
-            src="/logo/logo-192.svg"
-            alt="Interter"
-            width={44}
-            height={44}
+            src="/logo/logo-officiel.png"
+            alt="Interter — le Tournoi des Villes de France"
+            width={1672}
+            height={941}
+            style={{ height: "48px", width: "auto" }}
             className="drop-shadow"
             priority
           />
-          <span className="font-cinzel font-black text-2xl text-gueules tracking-wide hidden sm:inline">
-            Intert<span className="text-azur">er</span>
-          </span>
         </Link>
         <nav className="ml-auto flex items-center gap-4 text-base font-bold">
           <Link href="/defi-du-jour" className="hover:text-gueules transition-colors">

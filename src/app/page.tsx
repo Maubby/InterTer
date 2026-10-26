@@ -10,12 +10,13 @@ export default function Accueil() {
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
       <header className="text-center space-y-3">
         <Image
-          src="/logo/logo-512.svg"
-          alt="Logo Interter"
-          width={160}
-          height={160}
-          unoptimized
-          className="mx-auto w-40 h-40"
+          src="/logo/logo-officiel.png"
+          alt="Interter — le Tournoi des Villes de France"
+          width={1672}
+          height={941}
+          style={{ maxHeight: "220px", width: "auto" }}
+          className="mx-auto drop-shadow-lg"
+          priority
         />
         <Titre>Interter</Titre>
         <p className="text-xl text-sable">
