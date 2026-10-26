@@ -28,8 +28,9 @@ export function Bouton({
         rounded-lg text-lg font-bold
         border-4 border-sable
         shadow-enchere
-        active:translate-x-[3px] active:translate-y-[3px] active:shadow-none
-        transition-transform duration-75
+        active:shadow-none
+        transition-shadow duration-75
+        touch-manipulation select-none
         disabled:opacity-50 disabled:pointer-events-none
         ${variantes[variante]} ${pleineLargeur ? "w-full" : ""} ${className}
       `}

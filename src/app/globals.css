@@ -103,3 +103,8 @@ body {
     animation: none;
   }
 }
+
+/* ===== Tactile (mobile) ===== */
+/* Pas de délai de 300ms sur les taps, pas de flash bleu au toucher */
+html { -webkit-tap-highlight-color: transparent; }
+button, a, input, [role="button"] { touch-action: manipulation; }
