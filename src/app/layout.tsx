@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s — Interter",
   },
   description:
-    "Chaque jour, une Quête du Jour pour défendre ta ville face à toute la France. Quiz, devinettes et énigmes : l'esprit Intervilles, en webapp.",
+    "Chaque jour, une Quête du Jour pour défendre ta ville face à toute la France. Quiz, devinettes et énigmes : fais briller ton terroir !",
   applicationName: "Interter",
 };
 

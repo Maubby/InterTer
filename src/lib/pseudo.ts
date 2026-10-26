@@ -1,5 +1,5 @@
 // Générateur de pseudos « à la française chaleureuse » pour Interter.
-// Prénoms et noms courts, faciles à lire, ton Intervilles.
+// Prénoms et noms courts, faciles à lire, ton chaleureux et français.
 // Ex : « Jacques Beauregard », « Margot Lefèvre »
 
 const PRENOMS = [

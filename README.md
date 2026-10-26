@@ -1,4 +1,4 @@
-# Interter — l'esprit Intervilles, en webapp
+# Interter — le grand tournoi des villes de France, en webapp
 
 Chaque joueur défend **sa ville** : un **Défi du Jour** commun à toute la France
 (quiz, devinettes, vrai/faux…), et chaque bonne réponse fait monter sa ville et
