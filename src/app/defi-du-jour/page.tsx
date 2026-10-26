@@ -307,7 +307,7 @@ export default function PageDefiDuJour() {
                 <p className="font-cinzel font-bold text-lg text-azur">
                   {GUILDE[items[index].theme ?? items[index].game_type].nom}
                 </p>
-                <p className="text-base text-sable/70">
+                <p className="note-ancienne text-base text-sable/80">
                   {GUILDE[items[index].theme ?? items[index].game_type].intro}
                 </p>
               </div>
@@ -335,8 +335,8 @@ export default function PageDefiDuJour() {
                 {bonneReponse ? "Bravo ! " : "Dommage !"}
               </div>
               {item.payload?.explanation && (
-                <div className="text-base bg-parchemin rounded-lg border-2 border-sable/30 p-3">
-                  <strong className="font-cinzel">Selon la Chronique…</strong> {item.payload.explanation}
+                <div className="chronique bg-parchemin rounded-lg border-2 border-sable/30 p-3">
+                  <strong className="font-cinzel not-italic">Selon la Chronique…</strong> {item.payload.explanation}
                 </div>
               )}
               <Bouton variante="primaire" pleineLargeur onClick={suivant} disabled={enCours}>
@@ -529,7 +529,7 @@ function Intrus({ p, onValider, desactive }: Props) {
             key={i}
             disabled={desactive}
             onClick={() => { setChoix(i); onValider({ intruder_index: i }); }}
-            className={`min-h-[64px] rounded-lg border-4 text-lg font-bold ${
+            className={`min-h-[64px] rounded-lg border-4 text-lg choix-reponse ${
               choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
             }`}
           >

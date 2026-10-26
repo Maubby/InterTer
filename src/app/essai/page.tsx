@@ -180,7 +180,7 @@ export default function PageEssai() {
             </div>
             {/* Explication pédagogique : on apprend toujours quelque chose */}
             {item.payload?.explanation && (
-              <div className="text-base bg-parchemin rounded-lg border-2 border-sable/30 p-3">
+              <div className="chronique bg-parchemin rounded-lg border-2 border-sable/30 p-3">
                 <strong className="font-cinzel">Selon la Chronique…</strong> {item.payload.explanation}
               </div>
             )}

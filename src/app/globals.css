@@ -194,3 +194,42 @@ button, a, input, [role="button"] { touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) {
   .anim-respire, .anim-flamme { animation: none; }
 }
+
+/* ============================================================
+   NUITYPO : la Nunito habillée « médiévale chaleureuse »
+   Elle garde sa lisibilité (cible senior) mais gagne le
+   caractère du monde Interter.
+   ============================================================ */
+
+/* Corps de texte : un soupçon plus généreux, interlettre doux */
+body {
+  letter-spacing: 0.01em;
+}
+
+/* Les paragraphes « Selon la Chronique… » : aperçu de manuscrit */
+.chronique {
+  font-style: italic;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* Titres intermédiaires en Nunito : gravés mais ronds */
+.texte-marque {
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+/* Choix de réponses : Nunito black — ronde et puissante
+   (l'alternative lisible à la Cinzel pour les boutons-réponses) */
+.choix-reponse {
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+/* Petite mention « d'époque » pour les labels et méta-infos */
+.note-ancienne {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
