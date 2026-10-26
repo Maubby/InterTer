@@ -398,7 +398,7 @@ function Qcm({ p, onValider, desactive }: Props) {
   useEffect(() => { setChoix(null); }, [p]);
   return (
     <div className="space-y-3">
-      <p className="text-xl font-bold">{p.question}</p>
+      <p className="text-xl font-bold font-cinzel">{p.question}</p>
       {p.choices?.map((c: string, i: number) => (
         <button
           key={i}
@@ -426,7 +426,7 @@ function VraiFaux({ p, onValider, desactive }: Props) {
   const bonne = p.answer ?? (Array.isArray(p.answers) ? p.answers[0] : null);
   return (
     <div className="space-y-3">
-      <p className="text-xl font-bold">{affichage(affirmation)}</p>
+      <p className="text-xl font-bold font-cinzel">{affichage(affirmation)}</p>
       <div className="grid grid-cols-2 gap-3">
         {[["true", "VRAI"], ["false", "FAUX"]].map(([val, label]) => (
           <button

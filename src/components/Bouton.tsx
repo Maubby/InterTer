@@ -25,7 +25,7 @@ export function Bouton({
       className={`
         inline-flex items-center justify-center gap-2
         min-h-[56px] px-6 py-3
-        rounded-lg text-lg font-bold
+        rounded-lg text-lg font-bold font-cinzel
         border-4 border-sable
         shadow-enchere
         active:shadow-none

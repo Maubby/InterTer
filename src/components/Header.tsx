@@ -55,7 +55,7 @@ export default function Header() {
             priority
           />
         </Link>
-        <nav className="ml-auto flex items-center gap-4 text-base font-bold">
+        <nav className="ml-auto flex items-center gap-4 text-base font-bold font-cinzel">
           <Link href="/defi-du-jour" className="hover:text-gueules transition-colors">
             Quête du Jour
           </Link>
