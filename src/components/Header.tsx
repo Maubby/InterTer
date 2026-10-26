@@ -50,7 +50,7 @@ export default function Header() {
             alt="Interter — le Tournoi des Villes de France"
             width={1672}
             height={941}
-            style={{ height: "72px", width: "auto" }}
+            style={{ height: "94px", width: "auto" }}
             className="drop-shadow"
             priority
           />
