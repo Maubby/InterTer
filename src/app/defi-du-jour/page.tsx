@@ -234,7 +234,7 @@ export default function PageDefiDuJour() {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
         <Titre>Ta Quête du Jour est accomplie !</Titre>
-        <Carte className="space-y-4">
+        <Carte className="anim-deroule space-y-4">
           <Trophee taille={64} className="mx-auto text-or" />
           <p className="text-2xl font-bold">
             {resultat.correct_count}/{resultat.total / 10} bonnes réponses
@@ -288,14 +288,14 @@ export default function PageDefiDuJour() {
           className={`space-y-4 ${
             reponseDonnee
               ? bonneReponse
-                ? "anim-tampon border-sinople"
-                : "anim-tremble border-gueules"
+                ? "anim-halo border-sinople"
+                : "anim-secousse border-gueules"
               : ""
           }`}
         >
-          {/* L'hôte de l'épreuve */}
+          {/* L'hôte de l'épreuve — il fait sa révérence en arrivant */}
           {GUILDE[items[index].theme ?? items[index].game_type] && (
-            <div className="flex items-center gap-3 border-b-2 border-sable/20 pb-3">
+            <div key={item.id} className="anim-reverence flex items-center gap-3 border-b-2 border-sable/20 pb-3">
               <Image
                 src={GUILDE[items[index].theme ?? items[index].game_type].svg}
                 alt={GUILDE[items[index].theme ?? items[index].game_type].nom}
@@ -323,10 +323,15 @@ export default function PageDefiDuJour() {
           {reponseDonnee && (
             <>
               <div
-                className={`text-center font-bold text-xl ${
+                className={`relative text-center font-bold text-xl ${
                   bonneReponse ? "text-sinople" : "text-gueules"
                 }`}
               >
+                {bonneReponse && (
+                  <span className="anim-fanion font-cinzel text-or text-2xl">
+                    +10 points !
+                  </span>
+                )}
                 {bonneReponse ? "Bravo ! " : "Dommage !"}
               </div>
               {item.payload?.explanation && (
@@ -357,14 +362,14 @@ export default function PageDefiDuJour() {
         <p className="text-base">
           Tes points comptent <strong>×5</strong> pour ta ville, et
           chaque jour joué rallonge ta série{" "}
-          <Flamme className="inline w-5 h-5 text-gueules" /> !
+          <Flamme className="anim-flamme inline w-5 h-5 text-gueules" /> !
         </p>
         <Separateur />
         {erreur && <p className="text-gueules font-bold">{erreur}</p>}
         {phase === "chargement" ? (
           <p>Chargement…</p>
         ) : (
-          <Bouton variante="succes" pleineLargeur onClick={demarrer} disabled={enCours}>
+          <Bouton variante="succes" pleineLargeur onClick={demarrer} disabled={enCours} className="anim-respire">
             {enCours ? "Préparation…" : "C'est parti !"}
           </Bouton>
         )}

@@ -108,3 +108,89 @@ body {
 /* Pas de délai de 300ms sur les taps, pas de flash bleu au toucher */
 html { -webkit-tap-highlight-color: transparent; }
 button, a, input, [role="button"] { touch-action: manipulation; }
+
+/* ============================================================
+   ANIMATIONS MÉDIÉVALES — le jus du jeu !
+   ============================================================ */
+
+/* --- Fanfare de victoire : les points s'envolent en fanion --- */
+@keyframes fanion-envole {
+  0%   { transform: translateY(0) scale(0.6) rotate(-8deg); opacity: 0; }
+  20%  { transform: translateY(-10px) scale(1.15) rotate(3deg); opacity: 1; }
+  100% { transform: translateY(-70px) scale(0.9) rotate(-4deg); opacity: 0; }
+}
+.anim-fanion {
+  animation: fanion-envole 1.2s ease-out forwards;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* --- Bravo : la carte rayonne (halo doré pulsant) --- */
+@keyframes halo-or {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 160, 32, 0.7); }
+  50%      { box-shadow: 0 0 30px 12px rgba(232, 160, 32, 0.35); }
+}
+.anim-halo {
+  animation: halo-or 1s ease-in-out 2;
+}
+
+/* --- Dommage : secousse du parchemin --- */
+@keyframes secousse {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px) rotate(-1deg); }
+  40% { transform: translateX(6px) rotate(1deg); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.anim-secousse {
+  animation: secousse 0.4s ease-in-out;
+}
+
+/* --- Le personnage arrive : petite révérence (squash & stretch) --- */
+@keyframes reverence {
+  0%   { transform: translateY(12px) scale(0.9); opacity: 0; }
+  60%  { transform: translateY(-4px) scale(1.04); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.anim-reverence {
+  animation: reverence 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* --- La flamme de série (streak) danse --- */
+@keyframes flamme-danse {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  25%      { transform: scale(1.08) rotate(2deg); }
+  50%      { transform: scale(0.96) rotate(-1deg); }
+  75%      { transform: scale(1.05) rotate(1deg); }
+}
+.anim-flamme {
+  animation: flamme-danse 1.6s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* --- Écran final : le parchemin se déroule --- */
+@keyframes parchemin-deroule {
+  0%   { transform: scaleY(0.05); opacity: 0; transform-origin: top; }
+  60%  { transform: scaleY(1.03); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+.anim-deroule {
+  animation: parchemin-deroule 0.6s ease-out both;
+  transform-origin: top center;
+}
+
+/* --- Bouton principal : appel à l'action qui respire --- */
+@keyframes bouton-respire {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+.anim-respire {
+  animation: bouton-respire 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-respire, .anim-flamme { animation: none; }
+}
