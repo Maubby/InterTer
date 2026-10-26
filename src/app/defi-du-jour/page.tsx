@@ -241,7 +241,7 @@ export default function PageDefiDuJour() {
           </p>
           <p className="text-xl">
             <strong>{resultat.score} points</strong> pour ta ville — soit{" "}
-            <strong className="text-sinople">{resultat.score * 2} points</strong>{" "}
+            <strong className="text-sinople">{resultat.score * 5} points</strong>{" "}
             comptés au classement (×5 Quête du Jour) !
           </p>
           <p className="flex items-center justify-center gap-2 text-lg">

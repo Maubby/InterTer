@@ -314,7 +314,16 @@
         "Son nom complet : « la bête du ... »"
       ],
       "answer": "la bête du Gévaudan",
-      "explanation": "De 1764 à 1767, la bête du Gévaudan fit des dizaines de victimes en Lozère. Louloup gigantesque ou tueur déguisé ? L'énigme n'est jamais complètement résolue."
+      "explanation": "De 1764 à 1767, la bête du Gévaudan fit des dizaines de victimes en Lozère. Louloup gigantesque ou tueur déguisé ? L'énigme n'est jamais complètement résolue.",
+      "accepted_answers": [
+        "gevaudan",
+        "la bete du gevaudan",
+        "la bête du gévaudan",
+        "le gevaudan",
+        "bête du gévaudan",
+        "bete du gevaudan",
+        "la bête du gevaudan"
+      ]
     }
   },
   {
