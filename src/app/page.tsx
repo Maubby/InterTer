@@ -12,14 +12,15 @@ export default function Accueil() {
       <header className="text-center space-y-3">
         <Image
           src="/logo/logo-officiel.png"
-          alt="Interter — le Tournoi des Villes de France"
+          alt="Interter"
           width={1672}
           height={941}
           style={{ maxHeight: "220px", width: "auto" }}
           className="mx-auto drop-shadow-lg"
           priority
         />
-        <Titre>Interter</Titre>
+        {/* Le logo porte déjà le nom : la banderole donne le sous-titre */}
+        <Titre>Le Tournoi des Villes de France</Titre>
         <p className="text-xl text-sable">
           Chaque jour, une Quête du Jour pour faire briller ta ville face à toute
           la France.
