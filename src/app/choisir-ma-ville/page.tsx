@@ -27,13 +27,35 @@ export default function PageChoisirMaVille() {
   const [ok, setOk] = useState(false);
   // Pseudo pré-rempli : partie locale de l'email (récupéré à l'affichage)
   const [pseudoDefaut, setPseudoDefaut] = useState("");
+  // Pseudo déjà enregistré : il prime sur le pseudo proposé
+  const [pseudoActuel, setPseudoActuel] = useState("");
+  // Vrai tant qu'on ne sait pas si le joueur a déjà une ville
+  const [verification, setVerification] = useState(true);
 
-  // Pré-remplit le pseudo dès la connexion détectée :
-  // pseudo à consonance française, JAMAIS l'email (vie privée)
+  // Toute connexion arrive ici, même celle d'un joueur déjà inscrit :
+  // s'il a déjà une ville, on l'envoie jouer au lieu de la lui redemander.
+  // Sinon on pré-remplit le pseudo : à consonance française, JAMAIS l'email (vie privée)
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) setPseudoDefaut(pseudoPropose());
-    });
+    async function verifier() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profil } = await supabase
+          .from("profiles")
+          .select("pseudo, city_id")
+          .eq("id", user.id)
+          .maybeSingle();
+        if (profil?.city_id) {
+          window.location.replace("/defi-du-jour");
+          return;
+        }
+        if (profil?.pseudo) setPseudoActuel(profil.pseudo);
+        setPseudoDefaut(pseudoPropose());
+      }
+      setVerification(false);
+    }
+    verifier();
   }, []);
 
   // Normalisation : minuscules + suppression des accents
@@ -89,8 +111,9 @@ export default function PageChoisirMaVille() {
       return;
     }
 
-    // Pseudo : celui choisi par le joueur, sinon le pseudo proposé
-    const pseudoFinal = pseudo.trim() || pseudoDefaut || pseudoAleatoire();
+    // Pseudo : celui choisi par le joueur, sinon celui qu'il a déjà, sinon le pseudo proposé
+    const pseudoFinal =
+      pseudo.trim() || pseudoActuel || pseudoDefaut || pseudoAleatoire();
 
     // Crée le profil (1re connexion) ou le met à jour
     const { error: errProfil } = await supabase.from("profiles").upsert({
@@ -126,6 +149,15 @@ export default function PageChoisirMaVille() {
             Retour à l&apos;accueil
           </Bouton>
         </Carte>
+      </main>
+    );
+  }
+
+  // Pas de formulaire avant de savoir si le joueur a déjà une ville
+  if (verification) {
+    return (
+      <main className="mx-auto max-w-lg px-4 py-8 text-center text-lg">
+        Un instant…
       </main>
     );
   }
@@ -208,7 +240,7 @@ export default function PageChoisirMaVille() {
               type="text"
               value={pseudo}
               onChange={(e) => setPseudo(e.target.value)}
-              placeholder={pseudoDefaut || "TonPseudo"}
+              placeholder={pseudoActuel || pseudoDefaut || "TonPseudo"}
               className="w-full min-h-[48px] px-4 rounded-lg border-4 border-sable bg-parchemin-2 text-lg"
               maxLength={30}
             />
