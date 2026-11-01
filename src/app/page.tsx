@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { Bouton } from "@/components/Bouton";
-import { Carte, Titre } from "@/components/Carte";
+import { Carte, Lettrine, Titre } from "@/components/Carte";
+import { Separateur } from "@/components/Fioritures";
 import { Eclair, Etoile, Flamme, Trophee } from "@/components/Icons";
 
 export default function Accueil() {
@@ -25,21 +26,23 @@ export default function Accueil() {
         </p>
       </header>
 
-      <Carte className="flex items-center gap-4">
+      <Carte className="flex flex-col sm:flex-row items-center gap-4">
         <Image
           src="/mascotte/margot-bienvenue.svg"
           alt="Margot, la Dame Voyageuse"
           width={96}
           height={96}
           unoptimized
-          className="w-24 h-24 rounded-lg border-2 border-sable"
+          className="w-24 h-24 shrink-0 rounded-lg border-4 border-or outline-2 outline-sable bg-parchemin-2"
         />
         <p className="text-lg">
-          <span className="lettrine mr-2">B</span>
+          <Lettrine lettre="B" />
           ienvenue dans le grand tournoi des villes ! Je suis Margot, la Dame
           Voyageuse. Prête à défendre ton terter ?
         </p>
       </Carte>
+
+      <Separateur />
 
       <div className="grid gap-3">
         <Bouton

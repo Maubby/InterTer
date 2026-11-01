@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
-import { Carte, Titre } from "@/components/Carte";
+import { Carte, Lettrine, Titre } from "@/components/Carte";
 import Image from "next/image";
-import { Separateur, RoseDesVents } from "@/components/Fioritures";
+import { Compteur, Eclats, Feuillets, Separateur, Sceau, RoseDesVents } from "@/components/Fioritures";
 import { Etoile, Flamme, Trophee } from "@/components/Icons";
 
 // ---------- La guilde d'Interter : un personnage par thème ----------
@@ -265,13 +265,20 @@ export default function PageDefiDuJour() {
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
         <Titre>Ta Quête du Jour est accomplie !</Titre>
         <Carte className="anim-deroule space-y-4">
-          <Trophee taille={64} className="mx-auto text-or" />
+          {/* La quête est scellée, comme une charte */}
+          <Sceau className="absolute -top-7 -right-5 w-20 h-20 anim-sceau" />
+          <div className="relative w-fit mx-auto">
+            <Trophee taille={64} className="text-or anim-saut" />
+            <Eclats className="left-1/2 top-1/2" nombre={20} portee={140} />
+          </div>
           <p className="text-2xl font-bold">
             {resultat.correct_count}/{resultat.total / 10} bonnes réponses
           </p>
           <p className="text-xl">
             <strong>{resultat.score} points</strong> pour ta ville — soit{" "}
-            <strong className="text-sinople">{resultat.score * 5} points</strong>{" "}
+            <strong className="text-sinople text-3xl font-cinzel">
+              <Compteur valeur={resultat.score * 5} /> points
+            </strong>{" "}
             comptés au classement (×5 Quête du Jour) !
           </p>
           <p className="flex items-center justify-center gap-2 text-lg">
@@ -307,24 +314,17 @@ export default function PageDefiDuJour() {
       : null;
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
-        {/* Barre de progression */}
-        <div className="flex items-center gap-2">
-          {items.map((_, i) => (
-            <div
-              key={i}
-              className={`h-3 flex-1 rounded-full border-2 border-sable ${
-                i < index ? "bg-sinople" : i === index ? "bg-or" : "bg-parchemin-2"
-              }`}
-            />
-          ))}
-        </div>
+        {/* Les feuillets de la quête */}
+        <Feuillets total={items.length} courant={index} />
 
         <Titre niveau={2}>
-          {hote?.nom ?? "Épreuve"} — {index + 1} sur {items.length}
+          Feuillet {index + 1} sur {items.length}
         </Titre>
 
+        {/* Chaque épreuve arrive comme une page qu'on tourne */}
+        <div key={item.id} className="anim-page">
         <Carte
-          className={`space-y-4 ${
+          className={`zone-jeu space-y-4 ${
             reponseDonnee
               ? bonneReponse
                 ? "anim-halo border-sinople"
@@ -342,7 +342,9 @@ export default function PageDefiDuJour() {
                   width={96}
                   height={96}
                   unoptimized
-                  className="shrink-0 rounded-full border-4 border-or outline-2 outline-sable bg-parchemin-2"
+                  className={`shrink-0 rounded-full border-4 border-or outline-2 outline-sable bg-parchemin-2 ${
+                    reponseDonnee ? (bonneReponse ? "anim-saut" : "anim-desole") : ""
+                  }`}
                 />
               ) : (
                 <Image
@@ -378,23 +380,27 @@ export default function PageDefiDuJour() {
                 }`}
               >
                 {bonneReponse && (
-                  <span className="anim-fanion font-cinzel text-or text-2xl">
-                    +10 points !
-                  </span>
+                  <>
+                    <Eclats className="left-1/2 top-1/2" />
+                    <span className="anim-fanion font-cinzel text-or text-2xl">
+                      +10 points !
+                    </span>
+                  </>
                 )}
                 {bonneReponse ? "Bravo ! " : "Dommage !"}
               </div>
               {item.payload?.explanation && (
-                <div className="chronique bg-parchemin rounded-lg border-2 border-sable/30 p-3">
-                  <strong className="font-cinzel not-italic">Selon la Chronique…</strong> {item.payload.explanation}
+                <div className="chronique bg-parchemin-2 rounded-lg border-2 border-sable/30 p-3">
+                  <strong className="font-cinzel not-italic"><span className="rubrique" aria-hidden="true">¶ </span>Selon la Chronique…</strong> {item.payload.explanation}
                 </div>
               )}
               <Bouton variante="primaire" pleineLargeur onClick={suivant} disabled={enCours}>
-                {index + 1 >= items.length ? "Envoyer mes réponses !" : "Mini-jeu suivant"}
+                {index + 1 >= items.length ? "Envoyer mes réponses !" : "Tourner la page"}
               </Bouton>
             </>
           )}
         </Carte>
+        </div>
       </main>
     );
   }
@@ -404,8 +410,9 @@ export default function PageDefiDuJour() {
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
       <Titre>La Quête du Jour</Titre>
       <Carte className="space-y-4">
-        <p className="text-lg">
-          Chaque jour, <strong>une nouvelle Quête t&apos;attend</strong> : 5
+        <p className="text-lg text-left">
+          <Lettrine lettre="C" couleur="azur" />
+          haque jour, <strong>une nouvelle Quête t&apos;attend</strong> : 5
           défis inédits concoctés par la guilde du village — jamais vus,
           jamais revus !
         </p>

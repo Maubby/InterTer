@@ -56,19 +56,71 @@ body {
   border-radius: 8px;
 }
 
-/* Lettrine enluminée : initiale Cinzel 900 or sur fond gueules, 52×52px */
+/* ============================================================
+   MANUSCRIT ENLUMINÉ — chaque écran est une page de manuscrit
+   ============================================================ */
+
+/* Page enluminée (composant Carte) : filet d'or doublé d'un filet
+   rubriqué, et quatre fleurons d'angle. Les ornements passent SOUS le
+   contenu (isolation + z-index négatif) : ils ne gênent ni la lecture
+   ni les boutons. */
+.page-enluminee {
+  isolation: isolate;
+}
+.page-enluminee::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: -1;
+  border: 2px solid var(--color-or);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px var(--color-parchemin),
+    inset 0 0 0 3px rgba(200, 16, 46, 0.45);
+  pointer-events: none;
+}
+.page-enluminee::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background-image: url("/ornements/coin-hg.svg"), url("/ornements/coin-hd.svg"),
+    url("/ornements/coin-bd.svg"), url("/ornements/coin-bg.svg");
+  background-position: top left, top right, bottom right, bottom left;
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* Lettrine enluminée : initiale Cinzel 900 or, sur champ de gueules (ou
+   d'azur) orné de filigranes, cadre d'or et d'encre. Tombe sur deux
+   lignes, comme dans les manuscrits. */
 .lettrine {
-  display: inline-flex;
+  float: left;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 3.4rem;
+  height: 3.4rem;
+  margin: 0.2rem 0.55rem 0 0;
   font-family: var(--cinzel-font), serif;
   font-weight: 900;
+  font-size: 2.4rem;
+  line-height: 1;
   color: var(--color-or);
   background-color: var(--color-gueules);
+  background-image: url("/ornements/filigrane-lettrine.svg");
+  background-size: cover;
   border: 3px solid var(--color-sable);
-  border-radius: 4px 4px 12px 4px;
+  box-shadow: inset 0 0 0 2px var(--color-or);
+  border-radius: 4px;
+}
+.lettrine-azur {
+  background-color: var(--color-azur);
+}
+
+/* Rubrique : ce que les copistes écrivaient à l'encre rouge */
+.rubrique {
+  color: var(--color-gueules);
 }
 
 /* Animations signature (une seule par moment) */
@@ -232,4 +284,142 @@ body {
   font-variant: small-caps;
   letter-spacing: 0.06em;
   font-weight: 700;
+}
+
+/* ============================================================
+   LE MANUSCRIT S'ANIME — chaque geste du joueur a sa réponse
+   ============================================================ */
+
+/* --- Tourner la page : chaque épreuve arrive comme un feuillet --- */
+@keyframes page-tourne {
+  0%   { transform: perspective(1400px) rotateY(-75deg); opacity: 0; }
+  65%  { transform: perspective(1400px) rotateY(6deg); opacity: 1; }
+  100% { transform: perspective(1400px) rotateY(0); opacity: 1; }
+}
+.anim-page {
+  animation: page-tourne 0.6s cubic-bezier(0.25, 0.8, 0.35, 1) both;
+  transform-origin: left center;
+}
+
+/* --- Les réponses entrent l'une après l'autre --- */
+@keyframes entree {
+  0%   { transform: translateY(14px) scale(0.96); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.zone-jeu button:not(.bouton-enlumine) {
+  animation: entree 0.35s ease-out both;
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+.zone-jeu :nth-child(1 of button) { animation-delay: 0.30s; }
+.zone-jeu :nth-child(2 of button) { animation-delay: 0.38s; }
+.zone-jeu :nth-child(3 of button) { animation-delay: 0.46s; }
+.zone-jeu :nth-child(4 of button) { animation-delay: 0.54s; }
+.zone-jeu :nth-child(5 of button) { animation-delay: 0.62s; }
+.zone-jeu :nth-child(6 of button) { animation-delay: 0.70s; }
+/* Elles se soulèvent sous le doigt, et s'enfoncent au clic */
+.zone-jeu button:not(.bouton-enlumine):not(:disabled):hover {
+  transform: translateY(-3px);
+  box-shadow: 3px 3px 0 var(--color-sable);
+}
+.zone-jeu button:not(.bouton-enlumine):not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* --- Boutons enluminés : liseré d'or, ils se lèvent et s'enfoncent --- */
+.bouton-enlumine {
+  box-shadow: inset 0 0 0 2px rgba(232, 179, 61, 0.9), 3px 3px 0 var(--color-sable);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+.bouton-enlumine:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: inset 0 0 0 2px rgba(232, 179, 61, 0.9), 5px 5px 0 var(--color-sable);
+}
+.bouton-enlumine:active {
+  transform: translate(2px, 2px);
+  box-shadow: inset 0 0 0 2px rgba(232, 179, 61, 0.9), 0 0 0 var(--color-sable);
+}
+
+/* --- Bonne réponse : gerbe d'éclats d'or, de gueules et d'azur --- */
+@keyframes eclat {
+  0%   { transform: rotate(var(--a)) translateY(0) scale(0.3); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1) rotate(200deg); opacity: 0; }
+}
+.eclat {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  animation: eclat 0.9s cubic-bezier(0.15, 0.7, 0.3, 1) both;
+  pointer-events: none;
+}
+
+/* --- Le personnage réagit : il saute de joie, ou se désole --- */
+@keyframes saut-joie {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  30%      { transform: translateY(-14px) rotate(-6deg); }
+  55%      { transform: translateY(0) rotate(4deg); }
+  75%      { transform: translateY(-5px) rotate(0); }
+}
+.anim-saut {
+  animation: saut-joie 0.7s ease-out;
+}
+@keyframes desole {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(7deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(3deg); }
+}
+.anim-desole {
+  animation: desole 0.6s ease-in-out;
+}
+
+/* --- Feuillet en cours : il palpite doucement --- */
+@keyframes onglet {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.anim-onglet {
+  animation: onglet 1.4s ease-in-out infinite;
+}
+
+/* --- Le sceau s'abat sur la charte --- */
+@keyframes sceau-frappe {
+  0%   { transform: scale(2.6) rotate(-40deg); opacity: 0; }
+  55%  { transform: scale(0.85) rotate(16deg); opacity: 1; }
+  75%  { transform: scale(1.08) rotate(10deg); }
+  100% { transform: scale(1) rotate(12deg); opacity: 1; }
+}
+.anim-sceau {
+  animation: sceau-frappe 0.55s cubic-bezier(0.3, 0.7, 0.4, 1) 0.5s both;
+}
+
+/* --- Banderole : les titres se déroulent sur un phylactère de gueules --- */
+@keyframes banderole {
+  0%   { transform: scaleX(0.1); opacity: 0; }
+  70%  { transform: scaleX(1.04); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+.banderole {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.35em 1.6em 0.3em;
+  color: #ffffff;
+  background-color: var(--color-gueules);
+  box-shadow: inset 0 3px 0 var(--color-or), inset 0 -3px 0 var(--color-or),
+    inset 0 5px 0 var(--color-sable), inset 0 -5px 0 var(--color-sable);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.9em) 50%, 100% 100%, 0 100%, 0.9em 50%);
+  animation: banderole 0.5s cubic-bezier(0.3, 0.8, 0.4, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-page, .zone-jeu button:not(.bouton-enlumine), .eclat, .anim-saut,
+  .anim-desole, .anim-onglet, .anim-sceau, .banderole {
+    animation: none;
+  }
+  .eclat { display: none; }
 }

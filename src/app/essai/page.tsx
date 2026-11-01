@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
+import { Compteur, Eclats, Feuillets, Sceau } from "@/components/Fioritures";
 import { Etoile, Trophee } from "@/components/Icons";
 
 // ---------- Types ----------
@@ -80,9 +81,15 @@ export default function PageEssai() {
   if (fini) {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-        <Trophee taille={64} className="mx-auto text-or" />
-        <Titre>Tu as marqué {score} points !</Titre>
+        <div className="relative w-fit mx-auto">
+          <Trophee taille={64} className="text-or anim-saut" />
+          <Eclats className="left-1/2 top-1/2" nombre={20} portee={140} />
+        </div>
+        <Titre>
+          Tu as marqué <Compteur valeur={score} /> points !
+        </Titre>
         <Carte className="space-y-4">
+          <Sceau className="absolute -top-7 -right-5 w-20 h-20 anim-sceau" />
           <p className="text-xl">
             Ton score <strong>compterait pour ta ville</strong> si tu avais un
             compte !
@@ -129,29 +136,24 @@ export default function PageEssai() {
 
   return (
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
-      {/* Barre de progression */}
+      {/* Les feuillets de l'essai */}
       <div className="flex items-center gap-2">
-        {items.map((_, i) => (
-          <div
-            key={i}
-            className={`h-3 flex-1 rounded-full border-2 border-sable ${
-              i < index ? "bg-sinople" : i === index ? "bg-or" : "bg-parchemin-2"
-            }`}
-          />
-        ))}
+        <Feuillets total={items.length} courant={index} />
         <span className="font-cinzel font-bold ml-2">{score} pts</span>
       </div>
 
       <Titre niveau={2}>
-        Mini-jeu {index + 1} sur {items.length}
+        Feuillet {index + 1} sur {items.length}
       </Titre>
 
+      {/* Chaque épreuve arrive comme une page qu'on tourne */}
+      <div key={item.id} className="anim-page">
       <Carte
-        className={`space-y-4 ${
+        className={`zone-jeu space-y-4 ${
           reponseDonnee
             ? bonneReponse
-              ? "anim-tampon border-sinople"
-              : "anim-tremble border-gueules"
+              ? "anim-halo border-sinople"
+              : "anim-secousse border-gueules"
             : ""
         }`}
       >
@@ -168,20 +170,24 @@ export default function PageEssai() {
         {reponseDonnee && (
           <>
             <div
-              className={`text-center font-bold text-xl ${
+              className={`relative text-center font-bold text-xl ${
                 bonneReponse ? "text-sinople" : "text-gueules"
               }`}
             >
-              {bonneReponse ? (
-                <span className="anim-points-volants inline-block">Bravo ! +10 points</span>
-              ) : (
-                "Dommage !"
+              {bonneReponse && (
+                <>
+                  <Eclats className="left-1/2 top-1/2" />
+                  <span className="anim-fanion font-cinzel text-or text-2xl">
+                    +10 points !
+                  </span>
+                </>
               )}
+              {bonneReponse ? "Bravo !" : "Dommage !"}
             </div>
             {/* Explication pédagogique : on apprend toujours quelque chose */}
             {item.payload?.explanation && (
-              <div className="chronique bg-parchemin rounded-lg border-2 border-sable/30 p-3">
-                <strong className="font-cinzel">Selon la Chronique…</strong> {item.payload.explanation}
+              <div className="chronique bg-parchemin-2 rounded-lg border-2 border-sable/30 p-3">
+                <strong className="font-cinzel"><span className="rubrique" aria-hidden="true">¶ </span>Selon la Chronique…</strong> {item.payload.explanation}
               </div>
             )}
           </>
@@ -189,10 +195,11 @@ export default function PageEssai() {
 
         {reponseDonnee && (
           <Bouton variante="primaire" pleineLargeur onClick={suivant}>
-            {index + 1 >= items.length ? "Voir mon score" : "Mini-jeu suivant"}
+            {index + 1 >= items.length ? "Voir mon score" : "Tourner la page"}
           </Bouton>
         )}
       </Carte>
+      </div>
     </main>
   );
 }
