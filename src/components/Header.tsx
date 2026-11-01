@@ -67,14 +67,14 @@ export default function Header() {
             priority
           />
         </Link>
-        <nav className="order-last md:order-none w-full md:w-auto md:ml-auto flex items-center justify-around md:justify-end gap-2 md:gap-4">
-          <Link href="/defi-du-jour" className="px-2 py-2 hover:text-gueules transition-colors">
+        <nav className="order-last md:order-none w-full md:w-auto md:ml-auto flex items-center justify-between sm:justify-around md:justify-end gap-1 md:gap-4 text-[15px] md:text-base whitespace-nowrap">
+          <Link href="/defi-du-jour" className="px-1.5 py-2 hover:text-gueules transition-colors">
             Quête du Jour
           </Link>
-          <Link href="/essai" className="px-2 py-2 hover:text-gueules transition-colors">
+          <Link href="/essai" className="px-1.5 py-2 hover:text-gueules transition-colors">
             Essai
           </Link>
-          <Link href="/mon-profil" className="px-2 py-2 hover:text-gueules transition-colors">
+          <Link href="/mon-profil" className="px-1.5 py-2 hover:text-gueules transition-colors">
             Mon profil
           </Link>
         </nav>
