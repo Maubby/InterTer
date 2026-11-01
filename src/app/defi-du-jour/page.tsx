@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
+import { Choix, LETTRES, Verdict, type VerdictReponse } from "@/components/Jeu";
 import Image from "next/image";
 import { Compteur, Eclats, Feuillets, Separateur, Sceau, RoseDesVents } from "@/components/Fioritures";
 import { Etoile, Flamme, Trophee } from "@/components/Icons";
@@ -324,7 +325,7 @@ export default function PageDefiDuJour() {
         {/* Chaque épreuve arrive comme une page qu'on tourne */}
         <div key={item.id} className="anim-page">
         <Carte
-          className={`zone-jeu space-y-4 ${
+          className={`space-y-4 ${
             reponseDonnee
               ? bonneReponse
                 ? "anim-halo border-sinople"
@@ -365,32 +366,18 @@ export default function PageDefiDuJour() {
               </div>
             </div>
           )}
-          {item.game_type === "qcm" && <Qcm p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
-          {item.game_type === "true_false" && <VraiFaux p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
+          {item.game_type === "qcm" && <Qcm p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} verdict={reponseDonnee ? bonneReponse : null} />}
+          {item.game_type === "true_false" && <VraiFaux p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} verdict={reponseDonnee ? bonneReponse : null} />}
           {item.game_type === "riddle" && <Devinette p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
           {item.game_type === "emoji_riddle" && <EmojiRiddle p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
-          {item.game_type === "intruder" && <Intrus p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
+          {item.game_type === "intruder" && <Intrus p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} verdict={reponseDonnee ? bonneReponse : null} />}
           {item.game_type === "order_dates" && <OrdreDates p={item.payload} onValider={noterReponse} desactive={reponseDonnee || enCours} />}
 
           {reponseDonnee && (
             <>
-              <div
-                className={`relative text-center font-bold text-xl ${
-                  bonneReponse ? "text-sinople" : "text-gueules"
-                }`}
-              >
-                {bonneReponse && (
-                  <>
-                    <Eclats className="left-1/2 top-1/2" />
-                    <span className="anim-fanion font-cinzel text-or text-2xl">
-                      +10 points !
-                    </span>
-                  </>
-                )}
-                {bonneReponse ? "Bravo ! " : "Dommage !"}
-              </div>
+              <Verdict juste={bonneReponse === true} />
               {item.payload?.explanation && (
-                <div className="chronique bg-parchemin-2 rounded-lg border-2 border-sable/30 p-3">
+                <div className="chronique glose">
                   <strong className="font-cinzel not-italic"><span className="rubrique" aria-hidden="true">¶ </span>Selon la Chronique…</strong> {item.payload.explanation}
                 </div>
               )}
@@ -447,9 +434,9 @@ function affichage(a: any): string {
 }
 
 type OnValider = (answer: any) => void;
-type Props = { p: any; onValider: OnValider; desactive: boolean };
+type Props = { p: any; onValider: OnValider; desactive: boolean; verdict?: VerdictReponse };
 
-function Qcm({ p, onValider, desactive }: Props) {
+function Qcm({ p, onValider, desactive, verdict = null }: Props) {
   const [choix, setChoix] = useState<number | null>(null);
   // Reset quand on change d'épreuve (sinon le choix précédent reste surligné)
   useEffect(() => { setChoix(null); }, [p]);
@@ -457,22 +444,23 @@ function Qcm({ p, onValider, desactive }: Props) {
     <div className="space-y-3">
       <p className="text-xl font-bold font-cinzel">{p.question}</p>
       {p.choices?.map((c: string, i: number) => (
-        <button
+        <Choix
           key={i}
-          disabled={desactive}
+          lettre={LETTRES[i]}
+          rang={i}
+          choisi={choix === i}
+          verdict={verdict}
+          desactive={desactive}
           onClick={() => { setChoix(i); onValider({ choice: i }); }}
-          className={`w-full min-h-[56px] rounded-lg border-4 text-lg font-bold ${
-            choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
-          }`}
         >
           {c}
-        </button>
+        </Choix>
       ))}
     </div>
   );
 }
 
-function VraiFaux({ p, onValider, desactive }: Props) {
+function VraiFaux({ p, onValider, desactive, verdict = null }: Props) {
   const [choix, setChoix] = useState<string | null>(null);
   // Reset quand on change d'épreuve
   useEffect(() => { setChoix(null); }, [p]);
@@ -485,17 +473,18 @@ function VraiFaux({ p, onValider, desactive }: Props) {
     <div className="space-y-3">
       <p className="text-xl font-bold font-cinzel">{affichage(affirmation)}</p>
       <div className="grid grid-cols-2 gap-3">
-        {[["true", "VRAI"], ["false", "FAUX"]].map(([val, label]) => (
-          <button
+        {[["true", "VRAI"], ["false", "FAUX"]].map(([val, label], i) => (
+          <Choix
             key={val}
-            disabled={desactive}
+            lettre={label[0]}
+            rang={i}
+            choisi={choix === val}
+            verdict={verdict}
+            desactive={desactive}
             onClick={() => { setChoix(val); onValider({ value: val }); }}
-            className={`min-h-[64px] rounded-lg border-4 text-xl font-bold ${
-              choix === val ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
-            }`}
           >
             {label}
-          </button>
+          </Choix>
         ))}
       </div>
     </div>
@@ -573,7 +562,7 @@ function EmojiRiddle({ p, onValider, desactive }: Props) {
   );
 }
 
-function Intrus({ p, onValider, desactive }: Props) {
+function Intrus({ p, onValider, desactive, verdict = null }: Props) {
   const [choix, setChoix] = useState<number | null>(null);
   // Reset quand on change d'épreuve
   useEffect(() => { setChoix(null); }, [p]);
@@ -582,16 +571,17 @@ function Intrus({ p, onValider, desactive }: Props) {
       <p className="text-xl font-bold">Trouve l&apos;intrus :</p>
       <div className="grid grid-cols-2 gap-3">
         {p.items?.map((c: string, i: number) => (
-          <button
+          <Choix
             key={i}
-            disabled={desactive}
+            lettre={LETTRES[i]}
+            rang={i}
+            choisi={choix === i}
+            verdict={verdict}
+            desactive={desactive}
             onClick={() => { setChoix(i); onValider({ intruder_index: i }); }}
-            className={`min-h-[64px] rounded-lg border-4 text-lg choix-reponse ${
-              choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
-            }`}
           >
             {c}
-          </button>
+          </Choix>
         ))}
       </div>
     </div>

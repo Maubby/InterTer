@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
+import { Choix, LETTRES, Verdict, type VerdictReponse } from "@/components/Jeu";
 import { Compteur, Eclats, Feuillets, Sceau } from "@/components/Fioritures";
 import { Etoile, Trophee } from "@/components/Icons";
 
@@ -149,7 +150,7 @@ export default function PageEssai() {
       {/* Chaque épreuve arrive comme une page qu'on tourne */}
       <div key={item.id} className="anim-page">
       <Carte
-        className={`zone-jeu space-y-4 ${
+        className={`space-y-4 ${
           reponseDonnee
             ? bonneReponse
               ? "anim-halo border-sinople"
@@ -158,35 +159,21 @@ export default function PageEssai() {
         }`}
       >
         {item.game_type === "qcm" && (
-          <Qcm onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} />
+          <Qcm onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} verdict={reponseDonnee ? bonneReponse : null} />
         )}
         {item.game_type === "riddle" && (
           <Devinette onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} />
         )}
         {item.game_type === "intruder" && (
-          <Intrus onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} />
+          <Intrus onValider={valider} desactive={reponseDonnee || enCours} p={item.payload} verdict={reponseDonnee ? bonneReponse : null} />
         )}
 
         {reponseDonnee && (
           <>
-            <div
-              className={`relative text-center font-bold text-xl ${
-                bonneReponse ? "text-sinople" : "text-gueules"
-              }`}
-            >
-              {bonneReponse && (
-                <>
-                  <Eclats className="left-1/2 top-1/2" />
-                  <span className="anim-fanion font-cinzel text-or text-2xl">
-                    +10 points !
-                  </span>
-                </>
-              )}
-              {bonneReponse ? "Bravo !" : "Dommage !"}
-            </div>
+            <Verdict juste={bonneReponse === true} />
             {/* Explication pédagogique : on apprend toujours quelque chose */}
             {item.payload?.explanation && (
-              <div className="chronique bg-parchemin-2 rounded-lg border-2 border-sable/30 p-3">
+              <div className="chronique glose">
                 <strong className="font-cinzel"><span className="rubrique" aria-hidden="true">¶ </span>Selon la Chronique…</strong> {item.payload.explanation}
               </div>
             )}
@@ -212,29 +199,29 @@ function Qcm({
   onValider,
   desactive,
   p,
+  verdict,
 }: {
   onValider: (answer: any) => void;
   desactive: boolean;
   p: any;
+  verdict: VerdictReponse;
 }) {
   const [choix, setChoix] = useState<number | null>(null);
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">{p.question}</p>
       {p.choices?.map((c: string, i: number) => (
-        <button
+        <Choix
           key={i}
-          disabled={desactive}
-          onClick={() => {
-            setChoix(i);
-            onValider({ choice: i });
-          }}
-          className={`w-full min-h-[56px] rounded-lg border-4 text-lg font-bold transition-colors ${
-            choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
-          }`}
+          lettre={LETTRES[i]}
+          rang={i}
+          choisi={choix === i}
+          verdict={verdict}
+          desactive={desactive}
+          onClick={() => { setChoix(i); onValider({ choice: i }); }}
         >
           {c}
-        </button>
+        </Choix>
       ))}
     </div>
   );
@@ -287,10 +274,12 @@ function Intrus({
   onValider,
   desactive,
   p,
+  verdict,
 }: {
   onValider: (answer: any) => void;
   desactive: boolean;
   p: any;
+  verdict: VerdictReponse;
 }) {
   const [choix, setChoix] = useState<number | null>(null);
   return (
@@ -298,19 +287,17 @@ function Intrus({
       <p className="text-xl font-bold">Trouve l&apos;intrus :</p>
       <div className="grid grid-cols-2 gap-3">
         {p.items?.map((c: string, i: number) => (
-          <button
+          <Choix
             key={i}
-            disabled={desactive}
-            onClick={() => {
-              setChoix(i);
-              onValider({ intruder_index: i });
-            }}
-            className={`min-h-[64px] rounded-lg border-4 text-lg font-bold transition-colors ${
-              choix === i ? "bg-or border-sable" : "bg-white border-sable hover:bg-or/20"
-            }`}
+            lettre={LETTRES[i]}
+            rang={i}
+            choisi={choix === i}
+            verdict={verdict}
+            desactive={desactive}
+            onClick={() => { setChoix(i); onValider({ intruder_index: i }); }}
           >
             {c}
-          </button>
+          </Choix>
         ))}
       </div>
     </div>

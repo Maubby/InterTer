@@ -9,7 +9,7 @@ export function Carte({
 }) {
   return (
     <div
-      className={`page-enluminee relative bg-parchemin border-4 border-sable rounded-xl shadow-enchere p-5 ${className}`}
+      className={`page-enluminee pile-feuillets relative bg-parchemin border-4 border-sable rounded-xl p-5 ${className}`}
     >
       {children}
     </div>
