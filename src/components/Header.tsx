@@ -42,7 +42,18 @@ export default function Header() {
   }
 
   return (
-    <header className="border-b-4 border-sable/40 bg-parchemin/60 sticky top-0 z-40">
+    <header className="bg-parchemin sticky top-0 z-40">
+      {/* Frise enluminée sous l'en-tête, comme la bordure du logo */}
+      <div aria-hidden="true" className="frise-enluminee absolute left-0 right-0 top-full">
+        <svg viewBox="0 0 40 40" className="absolute left-1/2 top-1/2 w-13 h-13 -translate-x-1/2 -translate-y-1/2">
+          <path d="M20 1 39 20 20 39 1 20Z" fill="#1d4e89" stroke="#2b2118" strokeWidth="1.5" />
+          <path d="M20 6 34 20 20 34 6 20Z" fill="none" stroke="#e8b33d" strokeWidth="1.5" />
+          {[0, 90, 180, 270].map((a) => (
+            <circle key={a} cx="20" cy="14.5" r="4.2" transform={`rotate(${a} 20 20)`} fill="#c8102e" stroke="#e8b33d" strokeWidth="1" />
+          ))}
+          <circle cx="20" cy="20" r="3.2" fill="#e8b33d" stroke="#2b2118" strokeWidth="0.8" />
+        </svg>
+      </div>
       <div className="mx-auto max-w-5xl px-4 py-2 flex items-center gap-3">
         <Link href="/" aria-label="Interter — retour à l'accueil" className="flex items-center gap-3">
           <Image

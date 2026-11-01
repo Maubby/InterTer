@@ -10,16 +10,7 @@ export default function Accueil() {
   return (
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
       <header className="text-center space-y-3">
-        <Image
-          src="/logo/logo-officiel.png"
-          alt="Interter"
-          width={1672}
-          height={941}
-          style={{ maxHeight: "220px", width: "auto" }}
-          className="mx-auto drop-shadow-lg"
-          priority
-        />
-        {/* Le logo porte déjà le nom : la banderole donne le sous-titre */}
+        {/* Le logo est dans l'en-tête : la banderole donne le sous-titre */}
         <Titre>Le Tournoi des Villes de France</Titre>
         <p className="text-xl text-sable">
           Chaque jour, une Quête du Jour pour faire briller ta ville face à toute
@@ -27,19 +18,22 @@ export default function Accueil() {
         </p>
       </header>
 
-      <Carte className="flex flex-col sm:flex-row items-center gap-4">
+      {/* La Conteuse accueille le joueur : c'est elle qui ouvre le grand livre */}
+      <Carte className="flex flex-col sm:flex-row items-center gap-5">
         <Image
-          src="/mascotte/margot-bienvenue.svg"
-          alt="Margot, la Dame Voyageuse"
-          width={96}
-          height={96}
+          src="/personnages/conteuse-salue.webp"
+          alt="La Conteuse, qui te salue"
+          width={128}
+          height={128}
           unoptimized
-          className="w-24 h-24 shrink-0 rounded-lg border-4 border-or outline-2 outline-sable bg-parchemin-2"
+          priority
+          className="w-32 h-32 shrink-0 rounded-full border-4 border-or outline-2 outline-sable bg-parchemin-2 anim-reverence"
         />
         <p className="text-lg">
           <Lettrine lettre="B" />
-          ienvenue dans le grand tournoi des villes ! Je suis Margot, la Dame
-          Voyageuse. Prête à défendre ton terter ?
+          ienvenue dans le grand tournoi des villes ! Je suis la Conteuse :
+          chaque jour, j&apos;ouvre mon grand livre sur une nouvelle Quête.
+          À toi de faire briller ton terter !
         </p>
       </Carte>
 

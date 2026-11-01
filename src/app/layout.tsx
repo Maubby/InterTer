@@ -41,7 +41,8 @@ export default function RootLayout({
           modifient le <body> avant React ; on ignore ces différences cosmétiques. */}
       <body className="font-sans antialiased min-h-dvh" suppressHydrationWarning>
         <Header />
-        <div className="pt-2">{children}</div>
+        {/* pt-10 : place pour la frise enluminée qui borde l'en-tête */}
+        <div className="pt-10">{children}</div>
       </body>
     </html>
   );

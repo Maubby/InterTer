@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 24" width="72" height="24">
+  <!-- Frise enluminée : bande de vélin entre filets d'encre et d'or, rinceau d'or
+       portant fleurs de gueules et d'azur et feuillage de sinople. Se répète en largeur. -->
+  <rect x="0" y="3" width="72" height="18" fill="#e9d9b5"/>
+  <rect x="0" y="0" width="72" height="2.5" fill="#2b2118"/>
+  <rect x="0" y="2.5" width="72" height="1.6" fill="#e8b33d"/>
+  <rect x="0" y="19.9" width="72" height="1.6" fill="#e8b33d"/>
+  <rect x="0" y="21.5" width="72" height="2.5" fill="#2b2118"/>
+  <path d="M0 12Q18 5.5 36 12T72 12" fill="none" stroke="#e8b33d" stroke-width="2"/>
+  <path d="M0 12Q18 5.5 36 12T72 12" fill="none" stroke="#2b2118" stroke-width="0.5" opacity="0.5"/>
+  <g fill="#1e7d4e" stroke="#2b2118" stroke-width="0.5">
+    <path d="M7 10.5q-4-4.5-7-2.5q3 4 7 2.5Z"/>
+    <path d="M29 13.5q3 4.5 7 3q-2.5-4-7-3Z"/>
+    <path d="M43 13.5q-3 4.5-7 3q2.5-4 7-3Z" transform="translate(0 -3) scale(1 1)"/>
+    <path d="M65 13.5q3 4 7 2.5q-3-4-7-2.5Z"/>
+  </g>
+  <g transform="translate(18 8.6)">
+    <circle cx="0" cy="-2.3" r="2.1" fill="#c8102e" stroke="#2b2118" stroke-width="0.5"/>
+    <circle cx="2.3" cy="0" r="2.1" fill="#c8102e" stroke="#2b2118" stroke-width="0.5"/>
+    <circle cx="0" cy="2.3" r="2.1" fill="#c8102e" stroke="#2b2118" stroke-width="0.5"/>
+    <circle cx="-2.3" cy="0" r="2.1" fill="#c8102e" stroke="#2b2118" stroke-width="0.5"/>
+    <circle r="1.3" fill="#e8b33d"/>
+  </g>
+  <g transform="translate(54 15.4)">
+    <circle cx="0" cy="-2.3" r="2.1" fill="#1d4e89" stroke="#2b2118" stroke-width="0.5"/>
+    <circle cx="2.3" cy="0" r="2.1" fill="#1d4e89" stroke="#2b2118" stroke-width="0.5"/>
+    <circle cx="0" cy="2.3" r="2.1" fill="#1d4e89" stroke="#2b2118" stroke-width="0.5"/>
+    <circle cx="-2.3" cy="0" r="2.1" fill="#1d4e89" stroke="#2b2118" stroke-width="0.5"/>
+    <circle r="1.3" fill="#e8b33d"/>
+  </g>
+  <circle cx="36" cy="12" r="1.4" fill="#c8102e"/>
+  <circle cx="0" cy="12" r="1.4" fill="#c8102e"/>
+  <circle cx="72" cy="12" r="1.4" fill="#c8102e"/>
+</svg>

@@ -118,6 +118,15 @@ body {
   background-color: var(--color-azur);
 }
 
+/* Frise enluminée qui borde l'en-tête (rinceau, fleurs, filets d'or) */
+.frise-enluminee {
+  height: 32px;
+  background-image: url("/ornements/frise.svg");
+  background-size: 96px 32px;
+  background-repeat: repeat-x;
+  background-position: center top;
+}
+
 /* Rubrique : ce que les copistes écrivaient à l'encre rouge */
 .rubrique {
   color: var(--color-gueules);

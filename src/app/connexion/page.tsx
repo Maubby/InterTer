@@ -90,12 +90,12 @@ export default function PageConnexion() {
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
       <header className="text-center space-y-3">
         <Image
-          src="/mascotte/margot-bienvenue.svg"
-          alt="Margot, la Dame Voyageuse"
-          width={96}
-          height={96}
+          src="/personnages/conteuse-salue.webp"
+          alt="La Conteuse, qui te salue"
+          width={112}
+          height={112}
           unoptimized
-          className="mx-auto"
+          className="mx-auto rounded-full border-4 border-or outline-2 outline-sable bg-parchemin-2"
         />
         <Titre>Rejoins le tournoi</Titre>
         <p className="text-lg">
