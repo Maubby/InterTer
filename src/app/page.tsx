@@ -1,12 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
 import { Separateur } from "@/components/Fioritures";
 import { Eclair, Epees, Etoile, Flamme, Trophee } from "@/components/Icons";
 
+// Défi reçu d'un ami, pas encore relevé (list_my_duels)
+type DefiRecu = { code: string; createur: string };
+
 export default function Accueil() {
+  const supabase = getSupabaseBrowserClient();
+  const [defis, setDefis] = useState<DefiRecu[]>([]);
+
+  // Les défis que les amis m'ont lancés et que je n'ai pas encore joués
+  useEffect(() => {
+    (async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase.rpc("list_my_duels");
+      const duels = (data ?? []) as {
+        code: string;
+        createur: string;
+        je_suis_createur: boolean;
+        expire: boolean;
+        mon_score: number | null;
+      }[];
+      setDefis(duels.filter((d) => !d.je_suis_createur && !d.expire && d.mon_score === null));
+    })();
+  }, [supabase]);
+
   return (
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
       <header className="text-center space-y-3">
@@ -36,6 +63,21 @@ export default function Accueil() {
           À toi de faire briller ton terter !
         </p>
       </Carte>
+
+      {/* Un ami m'a défié : à relever en premier */}
+      {defis.map((d) => (
+        <Carte key={d.code} className="flex items-center gap-3 border-gueules anim-reverence">
+          <Epees className="w-9 h-9 shrink-0 text-gueules" />
+          <p className="flex-1 text-lg font-bold">{d.createur} te défie&nbsp;!</p>
+          <Bouton
+            variante="primaire"
+            className="!min-h-[48px] !px-4 shrink-0"
+            onClick={() => (window.location.href = `/duel/${d.code}`)}
+          >
+            Relever
+          </Bouton>
+        </Carte>
+      ))}
 
       <Separateur />
 

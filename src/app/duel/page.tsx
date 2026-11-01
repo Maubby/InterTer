@@ -9,6 +9,7 @@ import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
 import { Separateur } from "@/components/Fioritures";
 import { Epees } from "@/components/Icons";
+import { MesAmis } from "@/components/MesAmis";
 
 // Un duel dans la liste « Mes duels » (list_my_duels)
 type DuelResume = {
@@ -20,6 +21,7 @@ type DuelResume = {
   nb_joueurs: number;
   mon_score: number | null;
   meilleur_adverse: number | null;
+  adresse_a: string[] | null;
 };
 
 // Où en est le duel, du point de vue du joueur
@@ -134,9 +136,23 @@ export default function PageDuels() {
       {phase === "pret" && (
         <>
           {erreur && <p className="text-gueules font-bold text-center">{erreur}</p>}
-          <Bouton variante="primaire" pleineLargeur onClick={lancer} disabled={enCours} className="anim-respire">
-            <Epees className="w-6 h-6" /> {enCours ? "Préparation…" : "Lancer un duel"}
-          </Bouton>
+          <section className="space-y-3">
+            <Titre niveau={2}>Mes amis</Titre>
+            <MesAmis />
+          </section>
+
+          <Separateur />
+
+          <section className="space-y-3">
+            <Titre niveau={2}>Défier quelqu&apos;un d&apos;autre</Titre>
+            <p className="text-sable/70">
+              Tu joues ta manche, puis tu envoies le duel à qui tu veux, par
+              WhatsApp, SMS ou Messenger.
+            </p>
+            <Bouton variante="secondaire" pleineLargeur onClick={lancer} disabled={enCours}>
+              <Epees className="w-6 h-6" /> {enCours ? "Préparation…" : "Lancer un duel"}
+            </Bouton>
+          </section>
 
           <Separateur />
 
@@ -160,7 +176,11 @@ export default function PageDuels() {
                       >
                         <span className="min-w-0">
                           <span className="block font-cinzel font-bold">
-                            {d.je_suis_createur ? "Mon duel" : `Défi de ${d.createur}`}
+                            {d.je_suis_createur
+                              ? d.adresse_a?.length
+                                ? `Défi à ${d.adresse_a.join(", ")}`
+                                : "Mon duel"
+                              : `Défi de ${d.createur}`}
                           </span>
                           <span className="block text-sm font-normal text-sable/70">
                             {d.nb_joueurs} joueur{d.nb_joueurs > 1 ? "s" : ""}

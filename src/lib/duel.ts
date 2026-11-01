@@ -55,6 +55,54 @@ export function lienSms(code: string, score: ScoreInvitation = null): string {
   return `sms:?&body=${encodeURIComponent(messageInvitation(code, score))}`;
 }
 
+// ---------- Contacts du téléphone ----------
+// Le sélecteur de contacts n'existe que dans Chrome sur Android : sur iPhone,
+// Apple ne le permet pas aux sites (le partage natif propose alors les
+// contacts récents de WhatsApp et Messages).
+
+type Contact = { nom: string; tel: string };
+type ContactsManager = {
+  select: (
+    proprietes: string[],
+    options?: { multiple?: boolean }
+  ) => Promise<{ name?: string[]; tel?: string[] }[]>;
+};
+
+export function contactsDisponibles(): boolean {
+  return typeof navigator !== "undefined" && "contacts" in navigator && "ContactsManager" in window;
+}
+
+// Ouvre le carnet d'adresses ; renvoie le contact choisi, ou null
+export async function choisirContact(): Promise<Contact | null> {
+  const contacts = (navigator as Navigator & { contacts?: ContactsManager }).contacts;
+  if (!contacts) return null;
+  try {
+    const [choix] = await contacts.select(["name", "tel"], { multiple: false });
+    const tel = choix?.tel?.[0];
+    if (!tel) return null;
+    return { nom: choix.name?.[0] ?? tel, tel };
+  } catch {
+    return null; // sélection annulée
+  }
+}
+
+// Numéro au format international sans « + » (06 12… → 336 12…), pour wa.me
+export function telInternational(tel: string): string {
+  let chiffres = tel.replace(/[^\d+]/g, "");
+  if (chiffres.startsWith("+")) return chiffres.slice(1);
+  if (chiffres.startsWith("00")) return chiffres.slice(2);
+  if (chiffres.startsWith("0") && chiffres.length === 10) chiffres = "33" + chiffres.slice(1);
+  return chiffres;
+}
+
+export function lienWhatsAppVers(tel: string, code: string, score: ScoreInvitation = null): string {
+  return `https://wa.me/${telInternational(tel)}?text=${encodeURIComponent(messageInvitation(code, score))}`;
+}
+
+export function lienSmsVers(tel: string, code: string, score: ScoreInvitation = null): string {
+  return `sms:${tel.replace(/[^\d+]/g, "")}?&body=${encodeURIComponent(messageInvitation(code, score))}`;
+}
+
 // Page où revenir après la connexion (seulement une adresse interne)
 export function memoriserRetour(chemin: string) {
   try {
