@@ -87,7 +87,7 @@ export default function Accueil() {
           pleineLargeur
           onClick={() => (window.location.href = "/defi-du-jour")}
         >
-          <Eclair className="w-6 h-6" /> Vivre la Quête du Jour
+          <Eclair className="w-6 h-6" /> La Quête du Jour
         </Bouton>
         <Bouton
           variante="secondaire"

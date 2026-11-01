@@ -43,10 +43,13 @@ export default function PageClassement() {
   useEffect(() => {
     (async () => {
       setChargement(true);
+      // cities!inner : jointure stricte. Sans elle, le filtre département /
+      // région ne fait que vider les infos des villes qui ne correspondent
+      // pas, et elles restent au classement sans nom (« — »).
       let requete = supabase
         .from("city_scores")
         .select(
-          "city_id, total_points, play_count, cities(name, department_name, region_name)"
+          "city_id, total_points, play_count, cities!inner(name, department_name, region_name)"
         )
         .order("total_points", { ascending: false })
         .limit(50);

@@ -216,7 +216,7 @@ export default function PageMonProfil() {
         pleineLargeur
         onClick={() => (window.location.href = "/defi-du-jour")}
       >
-        <Flamme className="w-6 h-6" /> Vivre la Quête du Jour
+        <Flamme className="w-6 h-6" /> La Quête du Jour
       </Bouton>
     </main>
   );
