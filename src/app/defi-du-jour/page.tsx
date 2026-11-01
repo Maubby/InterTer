@@ -11,30 +11,60 @@ import { Etoile, Flamme, Trophee } from "@/components/Icons";
 // ---------- La guilde d'Interter : un personnage par thème ----------
 // Les thèmes structurent la banque de questions ; les formats
 // (qcm, devinette...) sont la manière de jouer chaque thème.
-const GUILDE: Record<string, { nom: string; svg: string; intro: string }> = {
+// Le prénom rime avec le métier (Yolande la Marchande, Aaron le Forgeron…).
+// Un personnage illustré a trois portraits : pendant la question, après une
+// bonne réponse, après une erreur. Les autres gardent leur dessin provisoire.
+type Hote = {
+  nom: string;
+  svg?: string;
+  portraits?: { question: string; bravo: string; oups: string };
+  intro: string;
+};
+const GUILDE: Record<string, Hote> = {
   quotidien: {
-    nom: "Mahaut la Marchande",
-    svg: "/personnages/mahaut-marchande.svg",
-    intro: "Mahaut étale ses marchandises devant toi :",
+    nom: "Yolande la Marchande",
+    portraits: {
+      question: "/personnages/yolande-question.webp",
+      bravo: "/personnages/yolande-bravo.webp",
+      oups: "/personnages/yolande-oups.webp",
+    },
+    intro: "Yolande étale ses marchandises devant toi :",
   },
   histoire: {
-    nom: "Henri le Bailli",
-    svg: "/personnages/henri-bailli.svg",
-    intro: "Henri te demande de trancher :",
+    nom: "Gabrielli le Bailli",
+    portraits: {
+      question: "/personnages/gabrielli-question.webp",
+      bravo: "/personnages/gabrielli-bravo.webp",
+      oups: "/personnages/gabrielli-oups.webp",
+    },
+    intro: "Gabrielli te demande de trancher :",
   },
   legendes: {
-    nom: "Ameline la Conteuse",
-    svg: "/personnages/ameline-contreuse.svg",
-    intro: "Ameline conte une légende :",
+    nom: "La Conteuse",
+    portraits: {
+      question: "/personnages/conteuse-question.webp",
+      bravo: "/personnages/conteuse-bravo.webp",
+      oups: "/personnages/conteuse-oups.webp",
+    },
+    intro: "La Conteuse ouvre son grand livre :",
   },
   armes: {
-    nom: "Garin le Forgeron",
-    svg: "/personnages/garin-forgeron.svg",
-    intro: "Garin frappe son enclume, écoute bien :",
+    nom: "Aaron le Forgeron",
+    portraits: {
+      question: "/personnages/aaron-question.webp",
+      bravo: "/personnages/aaron-bravo.webp",
+      oups: "/personnages/aaron-oups.webp",
+    },
+    intro: "Aaron frappe son enclume, écoute bien :",
   },
   cuisine: {
     nom: "Yvonne la Marmitonne",
-    svg: "/personnages/yvonne-marmitonne.svg",
+    // Pas encore de portrait joyeux : elle salue aussi pour féliciter
+    portraits: {
+      question: "/personnages/yvonne-question.webp",
+      bravo: "/personnages/yvonne-question.webp",
+      oups: "/personnages/yvonne-oups.webp",
+    },
     intro: "Yvonne vide son panier sur la table :",
   },
   chroniques: {
@@ -266,6 +296,15 @@ export default function PageDefiDuJour() {
   // ---------- Écran : question ----------
   if (phase === "question" && items[index]) {
     const item = items[index];
+    const hote = GUILDE[item.theme ?? item.game_type];
+    // Le portrait suit la réponse : il se réjouit ou se désole avec le joueur
+    const portrait = hote?.portraits
+      ? reponseDonnee
+        ? bonneReponse
+          ? hote.portraits.bravo
+          : hote.portraits.oups
+        : hote.portraits.question
+      : null;
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6">
         {/* Barre de progression */}
@@ -281,7 +320,7 @@ export default function PageDefiDuJour() {
         </div>
 
         <Titre niveau={2}>
-          {GUILDE[items[index].theme ?? items[index].game_type]?.nom ?? "Épreuve"} — {index + 1} sur {items.length}
+          {hote?.nom ?? "Épreuve"} — {index + 1} sur {items.length}
         </Titre>
 
         <Carte
@@ -294,21 +333,32 @@ export default function PageDefiDuJour() {
           }`}
         >
           {/* L'hôte de l'épreuve — il fait sa révérence en arrivant */}
-          {GUILDE[items[index].theme ?? items[index].game_type] && (
+          {hote && (
             <div key={item.id} className="anim-reverence flex items-center gap-3 border-b-2 border-sable/20 pb-3">
-              <Image
-                src={GUILDE[items[index].theme ?? items[index].game_type].svg}
-                alt={GUILDE[items[index].theme ?? items[index].game_type].nom}
-                width={56}
-                height={56}
-                unoptimized
-              />
+              {portrait ? (
+                <Image
+                  src={portrait}
+                  alt={hote.nom}
+                  width={96}
+                  height={96}
+                  unoptimized
+                  className="shrink-0 rounded-full border-4 border-or outline-2 outline-sable bg-parchemin-2"
+                />
+              ) : (
+                <Image
+                  src={hote.svg!}
+                  alt={hote.nom}
+                  width={56}
+                  height={56}
+                  unoptimized
+                />
+              )}
               <div>
                 <p className="font-cinzel font-bold text-lg text-azur">
-                  {GUILDE[items[index].theme ?? items[index].game_type].nom}
+                  {hote.nom}
                 </p>
                 <p className="note-ancienne text-base text-sable/80">
-                  {GUILDE[items[index].theme ?? items[index].game_type].intro}
+                  {hote.intro}
                 </p>
               </div>
             </div>
