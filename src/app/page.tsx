@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
 import { Separateur } from "@/components/Fioritures";
-import { Eclair, Etoile, Flamme, Trophee } from "@/components/Icons";
+import { Eclair, Epees, Etoile, Flamme, Trophee } from "@/components/Icons";
 
 export default function Accueil() {
   return (
@@ -46,6 +46,13 @@ export default function Accueil() {
           onClick={() => (window.location.href = "/defi-du-jour")}
         >
           <Eclair className="w-6 h-6" /> Vivre la Quête du Jour
+        </Bouton>
+        <Bouton
+          variante="secondaire"
+          pleineLargeur
+          onClick={() => (window.location.href = "/duel")}
+        >
+          <Epees className="w-6 h-6" /> Défier mes amis
         </Bouton>
         <Bouton
           variante="enigme"

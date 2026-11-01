@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { pseudoAleatoire, pseudoPropose } from "@/lib/pseudo";
+import { reprendreRetour } from "@/lib/duel";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Titre } from "@/components/Carte";
 
@@ -47,7 +48,8 @@ export default function PageChoisirMaVille() {
           .eq("id", user.id)
           .maybeSingle();
         if (profil?.city_id) {
-          window.location.replace("/defi-du-jour");
+          // Un ami invité à un duel retombe sur son duel
+          window.location.replace(reprendreRetour() ?? "/defi-du-jour");
           return;
         }
         if (profil?.pseudo) setPseudoActuel(profil.pseudo);
@@ -124,6 +126,13 @@ export default function PageChoisirMaVille() {
     if (errProfil) {
       setErreur(errProfil.message);
       setChargement(false);
+      return;
+    }
+
+    // Arrivé par une invitation à un duel : on y retourne directement
+    const retour = reprendreRetour();
+    if (retour) {
+      window.location.href = retour;
       return;
     }
 

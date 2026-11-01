@@ -21,6 +21,17 @@ export function Bouclier({ taille = 24, className }: IconProps) {
   );
 }
 
+// Deux épées croisées : le duel entre amis
+export function Epees({ taille = 24, className }: IconProps) {
+  return (
+    <svg {...base(taille)} className={className}>
+      <path d="M4 4l11 11M20 4L9 15" />
+      <path d="M13 17l4-4M11 17l-4-4" />
+      <path d="M16.5 16.5L20 20M7.5 16.5L4 20" />
+    </svg>
+  );
+}
+
 export function Trophee({ taille = 24, className }: IconProps) {
   return (
     <svg {...base(taille)} className={className}>

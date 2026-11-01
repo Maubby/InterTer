@@ -491,6 +491,9 @@ body {
 .banderole-sinople {
   background-color: var(--color-sinople);
 }
+.banderole-azur {
+  background-color: var(--color-azur);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .anim-page, .choix, .choix-juste, .choix-faux, .eclat, .anim-saut,

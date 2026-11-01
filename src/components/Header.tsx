@@ -71,9 +71,16 @@ export default function Header() {
           <Link href="/defi-du-jour" className="px-1.5 py-2 hover:text-gueules transition-colors">
             Quête du Jour
           </Link>
-          <Link href="/essai" className="px-1.5 py-2 hover:text-gueules transition-colors">
-            Essai
-          </Link>
+          {/* Connecté : le duel entre amis ; visiteur : l'essai sans compte */}
+          {pseudo ? (
+            <Link href="/duel" className="px-1.5 py-2 hover:text-gueules transition-colors">
+              Duel
+            </Link>
+          ) : (
+            <Link href="/essai" className="px-1.5 py-2 hover:text-gueules transition-colors">
+              Essai
+            </Link>
+          )}
           <Link href="/mon-profil" className="px-1.5 py-2 hover:text-gueules transition-colors">
             Mon profil
           </Link>
