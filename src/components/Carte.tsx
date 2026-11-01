@@ -31,14 +31,17 @@ export function Titre({
   const Tag = niveau === 1 ? "h1" : niveau === 2 ? "h2" : "h3";
   const taille =
     niveau === 1 ? "text-3xl md:text-4xl" : niveau === 2 ? "text-2xl" : "text-xl";
-  let contenu = children;
+  // Typographie française : espace insécable avant ! ? : ; (le « ! » ne
+  // tombe jamais seul à la ligne sur la banderole)
+  let contenu =
+    typeof children === "string" ? children.replace(/ ([!?:;])/g, " $1") : children;
   if (niveau === 1) {
-    contenu = <span className="banderole">{children}</span>;
+    contenu = <span className="banderole">{contenu}</span>;
   } else if (niveau === 2) {
     contenu = (
       <>
         <span className="rubrique mr-2" aria-hidden="true">¶</span>
-        {children}
+        {contenu}
       </>
     );
   }

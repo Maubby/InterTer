@@ -9,20 +9,34 @@ export function lienDuel(code: string): string {
   return `${window.location.origin}/duel/${code}`;
 }
 
-export function messageInvitation(code: string): string {
-  return `Je te défie sur Interter ! 5 questions sur nos villes de France, à jouer quand tu veux : ${lienDuel(code)}`;
+// Score du joueur qui invite, pour piquer l'ami au vif
+export type ScoreInvitation = { score: number; total: number } | null;
+
+export function messageInvitation(code: string, score: ScoreInvitation = null): string {
+  const defi = score
+    ? `J'ai fait ${score.score}/${score.total} au duel Interter, fais mieux que moi !`
+    : "Je te défie sur Interter !";
+  return `${defi} 5 questions sur nos villes de France, à jouer quand tu veux : ${lienDuel(code)}`;
+}
+
+// Le téléphone sait-il partager (feuille WhatsApp, SMS, Messenger…) ?
+export function partageNatifDisponible(): boolean {
+  return typeof navigator !== "undefined" && typeof navigator.share === "function";
 }
 
 // Partage natif (téléphone) si disponible, sinon copie dans le presse-papiers.
-// Renvoie « partage », « copie » ou « echec ».
-export async function partagerDuel(code: string): Promise<"partage" | "copie" | "echec"> {
-  const texte = messageInvitation(code);
-  if (navigator.share) {
+// Renvoie « partage », « annule », « copie » ou « echec ».
+export async function partagerDuel(
+  code: string,
+  score: ScoreInvitation = null
+): Promise<"partage" | "annule" | "copie" | "echec"> {
+  const texte = messageInvitation(code, score);
+  if (partageNatifDisponible()) {
     try {
       await navigator.share({ title: "Duel Interter", text: texte });
       return "partage";
     } catch {
-      // partage annulé : on retombe sur la copie
+      return "annule"; // le joueur a refermé la feuille de partage
     }
   }
   try {
@@ -33,12 +47,12 @@ export async function partagerDuel(code: string): Promise<"partage" | "copie" | 
   }
 }
 
-export function lienWhatsApp(code: string): string {
-  return `https://wa.me/?text=${encodeURIComponent(messageInvitation(code))}`;
+export function lienWhatsApp(code: string, score: ScoreInvitation = null): string {
+  return `https://wa.me/?text=${encodeURIComponent(messageInvitation(code, score))}`;
 }
 
-export function lienSms(code: string): string {
-  return `sms:?&body=${encodeURIComponent(messageInvitation(code))}`;
+export function lienSms(code: string, score: ScoreInvitation = null): string {
+  return `sms:?&body=${encodeURIComponent(messageInvitation(code, score))}`;
 }
 
 // Page où revenir après la connexion (seulement une adresse interne)

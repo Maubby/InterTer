@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { GUILDE } from "@/lib/guilde";
-import { lienSms, lienWhatsApp, memoriserRetour, partagerDuel } from "@/lib/duel";
+import { lienSms, lienWhatsApp, memoriserRetour, partagerDuel, type ScoreInvitation } from "@/lib/duel";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
 import { Epreuve, HoteEpreuve, type Item } from "@/components/Epreuves";
@@ -80,7 +80,8 @@ export default function Duel() {
       setPhase("sans-ville");
       return;
     }
-    setPhase(infos.a_joue || infos.expire ? "scores" : "accueil");
+    // Le créateur joue tout de suite ; il invitera ses amis avec son score
+    setPhase(infos.a_joue || infos.expire ? "scores" : infos.je_suis_createur ? "question" : "accueil");
   }, [supabase, code]);
 
   useEffect(() => {
@@ -156,7 +157,7 @@ export default function Duel() {
   if (phase === "invite" || phase === "sans-ville") {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-        <Titre>{`${duel.createur} te défie !`}</Titre>
+        <Titre>{`${duel.createur} te défie !`}</Titre>
         <Invitation duel={duel} />
         {duel.expire ? (
           <p className="text-lg font-bold text-gueules">Ce duel est terminé : il durait 7 jours.</p>
@@ -179,12 +180,12 @@ export default function Duel() {
     );
   }
 
-  // ---------- Avant de jouer ----------
+  // ---------- Un ami invité, avant de jouer ----------
   if (phase === "accueil") {
     return (
       <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
-        <Titre>{duel.je_suis_createur ? "Ton duel est prêt !" : `${duel.createur} te défie !`}</Titre>
-        {duel.je_suis_createur ? <Partage code={duel.code} /> : <Invitation duel={duel} />}
+        <Titre>{`${duel.createur} te défie !`}</Titre>
+        <Invitation duel={duel} />
         <Bouton
           variante="succes"
           pleineLargeur
@@ -195,7 +196,7 @@ export default function Duel() {
             setPhase("question");
           }}
         >
-          <Epees className="w-6 h-6" /> {duel.je_suis_createur ? "Jouer ma manche" : "Relever le défi"}
+          <Epees className="w-6 h-6" /> Relever le défi
         </Bouton>
       </main>
     );
@@ -274,49 +275,51 @@ function Invitation({ duel }: { duel: InfosDuel }) {
   );
 }
 
-// Envoyer le lien du duel à ses amis
-function Partage({ code, aJoue = false }: { code: string; aJoue?: boolean }) {
+// Défier un ami : un seul bouton, qui ouvre le partage du téléphone (WhatsApp,
+// SMS, Messenger…) avec un message prêt. Sans partage natif (ordinateur), le
+// lien est copié et WhatsApp / SMS apparaissent en secours.
+function Partage({ code, score }: { code: string; score: ScoreInvitation }) {
   const [message, setMessage] = useState<string | null>(null);
+  const [secours, setSecours] = useState(false);
   return (
-    <Carte className="space-y-4">
-      <p className="text-lg text-left">
-        <Lettrine lettre="E" />
-        nvoie le lien à tes amis : chacun jouera les mêmes 5 questions, quand
-        il veut.{aJoue ? " Plus vous êtes nombreux, plus le duel est disputé !" : " Tu peux jouer ta manche tout de suite."}
-      </p>
-      <p className="clear-both font-cinzel text-xl">
-        Code du duel : <strong className="tracking-widest text-gueules">{code}</strong>
-      </p>
+    <div className="space-y-3">
       <Bouton
-        variante="enigme"
+        variante="primaire"
         pleineLargeur
+        className="anim-respire"
         onClick={async () => {
-          const r = await partagerDuel(code);
+          const r = await partagerDuel(code, score);
+          if (r === "copie" || r === "echec") setSecours(true);
           setMessage(
             r === "copie"
-              ? "Lien copié ! Colle-le dans un message à tes amis."
+              ? "Lien copié ! Colle-le dans un message, ou choisis :"
               : r === "echec"
-                ? "Impossible de copier : envoie le code ci-dessus."
+                ? "Envoie le duel par :"
                 : null
           );
         }}
       >
-        Envoyer le lien à mes amis
+        <Epees className="w-6 h-6" /> Défier un ami
       </Bouton>
-      <div className="grid grid-cols-2 gap-3">
-        <a href={lienWhatsApp(code)} target="_blank" rel="noopener noreferrer" className="choix justify-center" style={{ animation: "none" }}>
-          WhatsApp
-        </a>
-        <a href={lienSms(code)} className="choix justify-center" style={{ animation: "none" }}>
-          SMS
-        </a>
-      </div>
+      <p className="text-base text-sable/70">
+        Il recevra un lien pour jouer les mêmes questions.
+      </p>
       {message && (
         <p className="font-bold text-sinople" role="status">
           {message}
         </p>
       )}
-    </Carte>
+      {secours && (
+        <div className="grid grid-cols-2 gap-3">
+          <a href={lienWhatsApp(code, score)} target="_blank" rel="noopener noreferrer" className="choix justify-center" style={{ animation: "none" }}>
+            WhatsApp
+          </a>
+          <a href={lienSms(code, score)} className="choix justify-center" style={{ animation: "none" }}>
+            SMS
+          </a>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -329,11 +332,11 @@ function TableauDuel({ duel, vientDeJouer }: { duel: InfosDuel; vientDeJouer: bo
     : meilleurAutre < 0
       ? { texte: "En attente de tes amis", classe: "banderole-azur" }
       : (moi.score ?? 0) > meilleurAutre
-        ? { texte: "Victoire !", classe: "banderole-sinople" }
+        ? { texte: "Victoire !", classe: "banderole-sinople" }
         : (moi.score ?? 0) < meilleurAutre
           ? { texte: "Défaite…", classe: "" }
-          : { texte: "Égalité !", classe: "banderole-azur" };
-  const victoire = verdict.texte === "Victoire !";
+          : { texte: "Égalité !", classe: "banderole-azur" };
+  const victoire = verdict.classe === "banderole-sinople";
 
   return (
     <main className="mx-auto max-w-lg px-4 py-8 space-y-6 text-center">
@@ -394,16 +397,18 @@ function TableauDuel({ duel, vientDeJouer }: { duel: InfosDuel; vientDeJouer: bo
         </ol>
         {meilleurAutre < 0 && moi && (
           <p className="text-base text-sable/70">
-            Personne d&apos;autre n&apos;a encore joué. Envoie le lien : leurs scores
-            apparaîtront ici.
+            Personne d&apos;autre n&apos;a encore joué : défie un ami, son score
+            apparaîtra ici.
           </p>
         )}
       </Carte>
 
-      {!duel.expire && <Partage code={duel.code} aJoue={duel.a_joue} />}
+      {!duel.expire && (
+        <Partage code={duel.code} score={moi?.score != null ? { score: moi.score, total: duel.total } : null} />
+      )}
 
-      <Bouton variante="primaire" pleineLargeur onClick={() => (window.location.href = "/duel")}>
-        <Epees className="w-6 h-6" /> Mes duels
+      <Bouton variante="secondaire" pleineLargeur onClick={() => (window.location.href = "/duel")}>
+        Mes duels
       </Bouton>
     </main>
   );
