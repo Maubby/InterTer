@@ -1,10 +1,13 @@
 "use client";
 
 // Les épreuves d'Interter, partagées par la Quête du Jour et les duels :
-// l'hôte (personnage de la guilde) et les formats de mini-jeux.
+// l'hôte (personnage de la guilde), la correction et les formats de mini-jeux.
+// Chaque épreuve se joue comme une scène de parcours GeoGaming : le personnage
+// parle, on joue, et une réussite rapporte l'objet qu'il confie.
 
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { Bouton } from "@/components/Bouton";
 import { Choix, LETTRES, type VerdictReponse } from "@/components/Jeu";
 import type { Hote } from "@/lib/guilde";
@@ -18,6 +21,60 @@ export type Item = {
   theme?: string | null;
   payload: any;
 };
+
+// Réponse telle qu'envoyée au serveur en fin de partie (essai 2 = demi-points)
+export type ReponseEnvoyee = { item_id: string; answer: any; essai?: 2 };
+
+// Correction d'une épreuve, partagée par la Quête et le duel. Le serveur dit
+// si la réponse est juste (check_practice_item) ; un QCM raté au premier essai
+// laisse un second essai, à demi-points. Un joker 50/50 par partie.
+export function useCorrection(supabase: SupabaseClient) {
+  const [verdict, setVerdict] = useState<VerdictReponse>(null);
+  const [rate, setRate] = useState<number | null>(null); // choix raté au 1er essai
+  const [eliminees, setEliminees] = useState<number[]>([]); // retirées par le joker
+  const [jokerPris, setJokerPris] = useState(false);
+  const [enCours, setEnCours] = useState(false);
+
+  // Renvoie la réponse à envoyer en fin de partie, ou null s'il reste un essai
+  async function noter(item: Item, answer: any): Promise<{ envoi: ReponseEnvoyee; juste: boolean } | null> {
+    setEnCours(true);
+    const { data } = await supabase.rpc("check_practice_item", { p_item_id: item.id, p_answer: answer });
+    setEnCours(false);
+    const juste = (data as { is_correct?: boolean } | null)?.is_correct === true;
+    const secondEssai = rate !== null;
+    if (!juste && !secondEssai && item.game_type === "qcm") {
+      setRate(answer.choice);
+      return null;
+    }
+    setVerdict(juste);
+    return { envoi: { item_id: item.id, answer, ...(secondEssai ? { essai: 2 as const } : {}) }, juste };
+  }
+
+  async function joker(item: Item) {
+    if (jokerPris) return;
+    setJokerPris(true);
+    const { data } = await supabase.rpc("joker_qcm", { p_item_id: item.id });
+    setEliminees((data as number[]) ?? []);
+  }
+
+  function suivante() {
+    setVerdict(null);
+    setRate(null);
+    setEliminees([]);
+  }
+
+  return {
+    verdict,
+    rate,
+    eliminees,
+    enCours,
+    jokerDispo: !jokerPris,
+    points: rate !== null ? 5 : 10,
+    noter,
+    joker,
+    suivante,
+  };
+}
 
 // L'hôte de l'épreuve : il fait sa révérence en arrivant, puis son portrait
 // suit la réponse (il se réjouit ou se désole avec le joueur).
@@ -60,9 +117,10 @@ export function HoteEpreuve({
           unoptimized
         />
       )}
-      <div>
+      {/* Il parle dans une bulle, comme les personnages des parcours */}
+      <div className="bulle">
         <p className="font-cinzel font-bold text-lg text-azur">{hote.nom}</p>
-        <p className="note-ancienne text-base text-sable/80">{hote.intro}</p>
+        <p className="text-base">{hote.intro}</p>
       </div>
     </div>
   );
@@ -74,13 +132,19 @@ export function Epreuve({
   onValider,
   desactive,
   verdict,
+  rate = null,
+  eliminees = [],
+  onJoker,
 }: {
   item: Item;
   onValider: OnValider;
   desactive: boolean;
   verdict: VerdictReponse;
+  rate?: number | null;
+  eliminees?: number[];
+  onJoker?: () => void;
 }) {
-  const props = { p: item.payload, onValider, desactive, verdict };
+  const props = { p: item.payload, onValider, desactive, verdict, rate, eliminees, onJoker };
   return (
     <>
       {item.game_type === "qcm" && <Qcm {...props} />}
@@ -110,58 +174,118 @@ type Props = {
   onValider: OnValider;
   desactive: boolean;
   verdict?: VerdictReponse;
+  rate?: number | null;
+  eliminees?: number[];
+  onJoker?: () => void;
 };
 
-function Qcm({ p, onValider, desactive, verdict = null }: Props) {
+// QCM à deux essais, comme dans les parcours : un raté laisse un second essai
+// (à demi-points), et un joker 50/50 par partie retire deux mauvaises réponses.
+function Qcm({ p, onValider, desactive, verdict = null, rate = null, eliminees = [], onJoker }: Props) {
   const [choix, setChoix] = useState<number | null>(null);
-  // Reset quand on change d'épreuve (sinon le choix précédent reste surligné)
-  useEffect(() => {
-    setChoix(null);
-  }, [p]);
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold font-cinzel">{p.question}</p>
-      {p.choices?.map((c: string, i: number) => (
-        <Choix
-          key={i}
-          lettre={LETTRES[i]}
-          rang={i}
-          choisi={choix === i}
-          verdict={verdict}
-          desactive={desactive}
-          onClick={() => {
-            setChoix(i);
-            onValider({ choice: i });
-          }}
-        >
-          {c}
-        </Choix>
-      ))}
+      {rate !== null && verdict === null && (
+        <p className="font-bold text-gueules" role="status">
+          Raté ! Encore un essai, pour 5 points.
+        </p>
+      )}
+      {p.choices?.map((c: string, i: number) =>
+        eliminees.includes(i) ? null : (
+          <Choix
+            key={i}
+            lettre={LETTRES[i]}
+            rang={i}
+            choisi={i === rate || choix === i}
+            verdict={i === rate ? false : verdict}
+            desactive={desactive || i === rate}
+            onClick={() => {
+              setChoix(i);
+              onValider({ choice: i });
+            }}
+          >
+            {c}
+          </Choix>
+        )
+      )}
+      {onJoker && verdict === null && eliminees.length === 0 && (p.choices?.length ?? 0) > 2 && (
+        <Bouton variante="secondaire" pleineLargeur disabled={desactive} onClick={onJoker}>
+          Joker 50/50 (un seul par partie)
+        </Bouton>
+      )}
     </div>
   );
 }
 
+// Vrai ou faux en glissant la carte : à droite si c'est vrai, à gauche si
+// c'est faux. Les boutons restent, pour qui préfère toucher.
 function VraiFaux({ p, onValider, desactive, verdict = null }: Props) {
   const [choix, setChoix] = useState<string | null>(null);
-  // Reset quand on change d'épreuve
-  useEffect(() => {
-    setChoix(null);
-  }, [p]);
+  const [dx, setDx] = useState(0);
+  const [glisse, setGlisse] = useState(false);
+  const depart = useRef<number | null>(null);
   // L'affirmation : selon le format de l'item (statement, question,
   // ou 1re d'une liste "statements")
   const affirmation =
     p.statement ??
     p.question ??
     (Array.isArray(p.statements) ? p.statements[0] : null);
-  // La bonne réponse au même format
-  const bonne = p.answer ?? (Array.isArray(p.answers) ? p.answers[0] : null);
+  const bloque = desactive || choix !== null;
+
+  function choisir(val: string) {
+    if (bloque) return;
+    setChoix(val);
+    onValider({ value: val });
+  }
+
   return (
     <div className="space-y-3">
-      <p className="text-xl font-bold font-cinzel">{affichage(affirmation)}</p>
+      <div
+        className={`carte-swipe ${glisse ? "glisse" : ""}`}
+        style={{
+          transform: `translateX(${dx}px) rotate(${dx / 18}deg)`,
+          borderColor: verdict === null ? undefined : verdict ? "var(--color-sinople)" : "var(--color-gueules)",
+        }}
+        onPointerDown={(e) => {
+          if (bloque) return;
+          depart.current = e.clientX;
+          setGlisse(true);
+          e.currentTarget.setPointerCapture(e.pointerId);
+        }}
+        onPointerMove={(e) => {
+          if (depart.current !== null) setDx(e.clientX - depart.current);
+        }}
+        onPointerUp={() => {
+          if (depart.current === null) return;
+          depart.current = null;
+          setGlisse(false);
+          if (Math.abs(dx) > 90) choisir(dx > 0 ? "true" : "false");
+          setDx(0);
+        }}
+        onPointerCancel={() => {
+          depart.current = null;
+          setGlisse(false);
+          setDx(0);
+        }}
+      >
+        <span className="tampon-faux" style={{ opacity: Math.min(1, -dx / 90) }} aria-hidden="true">
+          FAUX
+        </span>
+        <span className="tampon-vrai" style={{ opacity: Math.min(1, dx / 90) }} aria-hidden="true">
+          VRAI
+        </span>
+        <p className="text-xl font-bold font-cinzel">{affichage(affirmation)}</p>
+        {!bloque && (
+          <p className="note-ancienne text-sm text-sable/70 mt-3">
+            Glisse la carte : à droite si c&apos;est vrai, à gauche si c&apos;est faux
+          </p>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-3">
         {[
-          ["true", "VRAI"],
           ["false", "FAUX"],
+          ["true", "VRAI"],
         ].map(([val, label], i) => (
           <Choix
             key={val}
@@ -169,11 +293,8 @@ function VraiFaux({ p, onValider, desactive, verdict = null }: Props) {
             rang={i}
             choisi={choix === val}
             verdict={verdict}
-            desactive={desactive}
-            onClick={() => {
-              setChoix(val);
-              onValider({ value: val });
-            }}
+            desactive={bloque}
+            onClick={() => choisir(val)}
           >
             {label}
           </Choix>
@@ -258,10 +379,6 @@ function EmojiRiddle({ p, onValider, desactive }: Props) {
 
 function Intrus({ p, onValider, desactive, verdict = null }: Props) {
   const [choix, setChoix] = useState<number | null>(null);
-  // Reset quand on change d'épreuve
-  useEffect(() => {
-    setChoix(null);
-  }, [p]);
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold">Trouve l&apos;intrus :</p>
@@ -287,55 +404,69 @@ function Intrus({ p, onValider, desactive, verdict = null }: Props) {
   );
 }
 
+// La chronologie express : les événements arrivent un par un, et on place
+// chacun sur la frise du temps, le plus ancien en haut. Le premier est posé
+// d'office ; la frise complète part au serveur.
 function OrdreDates({ p, onValider, desactive }: Props) {
-  const [ordre, setOrdre] = useState<number[]>([]);
-  // Reset quand on change d'épreuve
-  useEffect(() => {
-    setOrdre([]);
-  }, [p]);
-  const tous = Array.from({ length: p.events?.length ?? 0 }, (_, i) => i);
+  const evenements: string[] = p.events ?? [];
+  // Ordre d'arrivée mélangé mais fixe (le même pour tous les joueurs)
+  const arrivee = evenements
+    .map((_, i) => i)
+    .sort((a, b) => empreinte(evenements[a]) - empreinte(evenements[b]));
+  const [frise, setFrise] = useState<number[]>(arrivee.slice(0, 1));
+  const aPlacer = arrivee.find((i) => !frise.includes(i));
 
-  function basculer(i: number) {
-    if (ordre.includes(i)) setOrdre(ordre.filter((x) => x !== i));
-    else setOrdre([...ordre, i]);
+  function poser(position: number) {
+    if (aPlacer === undefined || desactive) return;
+    const nouvelle = [...frise];
+    nouvelle.splice(position, 0, aPlacer);
+    setFrise(nouvelle);
+    if (nouvelle.length === evenements.length) onValider({ order: nouvelle });
   }
+
+  const emplacement = (position: number) =>
+    aPlacer !== undefined && !desactive ? (
+      <li key={`ici-${position}`}>
+        <button className="emplacement-frise" onClick={() => poser(position)}>
+          Placer ici
+        </button>
+      </li>
+    ) : null;
 
   return (
     <div className="space-y-3">
-      <p className="text-xl font-bold">
-        Classe du plus ancien au plus récent :
-      </p>
-      <ol className="space-y-2">
-        {ordre.map((i, pos) => (
-          <li key={i} className="font-bold text-azur">
-            {pos + 1}. {p.events[i]}
-          </li>
-        ))}
+      <p className="text-xl font-bold font-cinzel">Place chaque événement sur la frise du temps :</p>
+      {aPlacer !== undefined && (
+        <div className="carte-swipe anim-reverence" key={aPlacer}>
+          <p className="note-ancienne text-sm text-sable/70">
+            À placer ({frise.length + 1} sur {evenements.length})
+          </p>
+          <p className="text-lg font-bold">{evenements[aPlacer]}</p>
+        </div>
+      )}
+      <ol className="frise space-y-2">
+        <li className="note-ancienne text-sm text-sable/70">Le plus ancien</li>
+        {emplacement(0)}
+        {frise.flatMap((i, pos) => [
+          <li key={i} className="evenement-frise">
+            {evenements[i]}
+          </li>,
+          emplacement(pos + 1),
+        ])}
+        <li className="note-ancienne text-sm text-sable/70">Le plus récent</li>
       </ol>
-      <div className="grid gap-2">
-        {tous.map((i) => (
-          <button
-            key={i}
-            disabled={desactive}
-            onClick={() => basculer(i)}
-            className={`min-h-[52px] rounded-lg border-4 text-lg font-bold ${
-              ordre.includes(i)
-                ? "bg-or border-sable"
-                : "bg-white border-sable hover:bg-or/20"
-            }`}
-          >
-            {p.events[i]}
-          </button>
-        ))}
-      </div>
-      <Bouton
-        variante="enigme"
-        pleineLargeur
-        disabled={desactive || ordre.length !== tous.length}
-        onClick={() => onValider({ order: ordre })}
-      >
-        Valider mon classement
-      </Bouton>
+      {aPlacer !== undefined && frise.length > 1 && !desactive && (
+        <button className="underline font-bold" onClick={() => setFrise(arrivee.slice(0, 1))}>
+          Recommencer la frise
+        </button>
+      )}
     </div>
   );
+}
+
+// Petite empreinte d'un texte, pour mélanger sans hasard
+function empreinte(texte: string): number {
+  let h = 7;
+  for (const c of texte) h = (h * 31 + c.charCodeAt(0)) | 0;
+  return h;
 }

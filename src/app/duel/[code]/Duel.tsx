@@ -7,9 +7,9 @@ import { GUILDE } from "@/lib/guilde";
 import { lienSms, lienWhatsApp, memoriserRetour, partagerDuel, type ScoreInvitation } from "@/lib/duel";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
-import { Epreuve, HoteEpreuve, type Item } from "@/components/Epreuves";
+import { Epreuve, HoteEpreuve, useCorrection, type Item, type ReponseEnvoyee } from "@/components/Epreuves";
 import { Compteur, Eclats, Feuillets, Sceau, chiffreRomain } from "@/components/Fioritures";
-import { Verdict } from "@/components/Jeu";
+import { Tresor, Verdict } from "@/components/Jeu";
 import { Epees } from "@/components/Icons";
 
 // Le duel tel que le renvoie get_duel
@@ -49,10 +49,13 @@ export default function Duel() {
   const [phase, setPhase] = useState<Phase>("chargement");
   const [duel, setDuel] = useState<InfosDuel | null>(null);
   const [index, setIndex] = useState(0);
-  const [reponses, setReponses] = useState<{ item_id: string; answer: unknown }[]>([]);
-  const [reponseDonnee, setReponseDonnee] = useState(false);
-  const [bonneReponse, setBonneReponse] = useState<boolean | null>(null);
+  const [reponses, setReponses] = useState<ReponseEnvoyee[]>([]);
   const [enCours, setEnCours] = useState(false);
+  // Les objets confiés par les personnages : le trésor du duel
+  const [tresor, setTresor] = useState<string[]>([]);
+  const correction = useCorrection(supabase);
+  const reponseDonnee = correction.verdict !== null;
+  const bonneReponse = correction.verdict;
   const [erreur, setErreur] = useState<string | null>(null);
   const [vientDeJouer, setVientDeJouer] = useState(false);
 
@@ -90,28 +93,23 @@ export default function Duel() {
     })();
   }, [charger]);
 
-  // Correction immédiate, pour le plaisir ; le vrai score est calculé
+  // Correction immédiate (useCorrection) ; le vrai score est calculé
   // par le serveur à la fin (play_duel)
   async function noterReponse(answer: unknown) {
-    if (!duel?.items || reponseDonnee || enCours) return;
-    setEnCours(true);
+    if (!duel?.items || reponseDonnee || correction.enCours) return;
     const item = duel.items[index];
-    const { data } = await supabase.rpc("check_practice_item", {
-      p_item_id: item.id,
-      p_answer: answer,
-    });
-    setBonneReponse((data as { is_correct?: boolean } | null)?.is_correct === true);
-    setReponseDonnee(true);
-    setReponses((r) => [...r, { item_id: item.id, answer }]);
-    setEnCours(false);
+    const corrige = await correction.noter(item, answer);
+    if (!corrige) return; // QCM raté : second essai
+    setReponses((r) => [...r, corrige.envoi]);
+    const hote = GUILDE[item.theme ?? item.game_type];
+    if (corrige.juste && hote) setTresor((t) => [...t, hote.objet]);
   }
 
   async function suivant() {
     if (!duel?.items) return;
     if (index + 1 < duel.items.length) {
       setIndex((i) => i + 1);
-      setReponseDonnee(false);
-      setBonneReponse(null);
+      correction.suivante();
       return;
     }
     setEnCours(true);
@@ -222,12 +220,19 @@ export default function Duel() {
             <Epreuve
               item={item}
               onValider={noterReponse}
-              desactive={reponseDonnee || enCours}
-              verdict={reponseDonnee ? bonneReponse : null}
+              desactive={reponseDonnee || correction.enCours}
+              verdict={correction.verdict}
+              rate={correction.rate}
+              eliminees={correction.eliminees}
+              onJoker={correction.jokerDispo ? () => correction.joker(item) : undefined}
             />
             {reponseDonnee && (
               <>
-                <Verdict juste={bonneReponse === true} />
+                <Verdict
+                  juste={bonneReponse === true}
+                  points={correction.points}
+                  recompense={hote ? `${hote.nom} te confie ${hote.objet}` : undefined}
+                />
                 {item.payload?.explanation && (
                   <div className="chronique glose">
                     <strong className="font-cinzel not-italic">
@@ -253,7 +258,7 @@ export default function Duel() {
   }
 
   // ---------- Tableau des scores ----------
-  return <TableauDuel duel={duel} vientDeJouer={vientDeJouer} />;
+  return <TableauDuel duel={duel} vientDeJouer={vientDeJouer} tresor={tresor} />;
 }
 
 // Qui a lancé le duel, et qui a déjà joué (sans les scores, pour le suspense)
@@ -324,7 +329,7 @@ function Partage({ code, score }: { code: string; score: ScoreInvitation }) {
 }
 
 // Le classement du duel, une fois joué (ou terminé)
-function TableauDuel({ duel, vientDeJouer }: { duel: InfosDuel; vientDeJouer: boolean }) {
+function TableauDuel({ duel, vientDeJouer, tresor }: { duel: InfosDuel; vientDeJouer: boolean; tresor: string[] }) {
   const moi = duel.joueurs.find((j) => j.moi);
   const meilleurAutre = Math.max(-1, ...duel.joueurs.filter((j) => !j.moi).map((j) => j.score ?? -1));
   const verdict = !moi
@@ -356,6 +361,7 @@ function TableauDuel({ duel, vientDeJouer }: { duel: InfosDuel; vientDeJouer: bo
           / {duel.total}
         </p>
       )}
+      {vientDeJouer && <Tresor objets={tresor} />}
       {!moi && duel.expire && (
         <p className="text-lg text-gueules font-bold">Ce duel est terminé : il durait 7 jours.</p>
       )}

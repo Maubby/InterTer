@@ -4,11 +4,14 @@
 // Le prénom rime avec le métier (Yolande la Marchande, Aaron le Forgeron…).
 // Un personnage illustré a trois portraits : pendant la question, après une
 // bonne réponse, après une erreur. Les autres gardent leur dessin provisoire.
+// Comme dans un parcours GeoGaming, chaque épreuve réussie rapporte un objet.
 export type Hote = {
   nom: string;
   svg?: string;
   portraits?: { question: string; bravo: string; oups: string };
   intro: string;
+  // Ce qu'il confie au joueur qui réussit : le trésor de la Quête
+  objet: string;
 };
 export const GUILDE: Record<string, Hote> = {
   quotidien: {
@@ -19,6 +22,7 @@ export const GUILDE: Record<string, Hote> = {
       oups: "/personnages/yolande-oups.webp",
     },
     intro: "Yolande étale ses marchandises devant toi :",
+    objet: "une pièce d'or de son étal",
   },
   histoire: {
     nom: "Gabrielli le Bailli",
@@ -28,6 +32,7 @@ export const GUILDE: Record<string, Hote> = {
       oups: "/personnages/gabrielli-oups.webp",
     },
     intro: "Gabrielli te demande de trancher :",
+    objet: "le sceau du bailliage",
   },
   legendes: {
     nom: "La Conteuse",
@@ -37,6 +42,7 @@ export const GUILDE: Record<string, Hote> = {
       oups: "/personnages/conteuse-oups.webp",
     },
     intro: "La Conteuse ouvre son grand livre :",
+    objet: "une page de son grand livre",
   },
   armes: {
     nom: "Aaron le Forgeron",
@@ -46,6 +52,7 @@ export const GUILDE: Record<string, Hote> = {
       oups: "/personnages/aaron-oups.webp",
     },
     intro: "Aaron frappe son enclume, écoute bien :",
+    objet: "un fer forgé à la main",
   },
   cuisine: {
     nom: "Yvonne la Marmitonne",
@@ -56,30 +63,36 @@ export const GUILDE: Record<string, Hote> = {
       oups: "/personnages/yvonne-oups.webp",
     },
     intro: "Yvonne vide son panier sur la table :",
+    objet: "sa cuillère en bois",
   },
   chroniques: {
     nom: "Étienne le Greffier",
     svg: "/personnages/etienne-greffier.svg",
     intro: "Étienne relit les registres de la ville :",
+    objet: "un feuillet des registres",
   },
   geographie: {
     nom: "Berthe la Cartographe",
     svg: "/personnages/berthe-cartographe.svg",
     intro: "Berthe déplie ses cartes :",
+    objet: "une carte ancienne",
   },
   fetes: {
     nom: "Jehanne la Ménestrelle",
     svg: "/personnages/jehanne-menestrelle.svg",
     intro: "Jehanne accorde son luth :",
+    objet: "une corde de son luth",
   },
   nature: {
     nom: "Aldric le Fauconnier",
     svg: "/personnages/aldric-fauconnier.svg",
     intro: "Aldric pose son faucon sur le gant :",
+    objet: "une plume de faucon",
   },
   sciences: {
     nom: "Pons le Barbier-Chirurgien",
     svg: "/personnages/pons-barbier.svg",
     intro: "Pons aiguise ses instruments :",
+    objet: "un flacon d'onguent",
   },
 };

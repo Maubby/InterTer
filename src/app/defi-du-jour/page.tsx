@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 import { Bouton } from "@/components/Bouton";
 import { Carte, Lettrine, Titre } from "@/components/Carte";
-import { Verdict } from "@/components/Jeu";
-import { Epreuve, HoteEpreuve, type Item } from "@/components/Epreuves";
+import { Tresor, Verdict } from "@/components/Jeu";
+import { Epreuve, HoteEpreuve, useCorrection, type Item, type ReponseEnvoyee } from "@/components/Epreuves";
 import { GUILDE } from "@/lib/guilde";
 import { Compteur, Eclats, Feuillets, Separateur, Sceau, RoseDesVents } from "@/components/Fioritures";
 import { Etoile, Flamme, Trophee } from "@/components/Icons";
@@ -21,12 +21,15 @@ export default function PageDefiDuJour() {
   >("chargement");
   const [items, setItems] = useState<Item[]>([]);
   const [index, setIndex] = useState(0);
-  const [reponses, setReponses] = useState<{ item_id: string; answer: any }[]>([]);
+  const [reponses, setReponses] = useState<ReponseEnvoyee[]>([]);
   const [resultat, setResultat] = useState<Resultat | null>(null);
   const [enCours, setEnCours] = useState(false);
-  const [reponseDonnee, setReponseDonnee] = useState(false);
-  const [bonneReponse, setBonneReponse] = useState<boolean | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
+  // Les objets confiés par les personnages : le trésor de la Quête
+  const [tresor, setTresor] = useState<string[]>([]);
+  const correction = useCorrection(supabase);
+  const reponseDonnee = correction.verdict !== null;
+  const bonneReponse = correction.verdict;
 
   // Au chargement : connecté ? ville choisie ?
   useEffect(() => {
@@ -90,28 +93,22 @@ export default function PageDefiDuJour() {
     setEnCours(false);
   }
 
-  // Feedback d'une réponse : validée par la RPC check_practice_item
-  // (rapide, fiable, sans enjeu — le score réel tombe à la fin).
-  async function noterReponse(answer: any) {
-    if (reponseDonnee || enCours) return;
-    setEnCours(true);
-    const { data } = await supabase.rpc("check_practice_item", {
-      p_item_id: items[index].id,
-      p_answer: answer,
-    });
-    const ok = (data as any)?.is_correct === true;
-    setBonneReponse(ok);
-    setReponseDonnee(true);
-    setReponses((r) => [...r, { item_id: items[index].id, answer }]);
-    setEnCours(false);
+  // Feedback d'une réponse (useCorrection) ; le score réel tombe à la fin
+  async function noterReponse(answer: unknown) {
+    if (reponseDonnee || correction.enCours) return;
+    const item = items[index];
+    const corrige = await correction.noter(item, answer);
+    if (!corrige) return; // QCM raté : second essai
+    setReponses((r) => [...r, corrige.envoi]);
+    const hote = GUILDE[item.theme ?? item.game_type];
+    if (corrige.juste && hote) setTresor((t) => [...t, hote.objet]);
   }
 
   // Question suivante — ou envoi au serveur (RPC anti-triche) à la fin
   async function suivant() {
     if (index + 1 < items.length) {
       setIndex((i) => i + 1);
-      setReponseDonnee(false);
-      setBonneReponse(null);
+      correction.suivante();
       return;
     }
     setEnCours(true);
@@ -198,6 +195,7 @@ export default function PageDefiDuJour() {
             <Flamme className="w-6 h-6 text-gueules" />
             Série : <strong>{resultat.streak} jour{resultat.streak > 1 ? "s" : ""}</strong>
           </p>
+          <Tresor objets={tresor} />
           <p className="text-base text-sable/70">
             Reviens demain pour un nouveau défi — et fais grandir ta série !
           </p>
@@ -238,11 +236,23 @@ export default function PageDefiDuJour() {
           }`}
         >
           <HoteEpreuve key={item.id} hote={hote} reponseDonnee={reponseDonnee} bonneReponse={bonneReponse} />
-          <Epreuve item={item} onValider={noterReponse} desactive={reponseDonnee || enCours} verdict={reponseDonnee ? bonneReponse : null} />
+          <Epreuve
+            item={item}
+            onValider={noterReponse}
+            desactive={reponseDonnee || correction.enCours}
+            verdict={correction.verdict}
+            rate={correction.rate}
+            eliminees={correction.eliminees}
+            onJoker={correction.jokerDispo ? () => correction.joker(item) : undefined}
+          />
 
           {reponseDonnee && (
             <>
-              <Verdict juste={bonneReponse === true} />
+              <Verdict
+                juste={bonneReponse === true}
+                points={correction.points}
+                recompense={hote ? `${hote.nom} te confie ${hote.objet}` : undefined}
+              />
               {item.payload?.explanation && (
                 <div className="chronique glose">
                   <strong className="font-cinzel not-italic"><span className="rubrique" aria-hidden="true">¶ </span>Selon la Chronique…</strong> {item.payload.explanation}
