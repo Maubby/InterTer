@@ -11,6 +11,7 @@ export default function Header() {
   const supabase = getSupabaseBrowserClient();
   const [pseudo, setPseudo] = useState<string | null>(null);
   const [chargement, setChargement] = useState(true);
+  const [admin, setAdmin] = useState(false);
 
   // Qui est connecté ? (écoute aussi les changements de session)
   useEffect(() => {
@@ -21,12 +22,14 @@ export default function Header() {
       if (user) {
         const { data: profil } = await supabase
           .from("profiles")
-          .select("pseudo")
+          .select("pseudo, is_admin")
           .eq("id", user.id)
           .single();
         setPseudo(profil?.pseudo ?? "Joueur");
+        setAdmin(profil?.is_admin === true);
       } else {
         setPseudo(null);
+        setAdmin(false);
       }
       setChargement(false);
     }
@@ -63,7 +66,7 @@ export default function Header() {
             alt="Interter — le Tournoi des Villes de France"
             width={1672}
             height={941}
-            className="h-14 md:h-[94px] w-auto drop-shadow"
+            className="h-28 md:h-[200px] w-auto drop-shadow"
             priority
           />
         </Link>
@@ -84,6 +87,11 @@ export default function Header() {
           <Link href="/mon-profil" className="px-1.5 py-2 hover:text-gueules transition-colors">
             Mon profil
           </Link>
+          {admin && (
+            <Link href="/atelier" className="px-1.5 py-2 text-gueules hover:underline">
+              Atelier
+            </Link>
+          )}
         </nav>
 
         {/* État de connexion */}
