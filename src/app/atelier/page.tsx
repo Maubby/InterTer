@@ -13,6 +13,11 @@ import { Verdict } from "@/components/Jeu";
 import { Epreuve, HoteEpreuve, useCorrection, type Item } from "@/components/Epreuves";
 import { GUILDE } from "@/lib/guilde";
 
+const FORMATS: Record<string, string> = {
+  qcm: "QCM", true_false: "Vrai ou faux", riddle: "Devinette", emoji_riddle: "Rébus d'emojis",
+  intruder: "Intrus", order_dates: "Chronologie", carte: "Carte",
+};
+
 export default function Atelier() {
   const supabase = getSupabaseBrowserClient();
   const correction = useCorrection(supabase);
@@ -45,8 +50,14 @@ export default function Atelier() {
 
   const familles = [...new Set(items.map((i) => i.theme ?? i.game_type))].sort();
   const visibles = items.filter((i) => filtre === "tous" || (i.theme ?? i.game_type) === filtre);
-  const intitule = (i: Item) =>
-    i.payload.question ?? i.payload.riddle ?? i.payload.statement ?? i.payload.emojis ?? i.payload.title ?? i.game_type;
+  const intitule = (i: Item) => {
+    const p = i.payload;
+    if (i.game_type === "intruder") return `Intrus : ${(p.items ?? []).join(", ")}`;
+    if (i.game_type === "order_dates") return `Chronologie : ${(p.events ?? []).join(" · ")}`;
+    if (i.game_type === "true_false") return p.statement ?? (p.statements ?? []).join(" · ");
+    if (i.game_type === "emoji_riddle") return `${p.emojis} ${p.question ?? ""}`;
+    return p.question ?? p.riddle ?? i.game_type;
+  };
 
   if (choisi) {
     const hote = GUILDE[choisi.theme ?? choisi.game_type];
@@ -107,7 +118,7 @@ export default function Atelier() {
               onClick={() => { correction.suivante(); setChoisi(i); }}
               className="w-full text-left px-4 py-3 rounded-lg border-2 border-sable bg-parchemin-2 hover:bg-parchemin"
             >
-              <span className="text-sm text-sable/70">{i.game_type}</span>
+              <span className="text-sm text-sable/70">{FORMATS[i.game_type] ?? i.game_type}</span>
               <br />
               {String(intitule(i))}
             </button>

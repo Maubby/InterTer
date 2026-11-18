@@ -45,7 +45,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-parchemin sticky top-0 z-40">
+    <header className="bg-parchemin relative z-40">
       {/* Frise enluminée sous l'en-tête, comme la bordure du logo */}
       <div aria-hidden="true" className="frise-enluminee absolute left-0 right-0 top-full">
         <svg viewBox="0 0 40 40" className="absolute left-1/2 top-1/2 w-13 h-13 -translate-x-1/2 -translate-y-1/2">
@@ -59,7 +59,7 @@ export default function Header() {
       </div>
       {/* Téléphone : logo et compte sur une ligne, menu en dessous sur toute la
           largeur. À partir de md : tout sur une ligne. */}
-      <div className="mx-auto max-w-5xl px-4 py-2 flex flex-wrap items-center gap-x-4 gap-y-1 font-bold font-cinzel text-base">
+      <div className="mx-auto max-w-5xl px-4 py-2 flex flex-wrap md:flex-nowrap items-center gap-x-4 gap-y-1 font-bold font-cinzel text-base">
         <Link href="/" aria-label="Interter — retour à l'accueil" className="shrink-0">
           <Image
             src="/logo/logo-officiel.png"
