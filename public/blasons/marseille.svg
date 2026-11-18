@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="660" stroke="#000" fill="#fff"><radialGradient id="r" cx="221" cy="226" r="300" gradientTransform="matrix(1.35,0,0,1.35,-77,-85)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".2" stop-color="#fff" stop-opacity=".25"/><stop offset=".6" stop-color="#666" stop-opacity=".13"/><stop offset="1" stop-opacity=".13"/></radialGradient><clipPath id="k"><path id="s" d="M1.5 1.5h597V280A570 445 0 0 1 300 658.5 570 445 0 0 1 1.5 280Z"/></clipPath>
+<use xlink:href="#s"/>
+<g stroke-width="3"><path clip-path="url(#k)" fill="#2b5df2" d="M233 0H367V212.7H600v135H367V660H233V347.7H0v-135H233Z"/><use xlink:href="#s" fill="url(#r)"/></g>
+</svg>

@@ -5,16 +5,18 @@
 // Chaque épreuve se joue comme une scène de parcours GeoGaming : le personnage
 // parle, on joue, et une réussite rapporte l'objet qu'il confie.
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Bouton } from "@/components/Bouton";
 import { Choix, LETTRES, type VerdictReponse } from "@/components/Jeu";
 import type { Hote } from "@/lib/guilde";
+import { getSupabaseBrowserClient } from "@/lib/supabase";
+import { versCarte, versCoordonnees } from "@/lib/projection";
 
 // ---------- Types ----------
 export type GameType =
-  "qcm" | "true_false" | "riddle" | "emoji_riddle" | "intruder" | "order_dates";
+  "qcm" | "true_false" | "riddle" | "emoji_riddle" | "intruder" | "order_dates" | "carte";
 export type Item = {
   id: string;
   game_type: GameType;
@@ -153,6 +155,7 @@ export function Epreuve({
       {item.game_type === "emoji_riddle" && <EmojiRiddle {...props} />}
       {item.game_type === "intruder" && <Intrus {...props} />}
       {item.game_type === "order_dates" && <OrdreDates {...props} />}
+      {item.game_type === "carte" && <CarteFrance {...props} />}
     </>
   );
 }
@@ -186,6 +189,14 @@ function Qcm({ p, onValider, desactive, verdict = null, rate = null, eliminees =
   return (
     <div className="space-y-3">
       <p className="text-xl font-bold font-cinzel">{p.question}</p>
+      {p.image && (
+        <figure className="flex flex-col items-center gap-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={p.image} alt="" className="max-h-56 w-auto rounded-lg border-4 border-sable bg-parchemin-2 p-2" />
+          {/* Les images de Wikimedia Commons demandent de citer l'auteur et la licence */}
+          {p.credit && <figcaption className="text-xs text-sable/70">{p.credit}</figcaption>}
+        </figure>
+      )}
       {rate !== null && verdict === null && (
         <p className="font-bold text-gueules" role="status">
           Raté ! Encore un essai, pour 5 points.
@@ -465,6 +476,74 @@ function OrdreDates({ p, onValider, desactive }: Props) {
 }
 
 // Petite empreinte d'un texte, pour mélanger sans hasard
+// Placer sur la carte de France : on pose une épingle, on la déplace à
+// volonté, puis on valide. Le serveur mesure l'écart (ville) ou cherche la
+// région touchée. Après coup, la vraie position d'une ville s'affiche.
+function CarteFrance({ p, onValider, desactive, verdict = null }: Props) {
+  const [epingle, setEpingle] = useState<{ fx: number; fy: number } | null>(null);
+  const [vraie, setVraie] = useState<{ fx: number; fy: number } | null>(null);
+
+  useEffect(() => {
+    if (verdict === null || p.cible !== "ville" || !p.ville) return;
+    getSupabaseBrowserClient()
+      .from("cities")
+      .select("latitude, longitude")
+      .eq("name", p.ville)
+      .order("population", { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.[0]) setVraie(versCarte(data[0].latitude, data[0].longitude));
+      });
+  }, [verdict, p.cible, p.ville]);
+
+  function poser(e: React.MouseEvent<HTMLDivElement>) {
+    if (desactive || verdict !== null) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    setEpingle({ fx: (e.clientX - r.left) / r.width, fy: (e.clientY - r.top) / r.height });
+  }
+
+  const point = (pos: { fx: number; fy: number }, couleur: string, titre: string) => (
+    <span
+      title={titre}
+      className="absolute w-5 h-5 -ml-2.5 -mt-2.5 rounded-full border-4 border-sable pointer-events-none anim-sceau"
+      style={{ left: `${pos.fx * 100}%`, top: `${pos.fy * 100}%`, background: couleur }}
+    />
+  );
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xl font-bold font-cinzel">{p.question}</p>
+      <div
+        onClick={poser}
+        className="relative w-full border-4 border-sable rounded-lg bg-[#cfe3f2] cursor-crosshair select-none"
+        role="application"
+        aria-label="Carte de France : touche l'endroit de ta réponse"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/carte/france.svg" alt="" className="w-full block" draggable={false} />
+        {epingle && point(epingle, verdict === false ? "#b3261e" : "#c9a227", "Ta réponse")}
+        {vraie && verdict === false && point(vraie, "#2e7d32", p.ville)}
+      </div>
+      {vraie && verdict === false && (
+        <p className="font-bold">
+          <span className="text-gueules">●</span> ta réponse,{" "}
+          <span className="text-sinople">●</span> {p.ville}
+        </p>
+      )}
+      {verdict === null && (
+        <Bouton
+          variante="enigme"
+          pleineLargeur
+          disabled={desactive || !epingle}
+          onClick={() => epingle && onValider(versCoordonnees(epingle.fx, epingle.fy))}
+        >
+          {epingle ? "Je pose mon épingle ici" : "Touche la carte"}
+        </Bouton>
+      )}
+    </div>
+  );
+}
+
 function empreinte(texte: string): number {
   let h = 7;
   for (const c of texte) h = (h * 31 + c.charCodeAt(0)) | 0;
